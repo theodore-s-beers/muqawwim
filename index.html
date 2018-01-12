@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title>Calendar Converter for Near East Historians</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="Theo Beers" name="author">
+  <meta content="Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars." name="description">
+  <link href="https://www.theobeers.com/calendars/" rel="canonical">
+  <link href="img/icon.png" rel="icon" type="image/png">
+  <link href="img/icon-192.png" rel="apple-touch-icon" type="image/png">
+  <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" rel="stylesheet">
+  <script src="astro.js">
+  </script>
+  <script src="calendar.js">
+  </script>
+  <script>
+  function animalCalc() {
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Y\u012Bl\u0101n") : 1 == e ? (h = "Horse", i = "Y\u016Bnt") : 2 == e ? (h = "Goat", i = "Q\u016By") : 3 == e ? (h = "Monkey", i = "P\u012Bch\u012Bn") : 4 == e ? (h = "Rooster", i = "Takh\u0101q\u016By") : 5 == e ? (h = "Dog", i = "\u012At") : 6 == e ? (h = "Pig", i = "Tung\u016Bz") : 7 == e ? (h = "Rat", i = "S\u012Bchq\u0101n") : 8 == e ? (h = "Ox", i = "\u016Ad") : 9 == e ? (h = "Tiger", i = "B\u0101rs") : 10 == e ? (h = "Rabbit", i = "Tavashq\u0101n") : (h = "Dragon", i = "L\u016By"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
+  }
+  </script>
+</head>
+<body>
+  <div class="container" style="margin-top:0.6rem;">
+    <h3>Calendar Converter for Near East Historians</h3>
+    <p>This is a simple calendar conversion utility that displays a given date according to four different standards: <a href="https://en.wikipedia.org/wiki/Gregorian_calendar" rel="noopener" target="_blank">Gregorian</a>, <a href="https://en.wikipedia.org/wiki/Julian_calendar" rel="noopener" target="_blank">Julian</a>, <a href="https://en.wikipedia.org/wiki/Islamic_calendar" rel="noopener" target="_blank">Islamic</a>, and Persian (<em>i.e.</em>, <a href="https://en.wikipedia.org/wiki/Solar_Hijri_calendar" rel="noopener" target="_blank">Solar Hijri</a>). Change the date in any of the tables below, then click the corresponding "Calculate" button, and the equivalent date will appear in the other three calendars. Additionally—and perhaps most helpfully, for historians of the later medieval and early modern Persianate world—this page will indicate the <em>animal year</em> in which the given date falls. (See the "Notes and References" section below for further information on this and other arcane points.)</p>
+    <p>Nearly all of this project was derived from the far more extensive work of <a href="https://fourmilab.ch/" rel="noopener" target="_blank">John Walker</a>. You are most encouraged to spend some time exploring his <a href="https://www.fourmilab.ch/documents/calendar/" rel="noopener" target="_blank">calendar page</a> and the underlying code, which he has graciously placed in the public domain.</p>
+    <hr>
+    <h4>Gregorian Calendar</h4>
+    <form action="javascript:calcGregorian();" id="gregorian" name="gregorian">
+      <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
+        <tr>
+          <td><input id="gregYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value="1998"> <select name="month">
+            <option value="1">
+              January
+            </option>
+            <option value="2">
+              February
+            </option>
+            <option value="3">
+              March
+            </option>
+            <option value="4">
+              April
+            </option>
+            <option value="5">
+              May
+            </option>
+            <option value="6">
+              June
+            </option>
+            <option value="7">
+              July
+            </option>
+            <option value="8">
+              August
+            </option>
+            <option value="9">
+              September
+            </option>
+            <option value="10">
+              October
+            </option>
+            <option value="11">
+              November
+            </option>
+            <option value="12">
+              December
+            </option>
+          </select> <input id="gregDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value="1"><br>
+          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
+        </tr>
+        <tr style="display:none;">
+          <td><input name="hour" size="2" type="text" value="00">:<input name="min" size="2" type="text" value="00">:<input name="sec" size="2" type="text" value="00"></td>
+        </tr>
+        <tr style="display:none;">
+          <td><input name="wday2" readonly="readonly" size="9" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input class="btn btn-primary" id="gregCalcBtn" onclick="calcGregorian();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="submit" value="Calculate"> &nbsp; <input class="btn btn-secondary" id="gregTodayBtn" onclick="setDateToToday();calcGregorian();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="button" value="Today"></td>
+        </tr>
+      </table>
+    </form>
+    <script>
+    setDateToToday();
+    </script>
+    <div style="display:none;">
+      <form action="javascript:calcJulian();" id="julianday" name="julianday">
+        <table>
+          <tr>
+            <td><input name="day" size="16" type="text" value=""></td>
+          </tr>
+          <tr>
+            <td><input onclick="calcJulian();" type="button" value="Calculate"></td>
+          </tr>
+        </table>
+      </form>
+      <form action="javascript:calcModifiedJulian();" id="modifiedjulianday" name="modifiedjulianday">
+        <table>
+          <tr>
+            <td><input name="day" size="16" type="text" value=""></td>
+          </tr>
+          <tr>
+            <td><input onclick="calcModifiedJulian();" type="button" value="Calculate"></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <h4>Julian Calendar</h4>
+    <form action="javascript:calcJulianCalendar();" id="juliancalendar" name="juliancalendar">
+      <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
+        <tr>
+          <td><input id="julianYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+            <option value="1">
+              January
+            </option>
+            <option value="2">
+              February
+            </option>
+            <option value="3">
+              March
+            </option>
+            <option value="4">
+              April
+            </option>
+            <option value="5">
+              May
+            </option>
+            <option value="6">
+              June
+            </option>
+            <option value="7">
+              July
+            </option>
+            <option value="8">
+              August
+            </option>
+            <option value="9">
+              September
+            </option>
+            <option value="10">
+              October
+            </option>
+            <option value="11">
+              November
+            </option>
+            <option value="12">
+              December
+            </option>
+          </select> <input id="julianCalDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input class="btn btn-primary" id="julianBtn" onclick="calcJulianCalendar();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="submit" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <div style="display:none;">
+      <form action="javascript:calcHebrew();" id="hebrew" name="hebrew">
+        <table>
+          <tr>
+            <td><input name="year" size="5" type="text" value=""> <select name="month" size="1">
+              <option label="x" value="1">
+              </option>
+              <option label="x" value="2">
+              </option>
+              <option label="x" value="3">
+              </option>
+              <option label="x" value="4">
+              </option>
+              <option label="x" value="5">
+              </option>
+              <option label="x" value="6">
+              </option>
+              <option label="x" value="7">
+              </option>
+              <option label="x" value="8">
+              </option>
+              <option label="x" value="9">
+              </option>
+              <option label="x" value="10">
+              </option>
+              <option label="x" value="11">
+              </option>
+              <option label="x" value="12">
+              </option>
+              <option label="x" value="13">
+              </option>
+            </select> <input name="day" size="2" type="text" value=""> <input name="leap" readonly="readonly" size="36" type="text" value=""></td>
+          </tr>
+          <tr>
+            <td><img alt="" height="51" id="hebmonth" name="hebmonth" src="figures/hebrew_month_0.gif" width="186"></td>
+          </tr>
+          <tr>
+            <td><input onclick="calcHebrew();" type="button" value="Calculate"></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <h4>Islamic Calendar</h4>
+    <form action="javascript:calcIslamic();" id="islamic" name="islamic">
+      <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
+        <tr>
+          <td><input id="islamicYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+            <option value="1">
+              Muharram
+            </option>
+            <option value="2">
+              Safar
+            </option>
+            <option value="3">
+              Rabi‘ al-Awwal
+            </option>
+            <option value="4">
+              Rabi‘ al-Akhir
+            </option>
+            <option value="5">
+              Jumada al-Ula
+            </option>
+            <option value="6">
+              Jumada al-Akhirah
+            </option>
+            <option value="7">
+              Rajab
+            </option>
+            <option value="8">
+              Sha‘ban
+            </option>
+            <option value="9">
+              Ramadan
+            </option>
+            <option value="10">
+              Shawwal
+            </option>
+            <option value="11">
+              Dhu al-Qa‘dah
+            </option>
+            <option value="12">
+              Dhu al-Hijjah
+            </option>
+          </select> <input id="islamicDay" max="30" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:10.8em;" type="text" value=""></td>
+        </tr>
+        <tr style="display:none;">
+          <td><input name="wday2" readonly="readonly" size="18" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input class="btn btn-primary" id="islamicBtn" onclick="calcIslamic();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="submit" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <h4>Persian (Solar Hijri) Calendar</h4>
+    <form action="javascript:calcPersiana();" id="persiana" name="persiana">
+      <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
+        <tr>
+          <td><input id="persYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+            <option value="1">
+              Farvardin
+            </option>
+            <option value="2">
+              Ordibehesht
+            </option>
+            <option value="3">
+              Khordad
+            </option>
+            <option value="4">
+              Tir
+            </option>
+            <option value="5">
+              Mordad
+            </option>
+            <option value="6">
+              Shahrivar
+            </option>
+            <option value="7">
+              Mehr
+            </option>
+            <option value="8">
+              Aban
+            </option>
+            <option value="9">
+              Azar
+            </option>
+            <option value="10">
+              Dey
+            </option>
+            <option value="11">
+              Bahman
+            </option>
+            <option value="12">
+              Esfand
+            </option>
+          </select> <input id="persianDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:9em;" type="text" value=""></td>
+        </tr>
+        <tr style="display:none;">
+          <td><input name="wday2" readonly="readonly" size="13" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input class="btn btn-primary" id="persBtn" onclick="calcPersiana();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="submit" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <div class="card border-info mb-3" style="max-width:36rem;">
+      <div class="card-body text-info">
+        <p class="card-text" id="animalAnswer">In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the …</p>
+      </div>
+    </div>
+    <hr>
+    <div data-children=".item" id="notesAccordion">
+      <div class="item">
+        <a aria-controls="notes" aria-expanded="false" data-parent="#notesAccordion" data-toggle="collapse" href="#notes">
+        <h4>Notes and References</h4></a>
+        <div class="collapse" id="notes" role="tabpanel">
+          <ul>
+            <li>Calendrical problems can be notoriously difficult for historians to resolve. After all, a calendar is no better than the way in which it has been observed by particular institutions, or the scrupulousness with which dates were recorded in the source materials available to us. With this in mind, a conversion program based on the formal rules of the included calendars may not answer all questions. The idea is to provide accurate calculations assuming ideal circumstances.</li>
+            <li>If you find that a certain date appears to have been converted incorrectly on this page, please let me know <a href="mailto:tbeers@uchicago.edu">by email</a>. (This would come as a surprise. I have relied upon the algorithms coded by John Walker for years, with nary a problem.)
+            </li>
+            <li>In several of the Arab countries that use the Gregorian calendar for civil purposes, a different <a href="https://en.wikipedia.org/wiki/Arabic_names_of_calendar_months" rel="noopener" target="_blank">set of names</a> is sometimes applied to the twelve months. Similarly, the Solar Hijri calendar is followed in Afghanistan, but with <a href="https://en.wikipedia.org/wiki/Solar_Hijri_calendar#In_Afghanistan" rel="noopener" target="_blank">month names</a> drawn from the Arabic zodiacal signs, rather than from Middle Persian (as in the Iranian version shown above). And there is yet another naming convention in Pashto!
+            </li>
+            <li>It should be noted that the Persian calendar included above is the version adopted in Iran in 1925, as a modernization of the <a href="https://en.wikipedia.org/wiki/Jalali_calendar" rel="noopener" target="_blank">Jalali calendar</a> (which dated back to 1079 CE but had not been used consistently in the intervening eras). Why would this recent standard be helpful for history before the twentieth century? The key point is that societies in Greater Iran have, since ancient times, treated the March equinox as the beginning of a new year—<em>i.e.</em>, the festival of <a href="https://en.wikipedia.org/wiki/Nowruz" rel="noopener" target="_blank">Nowruz</a>. This practice is formalized in the Solar Hijri calendar, with the first day of the year, 1 Farvardin, occuring at the March equinox as observed from central Iran (52.5 degrees east meridian). We can therefore use the modern calendar <a href="https://en.wiktionary.org/wiki/proleptic" rel="noopener" target="_blank">proleptically</a> for calculations involving <em>years</em> in earlier periods of Iranian history. The practical significance of this will be made clear in the following note…
+            </li>
+            <li>Most people are probably familiar with the <a href="https://en.wikipedia.org/wiki/Chinese_zodiac" rel="noopener" target="_blank">Chinese zodiac</a> system, in which each year is associated with an animal sign in a repeating twelve-year cycle. The traditional Chinese calendar is lunisolar, and the year begins with a new moon that may occur between 21 January and 20 February (Gregorian). Variants of this scheme have been followed, and in many cases continue to be used, in countries across Asia. During the Mongol period, the practice of classifying years with animals was brought to Iran, and, for a time, some authors of astronomical and historical works <em>in Persian</em> used the Chinese calendar directly as a way of dating events. The animal signs themselves became a lasting part of Persianate culture, except that there was (quite naturally) a gradual shift toward setting the transition point between years at the March equinox. This convention took on importance in the historiography of the Timurid and Safavid periods—especially the latter. In several key Safavid Persian chronicles, to the extent that an annalistic format is employed, each year-section begins at Nowruz and is labeled with the corresponding animal. (Months and days are given in the Islamic calendar only.) It is clear that authors of the time had some difficulty maintaining concordance between the solar and lunar schemes that they used; and this has occasionally led to confusion among modern historians. But that is a topic best left for another conversation. Returning to the matter of the Solar Hijri calendar, we have an accurate way of tracking the passage of solar years in Iran from one March equinox to the next, and so we need only a bit of simple modular arithmetic to calculate the animal sign associated with any date.
+            </li>
+            <li>For more on the use of the twelve-animal cycle in Persian, see <a href="files/melville.pdf" rel="noopener" target="_blank">this journal article</a> by Charles Melville (of Cambridge), and <a href="files/mcchesney.pdf" rel="noopener" target="_blank">this one</a> by Robert D. McChesney (emeritus of NYU).
+            </li>
+            <li>It may go without saying, but users of this program should exercise care when interpreting results, in proportion to the degree of precision that is required, and with particular sensitivity to breakpoints. If, for example, you were studying an event in Safavid history that took place within a few days of the March equinox, it could be rather difficult to determine which animal year was in effect, since the actual observance of Nowruz varied slightly based on a number of factors. But I hope you will find, as I have, that formally correct conversion of dates is more than adequate in almost all cases.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <p>&copy; 2018 <a href="https://www.theobeers.com/" rel="noopener" target="_blank">T. S. Beers</a><br>
+    The files relating to this page are available <a href="https://github.com/theodore-s-beers/calendars" rel="noopener" target="_blank">on GitHub</a> under the <a href="https://en.wikipedia.org/wiki/MIT_License" rel="noopener" target="_blank">MIT License</a>.<br>
+    I'm not much of a developer. If anything is messed up, please let me know <a href="mailto:tbeers@uchicago.edu">by email</a>!</p>
+  </div>
+  <div style="display:none;">
+    <form action="javascript:calcPersian();" id="persian" name="persian">
+      <table>
+        <tr>
+          <td><input name="year" size="5" type="text" value=""> <select name="month" size="1">
+            <option label="x" value="1">
+            </option>
+            <option label="x" value="2">
+            </option>
+            <option label="x" value="3">
+            </option>
+            <option label="x" value="4">
+            </option>
+            <option label="x" value="5">
+            </option>
+            <option label="x" value="6">
+            </option>
+            <option label="x" value="7">
+            </option>
+            <option label="x" value="8">
+            </option>
+            <option label="x" value="9">
+            </option>
+            <option label="x" value="10">
+            </option>
+            <option label="x" value="11">
+            </option>
+            <option label="x" value="12">
+            </option>
+          </select> <input name="day" size="2" type="text" value=""> <input name="leap" readonly="readonly" size="12" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input name="wday" readonly="readonly" size="13" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcPersian();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcMayanCount();" id="mayancount" name="mayancount">
+      <table class="l">
+        <tr>
+          <td><input name="baktun" size="4" type="text" value=""> <b>.</b> <input name="katun" size="3" type="text" value=""> <b>.</b> <input name="tun" size="3" type="text" value=""> <b>.</b> <input name="uinal" size="3" type="text" value=""> <b>.</b> <input name="kin" size="3" type="text" value=""><input class="ctr" name="haab" readonly="readonly" size="9" type="text" value=""><input class="ctr" name="tzolkin" readonly="readonly" size="10" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcMayanCount();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcIndianCivilCalendar();" id="indiancivilcalendar" name="indiancivilcalendar">
+      <table class="l">
+        <tr>
+          <td><input name="year" size="5" type="text" value=""> <select name="month" size="1">
+            <option label="x" value="1">
+            </option>
+            <option label="x" value="2">
+            </option>
+            <option label="x" value="3">
+            </option>
+            <option label="x" value="4">
+            </option>
+            <option label="x" value="5">
+            </option>
+            <option label="x" value="6">
+            </option>
+            <option label="x" value="7">
+            </option>
+            <option label="x" value="8">
+            </option>
+            <option label="x" value="9">
+            </option>
+            <option label="x" value="10">
+            </option>
+            <option label="x" value="11">
+            </option>
+            <option label="x" value="12">
+            </option>
+          </select> <input name="day" size="3" type="text" value=""><input class="ctr" name="weekday" readonly="readonly" size="15" type="text" value=""> <input class="ctr" name="leap" readonly="readonly" size="12" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcIndianCivilCalendar();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcFrench();" id="french" name="french">
+      <table class="l">
+        <tr>
+          <td><input name="an" size="5" type="text" value=""><select name="mois" size="1">
+            <option label="x" value="1">
+            </option>
+            <option label="x" value="2">
+            </option>
+            <option label="x" value="3">
+            </option>
+            <option label="x" value="4">
+            </option>
+            <option label="x" value="5">
+            </option>
+            <option label="x" value="6">
+            </option>
+            <option label="x" value="7">
+            </option>
+            <option label="x" value="8">
+            </option>
+            <option label="x" value="9">
+            </option>
+            <option label="x" value="10">
+            </option>
+            <option label="x" value="11">
+            </option>
+            <option label="x" value="12">
+            </option>
+            <option label="x" value="13">
+            </option>
+          </select><select name="decade" size="1">
+            <option label="x" value="1">
+            </option>
+            <option label="x" value="2">
+            </option>
+            <option label="x" value="3">
+            </option>
+          </select><select name="jour" size="1">
+            <option label="x" value="1">
+            </option>
+            <option label="x" value="2">
+            </option>
+            <option label="x" value="3">
+            </option>
+            <option label="x" value="4">
+            </option>
+            <option label="x" value="5">
+            </option>
+            <option label="x" value="6">
+            </option>
+            <option label="x" value="7">
+            </option>
+            <option label="x" value="8">
+            </option>
+            <option label="x" value="9">
+            </option>
+            <option label="x" value="10">
+            </option>
+            <option label="x" value="11">
+            </option>
+            <option label="x" value="12">
+            </option>
+            <option label="x" value="13">
+            </option>
+            <option label="x" value="14">
+            </option>
+            <option label="x" value="15">
+            </option>
+            <option label="x" value="16">
+            </option>
+            <option label="x" value="17">
+            </option>
+          </select></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcFrench();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcIsoWeek();" id="isoweek" name="isoweek">
+      <table class="l">
+        <tr>
+          <td><input name="day" size="3" type="text" value=""><input name="week" size="3" type="text" value=""><input name="year" size="5" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcIsoWeek();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcIsoDay();" id="isoday" name="isoday">
+      <table class="l">
+        <tr>
+          <td><input name="day" size="3" type="text" value=""><input name="year" size="5" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcIsoDay();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcUnixTime();" id="unixtime" name="unixtime">
+      <table class="l">
+        <tr>
+          <td><input name="time" size="14" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcUnixTime();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcExcelSerial1900();" id="excelserial1900" name="excelserial1900">
+      <table class="l">
+        <tr>
+          <td><input name="day" size="16" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcExcelSerial1900();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+    <form action="javascript:calcExcelSerial1904();" id="excelserial1904" name="excelserial1904">
+      <table class="l">
+        <tr>
+          <td><input name="day" size="16" type="text" value=""></td>
+        </tr>
+        <tr>
+          <td><input onclick="calcExcelSerial1904();" type="button" value="Calculate"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script>
+  "" == location.search ? calcGregorian() : presetDataToRequest(location.search.substring(1));
+  </script> 
+  <script>
+  const persSubmit = document.getElementById("persBtn"),
+  gregCalcSubmit = document.getElementById("gregCalcBtn"),
+  gregTodaySubmit = document.getElementById("gregTodayBtn"),
+  julianSubmit = document.getElementById("julianBtn"),
+  islamicSubmit = document.getElementById("islamicBtn");
+  persSubmit.addEventListener("click", function() {
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  }), gregCalcSubmit.addEventListener("click", function() {
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  }), gregTodaySubmit.addEventListener("click", function() {
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  }), julianSubmit.addEventListener("click", function() {
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  }), islamicSubmit.addEventListener("click", function() {
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  });
+  </script> 
+  <script>
+  animalCalc();
+  </script> 
+  <script crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
+  </script> 
+  <script crossorigin="anonymous" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js">
+  </script> 
+  <script crossorigin="anonymous" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js">
+  </script>
+</body>
+</html>
