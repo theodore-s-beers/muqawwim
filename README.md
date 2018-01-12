@@ -1,1 +1,1 @@
-Hold that thought…
+Visit https://www.theobeers.com/calendars/.
