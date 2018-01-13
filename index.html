@@ -7,28 +7,33 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="Theo Beers" name="author">
   <meta content="Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars." name="description">
+  <meta content="#006dfe" name="theme-color">
+  <link href="manifest.json" rel="manifest">
   <link href="https://www.theobeers.com/calendars/" rel="canonical">
   <link href="img/icon.png" rel="icon" type="image/png">
   <link href="img/icon-192.png" rel="apple-touch-icon" type="image/png">
-  <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" rel="stylesheet">
-  <script src="astro.js">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="js/astro.js">
   </script>
-  <script src="calendar.js">
+  <script src="js/calendar.js">
   </script>
   <script>
   function animalCalc() {
-  var e = document.getElementById("persYear").value % 12,
-    f = document.getElementById("persYear").value,
-    g = document.getElementById("animalAnswer"),
-    h = "",
-    i = "";
-  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Y\u012Bl\u0101n") : 1 == e ? (h = "Horse", i = "Y\u016Bnt") : 2 == e ? (h = "Goat", i = "Q\u016By") : 3 == e ? (h = "Monkey", i = "P\u012Bch\u012Bn") : 4 == e ? (h = "Rooster", i = "Takh\u0101q\u016By") : 5 == e ? (h = "Dog", i = "\u012At") : 6 == e ? (h = "Pig", i = "Tung\u016Bz") : 7 == e ? (h = "Rat", i = "S\u012Bchq\u0101n") : 8 == e ? (h = "Ox", i = "\u016Ad") : 9 == e ? (h = "Tiger", i = "B\u0101rs") : 10 == e ? (h = "Rabbit", i = "Tavashq\u0101n") : (h = "Dragon", i = "L\u016By"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
+  var a = document.getElementById("persYear").value % 12,
+    b = document.getElementById("persYear").value,
+    c = document.getElementById("animalAnswer"),
+    d = "",
+    j = "";
+  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Yilan") : 1 == a ? (d = "Horse", j = "Yunt") : 2 == a ? (d = "Goat", j = "Quy") : 3 == a ? (d = "Monkey", j = "Pichin") : 4 == a ? (d = "Rooster", j = "Takhaquy") : 5 == a ? (d = "Dog", j = "It") : 6 == a ? (d = "Pig", j = "Tunguz") : 7 == a ? (d = "Rat", j = "Sichqan") : 8 == a ? (d = "Ox", j = "Ud") : 9 == a ? (d = "Tiger", j = "Bars") : 10 == a ? (d = "Rabbit", j = "Tavashqan") : (d = "Dragon", j = "Luy"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
   }
   </script>
 </head>
 <body>
   <div class="container" style="margin-top:0.6rem;">
     <h3>Calendar Converter for Near East Historians</h3>
+    <script>
+    "serviceWorker" in navigator && navigator.serviceWorker.register("service-worker.js");
+    </script>
     <p>This is a simple calendar conversion utility that displays a given date according to four different standards: <a href="https://en.wikipedia.org/wiki/Gregorian_calendar" rel="noopener" target="_blank">Gregorian</a>, <a href="https://en.wikipedia.org/wiki/Julian_calendar" rel="noopener" target="_blank">Julian</a>, <a href="https://en.wikipedia.org/wiki/Islamic_calendar" rel="noopener" target="_blank">Islamic</a>, and Persian (<em>i.e.</em>, <a href="https://en.wikipedia.org/wiki/Solar_Hijri_calendar" rel="noopener" target="_blank">Solar Hijri</a>). Change the date in any of the tables below, then click the corresponding "Calculate" button, and the equivalent date will appear in the other three calendars. Additionally—and perhaps most helpfully, for historians of the later medieval and early modern Persianate world—this page will indicate the <em>animal year</em> in which the given date falls. (See the "Notes and References" section below for further information on this and other arcane points.)</p>
     <p>Nearly all of this project was derived from the far more extensive work of <a href="https://fourmilab.ch/" rel="noopener" target="_blank">John Walker</a>. You are most encouraged to spend some time exploring his <a href="https://www.fourmilab.ch/documents/calendar/" rel="noopener" target="_blank">calendar page</a> and the underlying code, which he has graciously placed in the public domain.</p>
     <hr>
@@ -195,7 +200,7 @@
             </select> <input name="day" size="2" type="text" value=""> <input name="leap" readonly="readonly" size="36" type="text" value=""></td>
           </tr>
           <tr>
-            <td><img alt="" height="51" id="hebmonth" name="hebmonth" src="figures/hebrew_month_0.gif" width="186"></td>
+            <td><img alt="" height="51" id="hebmonth" name="hebmonth" src="figures/hebrew_month_0.gif"></td>
           </tr>
           <tr>
             <td><input onclick="calcHebrew();" type="button" value="Calculate"></td>
@@ -326,7 +331,7 @@
             </li>
             <li>It should be noted that the Persian calendar included above is the version adopted in Iran in 1925, as a modernization of the <a href="https://en.wikipedia.org/wiki/Jalali_calendar" rel="noopener" target="_blank">Jalali calendar</a> (which dated back to 1079 CE but had not been used consistently in the intervening eras). Why would this recent standard be helpful for history before the twentieth century? The key point is that societies in Greater Iran have, since ancient times, treated the March equinox as the beginning of a new year—<em>i.e.</em>, the festival of <a href="https://en.wikipedia.org/wiki/Nowruz" rel="noopener" target="_blank">Nowruz</a>. This practice is formalized in the Solar Hijri calendar, with the first day of the year, 1 Farvardin, occuring at the March equinox as observed from central Iran (52.5 degrees east meridian). We can therefore use the modern calendar <a href="https://en.wiktionary.org/wiki/proleptic" rel="noopener" target="_blank">proleptically</a> for calculations involving <em>years</em> in earlier periods of Iranian history. The practical significance of this will be made clear in the following note…
             </li>
-            <li>Most people are probably familiar with the <a href="https://en.wikipedia.org/wiki/Chinese_zodiac" rel="noopener" target="_blank">Chinese zodiac</a> system, in which each year is associated with an animal sign in a repeating twelve-year cycle. The traditional Chinese calendar is lunisolar, and the year begins with a new moon that may occur between 21 January and 20 February (Gregorian). Variants of this scheme have been followed, and in many cases continue to be used, in countries across Asia. During the Mongol period, the practice of classifying years with animals was brought to Iran, and, for a time, some authors of astronomical and historical works <em>in Persian</em> used the Chinese calendar directly as a way of dating events. The animal signs themselves became a lasting part of Persianate culture, except that there was (quite naturally) a gradual shift toward setting the transition point between years at the March equinox. This convention took on importance in the historiography of the Timurid and Safavid periods—especially the latter. In several key Safavid Persian chronicles, to the extent that an annalistic format is employed, each year-section begins at Nowruz and is labeled with the corresponding animal. (Months and days are given in the Islamic calendar only.) It is clear that authors of the time had some difficulty maintaining concordance between the solar and lunar schemes that they used; and this has occasionally led to confusion among modern historians. But that is a topic best left for another conversation. Returning to the matter of the Solar Hijri calendar, we have an accurate way of tracking the passage of solar years in Iran from one March equinox to the next, and so we need only a bit of simple modular arithmetic to calculate the animal sign associated with any date.
+            <li>Most people are probably familiar with the <a href="https://en.wikipedia.org/wiki/Chinese_zodiac" rel="noopener" target="_blank">Chinese zodiac</a> system, in which each year is associated with an animal sign in a repeating twelve-year cycle. The traditional Chinese calendar is lunisolar, and the year begins with a new moon that may occur between 21 January and 20 February (Gregorian). Variants of this scheme have been followed, and in many cases continue to be used, in countries across Asia. During the Mongol period, the practice of classifying years with animals was brought to Iran, and, for a time, some authors of astronomical and historical works <em>in Persian</em> used the Chinese calendar directly as one way of dating events. The animal signs themselves became a lasting part of Persianate culture, except that there was (quite naturally) a gradual shift toward setting the transition point between years at the March equinox. This convention took on importance in the historiography of the Timurid and Safavid periods—especially the latter. In several key Safavid Persian chronicles, to the extent that an annalistic format is employed, each year-section begins at Nowruz and is labeled with the corresponding animal. (Months and days are given in the Islamic calendar only.) It is clear that authors of the time had some difficulty maintaining concordance between the solar and lunar schemes that they used; and this has occasionally led to confusion among modern historians. But that is a topic best left for another conversation. Returning to the matter of the Solar Hijri calendar, we have an accurate way of tracking the passage of solar years in Iran from one March equinox to the next, and so we need only a bit of simple modular arithmetic to calculate the animal sign associated with any date.
             </li>
             <li>For more on the use of the twelve-animal cycle in Persian, see <a href="files/melville.pdf" rel="noopener" target="_blank">this journal article</a> by Charles Melville (of Cambridge), and <a href="files/mcchesney.pdf" rel="noopener" target="_blank">this one</a> by Robert D. McChesney (emeritus of NYU).
             </li>
@@ -564,50 +569,50 @@
   julianSubmit = document.getElementById("julianBtn"),
   islamicSubmit = document.getElementById("islamicBtn");
   persSubmit.addEventListener("click", function() {
-  var a = document.getElementById("persYear").value % 12,
-    b = document.getElementById("persYear").value,
-    c = document.getElementById("animalAnswer"),
-    d = "",
-    j = "";
-  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Yilan") : 1 == e ? (h = "Horse", i = "Yunt") : 2 == e ? (h = "Goat", i = "Quy") : 3 == e ? (h = "Monkey", i = "Pichin") : 4 == e ? (h = "Rooster", i = "Takhaquy") : 5 == e ? (h = "Dog", i = "It") : 6 == e ? (h = "Pig", i = "Tunguz") : 7 == e ? (h = "Rat", i = "Sichqan") : 8 == e ? (h = "Ox", i = "Ud") : 9 == e ? (h = "Tiger", i = "Bars") : 10 == e ? (h = "Rabbit", i = "Tavashqan") : (h = "Dragon", i = "Luy"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
   }), gregCalcSubmit.addEventListener("click", function() {
-  var a = document.getElementById("persYear").value % 12,
-    b = document.getElementById("persYear").value,
-    c = document.getElementById("animalAnswer"),
-    d = "",
-    j = "";
-  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Yilan") : 1 == e ? (h = "Horse", i = "Yunt") : 2 == e ? (h = "Goat", i = "Quy") : 3 == e ? (h = "Monkey", i = "Pichin") : 4 == e ? (h = "Rooster", i = "Takhaquy") : 5 == e ? (h = "Dog", i = "It") : 6 == e ? (h = "Pig", i = "Tunguz") : 7 == e ? (h = "Rat", i = "Sichqan") : 8 == e ? (h = "Ox", i = "Ud") : 9 == e ? (h = "Tiger", i = "Bars") : 10 == e ? (h = "Rabbit", i = "Tavashqan") : (h = "Dragon", i = "Luy"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
   }), gregTodaySubmit.addEventListener("click", function() {
-  var a = document.getElementById("persYear").value % 12,
-    b = document.getElementById("persYear").value,
-    c = document.getElementById("animalAnswer"),
-    d = "",
-    j = "";
-  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Yilan") : 1 == e ? (h = "Horse", i = "Yunt") : 2 == e ? (h = "Goat", i = "Quy") : 3 == e ? (h = "Monkey", i = "Pichin") : 4 == e ? (h = "Rooster", i = "Takhaquy") : 5 == e ? (h = "Dog", i = "It") : 6 == e ? (h = "Pig", i = "Tunguz") : 7 == e ? (h = "Rat", i = "Sichqan") : 8 == e ? (h = "Ox", i = "Ud") : 9 == e ? (h = "Tiger", i = "Bars") : 10 == e ? (h = "Rabbit", i = "Tavashqan") : (h = "Dragon", i = "Luy"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
   }), julianSubmit.addEventListener("click", function() {
-  var a = document.getElementById("persYear").value % 12,
-    b = document.getElementById("persYear").value,
-    c = document.getElementById("animalAnswer"),
-    d = "",
-    j = "";
-  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Yilan") : 1 == e ? (h = "Horse", i = "Yunt") : 2 == e ? (h = "Goat", i = "Quy") : 3 == e ? (h = "Monkey", i = "Pichin") : 4 == e ? (h = "Rooster", i = "Takhaquy") : 5 == e ? (h = "Dog", i = "It") : 6 == e ? (h = "Pig", i = "Tunguz") : 7 == e ? (h = "Rat", i = "Sichqan") : 8 == e ? (h = "Ox", i = "Ud") : 9 == e ? (h = "Tiger", i = "Bars") : 10 == e ? (h = "Rabbit", i = "Tavashqan") : (h = "Dragon", i = "Luy"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
   }), islamicSubmit.addEventListener("click", function() {
-  var a = document.getElementById("persYear").value % 12,
-    b = document.getElementById("persYear").value,
-    c = document.getElementById("animalAnswer"),
-    d = "",
-    j = "";
-  1 > b ? c.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == a ? (d = "Snake", j = "Y\u012Bl\u0101n") : 1 == a ? (d = "Horse", j = "Y\u016Bnt") : 2 == a ? (d = "Goat", j = "Q\u016By") : 3 == a ? (d = "Monkey", j = "P\u012Bch\u012Bn") : 4 == a ? (d = "Rooster", j = "Takh\u0101q\u016By") : 5 == a ? (d = "Dog", j = "\u012At") : 6 == a ? (d = "Pig", j = "Tung\u016Bz") : 7 == a ? (d = "Rat", j = "S\u012Bchq\u0101n") : 8 == a ? (d = "Ox", j = "\u016Ad") : 9 == a ? (d = "Tiger", j = "B\u0101rs") : 10 == a ? (d = "Rabbit", j = "Tavashq\u0101n") : (d = "Dragon", j = "L\u016By"), c.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + d + " (<em>" + j + "<\/em>)<\/strong>.")
+  var e = document.getElementById("persYear").value % 12,
+    f = document.getElementById("persYear").value,
+    g = document.getElementById("animalAnswer"),
+    h = "",
+    i = "";
+  1 > f ? g.innerHTML = "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.<\/em>" : (0 == e ? (h = "Snake", i = "Yilan") : 1 == e ? (h = "Horse", i = "Yunt") : 2 == e ? (h = "Goat", i = "Quy") : 3 == e ? (h = "Monkey", i = "Pichin") : 4 == e ? (h = "Rooster", i = "Takhaquy") : 5 == e ? (h = "Dog", i = "It") : 6 == e ? (h = "Pig", i = "Tunguz") : 7 == e ? (h = "Rat", i = "Sichqan") : 8 == e ? (h = "Ox", i = "Ud") : 9 == e ? (h = "Tiger", i = "Bars") : 10 == e ? (h = "Rabbit", i = "Tavashqan") : (h = "Dragon", i = "Luy"), g.innerHTML = "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" + h + " (<em>" + i + "<\/em>)<\/strong>.")
   });
   </script> 
   <script>
   animalCalc();
   </script> 
-  <script crossorigin="anonymous" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
+  <script src="js/jquery-3.2.1.slim.min.js">
   </script> 
-  <script crossorigin="anonymous" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js">
+  <script src="js/popper.min.js">
   </script> 
-  <script crossorigin="anonymous" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js">
+  <script src="js/bootstrap.min.js">
   </script>
 </body>
 </html>
