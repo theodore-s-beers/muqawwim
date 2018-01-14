@@ -41,7 +41,7 @@
     <form action="javascript:calcGregorian();" id="gregorian" name="gregorian">
       <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
         <tr>
-          <td><input id="gregYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value="1998"> <select name="month">
+          <td><input aria-label="Gregorian year" id="gregYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value="1998"> <select aria-label="Gregorian month" name="month">
             <option value="1">
               January
             </option>
@@ -78,8 +78,8 @@
             <option value="12">
               December
             </option>
-          </select> <input id="gregDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value="1"><br>
-          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
+          </select> <input aria-label="Gregorian day" id="gregDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value="1"><br>
+          <input aria-label="Normal or leap year" name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input aria-label="Weekday" name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
         </tr>
         <tr style="display:none;">
           <td><input name="hour" size="2" type="text" value="00">:<input name="min" size="2" type="text" value="00">:<input name="sec" size="2" type="text" value="00"></td>
@@ -121,7 +121,7 @@
     <form action="javascript:calcJulianCalendar();" id="juliancalendar" name="juliancalendar">
       <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
         <tr>
-          <td><input id="julianYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+          <td><input aria-label="Julian year" id="julianYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select aria-label="Julian month" name="month">
             <option value="1">
               January
             </option>
@@ -158,8 +158,8 @@
             <option value="12">
               December
             </option>
-          </select> <input id="julianCalDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
-          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
+          </select> <input aria-label="Julian day" id="julianCalDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input aria-label="Normal or leap year" name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input aria-label="Weekday" name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""></td>
         </tr>
         <tr>
           <td><input class="btn btn-primary" id="julianBtn" onclick="calcJulianCalendar();" style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;" type="submit" value="Calculate"></td>
@@ -212,7 +212,7 @@
     <form action="javascript:calcIslamic();" id="islamic" name="islamic">
       <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
         <tr>
-          <td><input id="islamicYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+          <td><input aria-label="Islamic year" id="islamicYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select aria-label="Islamic month" name="month">
             <option value="1">
               Muharram
             </option>
@@ -249,8 +249,8 @@
             <option value="12">
               Dhu al-Hijjah
             </option>
-          </select> <input id="islamicDay" max="30" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
-          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:11em;" type="text" value=""></td>
+          </select> <input aria-label="Islamic day" id="islamicDay" max="30" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input aria-label="Normal or leap year" name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input aria-label="Arabic weekday" name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:11em;" type="text" value=""></td>
         </tr>
         <tr style="display:none;">
           <td><input name="wday2" readonly="readonly" size="18" type="text" value=""></td>
@@ -264,7 +264,7 @@
     <form action="javascript:calcPersiana();" id="persiana" name="persiana">
       <table class="table table-bordered table-sm" style="max-width:36rem;text-align:center;">
         <tr>
-          <td><input id="persYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
+          <td><input aria-label="Persian year" id="persYear" name="year" style="padding-left:0.2em;max-width:4.2em;" type="number" value=""> <select name="month">
             <option value="1">
               Farvardin
             </option>
@@ -301,8 +301,8 @@
             <option value="12">
               Esfand
             </option>
-          </select> <input id="persianDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
-          <input name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:9em;" type="text" value=""></td>
+          </select> <input aria-label="Persian day" id="persianDay" max="31" min="1" name="day" style="padding-left:0.2em;min-width:2.9em;max-width:2.9em;" type="number" value=""><br>
+          <input aria-label="Normal or leap year" name="leap" readonly style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;" type="text" value=""> <input aria-label="Persian weekday" name="wday" readonly style="color:forestgreen;padding-left:0.2em;max-width:9em;" type="text" value=""></td>
         </tr>
         <tr style="display:none;">
           <td><input name="wday2" readonly="readonly" size="13" type="text" value=""></td>
