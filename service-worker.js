@@ -1,4 +1,4 @@
-const PRECACHE = "precache-v8",
+const PRECACHE = "precache-v9",
   RUNTIME = "runtime",
   PRECACHE_URLS = ["index.html", "./", "js/calendar.js", "js/astro.js", "css/bootstrap.min.css", "img/icon.png", "img/icon-192.png", "figures/hebrew_month_0.gif", "figures/hebrew_month_1.gif", "figures/hebrew_month_2.gif", "figures/hebrew_month_3.gif", "figures/hebrew_month_4.gif", "figures/hebrew_month_5.gif", "figures/hebrew_month_6.gif", "figures/hebrew_month_7.gif", "figures/hebrew_month_8.gif", "figures/hebrew_month_9.gif", "figures/hebrew_month_10.gif", "figures/hebrew_month_11.gif", "figures/hebrew_month_12.gif", "figures/hebrew_month_13.gif", "figures/hebrew_month_14.gif", "js/popper.min.js", "js/bootstrap.min.js", "js/jquery-3.2.1.slim.min.js"];
 self.addEventListener("install", a => {

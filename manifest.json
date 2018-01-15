@@ -1,6 +1,6 @@
 {
-  "name": "CalendarConv",
-  "short_name": "CalendarConv",
+  "name": "Calendrics",
+  "short_name": "Calendrics",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#218686",
