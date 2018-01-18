@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/theobeers
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.muqawwim.com
+  * I am theobeers (https://keybase.io/theobeers) on keybase.
+  * I have a public key ASDxgEIXnc83q4yF99GeRF3iM3KMUbLYtUynXxulouWLqQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120f18042179dcf37ab8c85f7d19e445de233728c51b2d8b54ca75f1ba5a2e58ba90a",
+      "host": "keybase.io",
+      "kid": "0120f18042179dcf37ab8c85f7d19e445de233728c51b2d8b54ca75f1ba5a2e58ba90a",
+      "uid": "c0a9783a332e46efd731186a98f2b119",
+      "username": "theobeers"
+    },
+    "merkle_root": {
+      "ctime": 1516297395,
+      "hash": "585f5995b99126ec4e394ea11b34f200f8cc4ddb521c6df882f61d102b708c96c4a00ff87f54a0d7f76a45b3d7405b5ff6d5d8c2cadee9c3e95f07d18445d0bd",
+      "hash_meta": "371ebc8eff293ba0e792d6683dd475aea7668034dab0d643d3399c1bc3e7ac3e",
+      "seqno": 1942166
+    },
+    "service": {
+      "hostname": "www.muqawwim.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.38"
+  },
+  "ctime": 1516297431,
+  "expire_in": 504576000,
+  "prev": "0face0ba1ddb64b66f5fd46c38bc7a683b2a20282b276cad6636f7526748ef76",
+  "seqno": 22,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg8YBCF53PN6uMhffRnkRd4jNyjFGy2LVMp18bpaLli6kKp3BheWxvYWTFA0p7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwZjE4MDQyMTc5ZGNmMzdhYjhjODVmN2QxOWU0NDVkZTIzMzcyOGM1MWIyZDhiNTRjYTc1ZjFiYTVhMmU1OGJhOTBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwZjE4MDQyMTc5ZGNmMzdhYjhjODVmN2QxOWU0NDVkZTIzMzcyOGM1MWIyZDhiNTRjYTc1ZjFiYTVhMmU1OGJhOTBhIiwidWlkIjoiYzBhOTc4M2EzMzJlNDZlZmQ3MzExODZhOThmMmIxMTkiLCJ1c2VybmFtZSI6InRoZW9iZWVycyJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTUxNjI5NzM5NSwiaGFzaCI6IjU4NWY1OTk1Yjk5MTI2ZWM0ZTM5NGVhMTFiMzRmMjAwZjhjYzRkZGI1MjFjNmRmODgyZjYxZDEwMmI3MDhjOTZjNGEwMGZmODdmNTRhMGQ3Zjc2YTQ1YjNkNzQwNWI1ZmY2ZDVkOGMyY2FkZWU5YzNlOTVmMDdkMTg0NDVkMGJkIiwiaGFzaF9tZXRhIjoiMzcxZWJjOGVmZjI5M2JhMGU3OTJkNjY4M2RkNDc1YWVhNzY2ODAzNGRhYjBkNjQzZDMzOTljMWJjM2U3YWMzZSIsInNlcW5vIjoxOTQyMTY2fSwic2VydmljZSI6eyJob3N0bmFtZSI6Ind3dy5tdXFhd3dpbS5jb20iLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4zOCJ9LCJjdGltZSI6MTUxNjI5NzQzMSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsInByZXYiOiIwZmFjZTBiYTFkZGI2NGI2NmY1ZmQ0NmMzOGJjN2E2ODNiMmEyMDI4MmIyNzZjYWQ2NjM2Zjc1MjY3NDhlZjc2Iiwic2Vxbm8iOjIyLCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQDMsF/Er6rRH851MyG/1f3yhW0Q1GILR/oVDcEDKkDG4mKtv189tYv7a2wazWcc0PK8fD12ZK/B5gEHXRHbTdgqoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCAY7HKX8LOY1ZSGN7TV+RH6eCT5DsB10lsiwWcS0SyoQqN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/theobeers
+
+==================================================================
