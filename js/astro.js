@@ -4,86 +4,102 @@ var J2000 = 2451545,
   AstronomicalUnit = 149597870,
   TropicalYear = 365.24219878;
 
-function astor(c) {
-  return c * (Math.PI / 648000)
+function astor(a) {
+  return a * (Math.PI / 648e3)
 }
 
-function dtr(c) {
-  return c * Math.PI / 180
+function dtr(a) {
+  return a * Math.PI / 180
 }
 
-function rtd(c) {
-  return 180 * c / Math.PI
+function rtd(a) {
+  return 180 * a / Math.PI
 }
 
-function fixangle(c) {
-  return c - 360 * Math.floor(c / 360)
+function fixangle(a) {
+  return a - 360 * Math.floor(a / 360)
 }
 
-function fixangr(c) {
-  return c - 2 * Math.PI * Math.floor(c / (2 * Math.PI))
+function fixangr(a) {
+  return a - 2 * Math.PI * Math.floor(a / (2 * Math.PI))
 }
 
-function dsin(c) {
-  return Math.sin(dtr(c))
+function dsin(a) {
+  return Math.sin(dtr(a))
 }
 
-function dcos(c) {
-  return Math.cos(dtr(c))
+function dcos(a) {
+  return Math.cos(dtr(a))
 }
 
-function mod(c, g) {
-  return c - g * Math.floor(c / g)
+function mod(a, d) {
+  return a - d * Math.floor(a / d)
 }
 
-function amod(c, g) {
-  return mod(c - 1, g) + 1
+function amod(a, d) {
+  return mod(a - 1, d) + 1
 }
 
-function jhms(c) {
-  var g;
-  return c += 0.5, g = 86400 * (c - Math.floor(c)) + 0.5, [Math.floor(g / 3600), Math.floor(g / 60 % 60), Math.floor(g % 60)]
+function jhms(a) {
+  var d;
+  return d = 86400 * ((a += .5) - Math.floor(a)) + .5, [Math.floor(d / 3600), Math.floor(d / 60 % 60), Math.floor(d % 60)]
 }
 var Weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-function jwday(c) {
-  return mod(Math.floor(c + 1.5), 7)
+function jwday(a) {
+  return mod(Math.floor(a + 1.5), 7)
 }
 var oterms = [-4680.93, -1.55, 1999.25, -51.38, -249.67, -39.05, 7.12, 27.87, 5.79, 2.45];
 
-function obliqeq(c) {
-  var g, h, k, l;
-  if (k = h = (c - J2000) / (100 * JulianCentury), g = 23 + 26 / 60 + 21.448 / 3600, 1 > Math.abs(h))
-    for (l = 0; 10 > l; l++) g += oterms[l] / 3600 * k, k *= h;
-  return g
+function obliqeq(a) {
+  var d, e, f, h;
+  if (f = e = (a - J2000) / (100 * JulianCentury), d = 23.43929111111111, 1 > Math.abs(e))
+    for (h = 0; 10 > h; h++) d += oterms[h] / 3600 * f, f *= e;
+  return d
 }
 var nutArgMult = [0, 0, 0, 0, 1, -2, 0, 0, 2, 2, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, -2, 1, 0, 2, 2, 0, 0, 0, 2, 1, 0, 0, 1, 2, 2, -2, -1, 0, 2, 2, -2, 0, 1, 0, 0, -2, 0, 0, 2, 1, 0, 0, -1, 2, 2, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 0, -1, 2, 2, 0, 0, -1, 0, 1, 0, 0, 1, 2, 1, -2, 0, 2, 0, 0, 0, 0, -2, 2, 1, 2, 0, 0, 2, 2, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, -2, 0, 1, 2, 2, 0, 0, 0, 2, 0, -2, 0, 0, 2, 0, 0, 0, -1, 2, 1, 0, 2, 0, 0, 0, 2, 0, -1, 0, 1, -2, 2, 0, 2, 2, 0, 1, 0, 0, 1, -2, 0, 1, 0, 1, 0, -1, 0, 0, 1, 0, 0, 2, -2, 0, 2, 0, -1, 2, 1, 2, 0, 1, 2, 2, 0, 1, 0, 2, 2, -2, 1, 1, 0, 0, 0, -1, 0, 2, 2, 2, 0, 0, 2, 1, 2, 0, 1, 0, 0, -2, 0, 2, 2, 2, -2, 0, 1, 2, 1, 2, 0, -2, 0, 1, 2, 0, 0, 0, 1, 0, -1, 1, 0, 0, -2, -1, 0, 2, 1, -2, 0, 0, 0, 1, 0, 0, 2, 2, 1, -2, 0, 2, 0, 1, -2, 1, 0, 2, 1, 0, 0, 1, -2, 0, -1, 0, 1, 0, 0, -2, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2, 0, -1, -1, 1, 0, 0, 0, 1, 1, 0, 0, 0, -1, 1, 2, 2, 2, -1, -1, 2, 2, 0, 0, -2, 2, 2, 0, 0, 3, 2, 2, 2, -1, 0, 2, 2],
   nutArgCoeff = [-171996, -1742, 92095, 89, -13187, -16, 5736, -31, -2274, -2, 977, -5, 2062, 2, -895, 5, 1426, -34, 54, -1, 712, 1, -7, 0, -517, 12, 224, -6, -386, -4, 200, 0, -301, 0, 129, -1, 217, -5, -95, 3, -158, 0, 0, 0, 129, 1, -70, 0, 123, 0, -53, 0, 63, 0, 0, 0, 63, 1, -33, 0, -59, 0, 26, 0, -58, -1, 32, 0, -51, 0, 27, 0, 48, 0, 0, 0, 46, 0, -24, 0, -38, 0, 16, 0, -31, 0, 13, 0, 29, 0, 0, 0, 29, 0, -12, 0, 26, 0, 0, 0, -22, 0, 0, 0, 21, 0, -10, 0, 17, -1, 0, 0, 16, 0, -8, 0, -16, 1, 7, 0, -15, 0, 9, 0, -13, 0, 7, 0, -12, 0, 6, 0, 11, 0, 0, 0, -10, 0, 5, 0, -8, 0, 3, 0, 7, 0, -3, 0, -7, 0, 0, 0, -7, 0, 3, 0, -7, 0, 3, 0, 6, 0, 0, 0, 6, 0, -3, 0, 6, 0, -3, 0, -6, 0, 3, 0, -6, 0, 3, 0, 5, 0, 0, 0, -5, 0, 3, 0, -5, 0, 3, 0, -5, 0, 3, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, -4, 0, 0, 0, -4, 0, 0, 0, -4, 0, 0, 0, 3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0, -3, 0, 0, 0];
 
-function nutation(c) {
-  var g, h, k, l, m, n, o, p, q = (c - 2451545) / 36525,
-    s = [],
-    w = 0,
-    x = 0;
-  for (n = q * (m = q * q), s[0] = dtr(297.850363 + 445267.11148 * q - 0.0019142 * m + n / 189474), s[1] = dtr(357.52772 + 35999.05034 * q - 1.603e-4 * m - n / 3e5), s[2] = dtr(134.96298 + 477198.867398 * q + 0.0086972 * m + n / 56250), s[3] = dtr(93.27191 + 483202.017538 * q - 0.0036825 * m + n / 327270), s[4] = dtr(125.04452 - 1934.136261 * q + 0.0020708 * m + n / 4.5e5), k = 0; 5 > k; k++) s[k] = fixangr(s[k]);
-  for (o = q / 10, k = 0; 63 > k; k++) {
-    for (p = 0, l = 0; 5 > l; l++) 0 != nutArgMult[5 * k + l] && (p += nutArgMult[5 * k + l] * s[l]);
-    w += (nutArgCoeff[4 * k + 0] + nutArgCoeff[4 * k + 1] * o) * Math.sin(p), x += (nutArgCoeff[4 * k + 2] + nutArgCoeff[4 * k + 3] * o) * Math.cos(p)
+function nutation(a) {
+  var d, e, f, h, i, l, n = (a - 2451545) / 36525,
+    o = [],
+    r = 0,
+    s = 0;
+  for (h = n * (f = n * n), o[0] = dtr(297.850363 + 445267.11148 * n - .0019142 * f + h / 189474), o[1] = dtr(357.52772 + 35999.05034 * n - 1603e-7 * f - h / 3e5), o[2] = dtr(134.96298 + 477198.867398 * n + .0086972 * f + h / 56250), o[3] = dtr(93.27191 + 483202.017538 * n - .0036825 * f + h / 327270), o[4] = dtr(125.04452 - 1934.136261 * n + .0020708 * f + h / 45e4), d = 0; 5 > d; d++) o[d] = fixangr(o[d]);
+  for (i = n / 10, d = 0; 63 > d; d++) {
+    for (e = l = 0; 5 > e; e++) 0 != nutArgMult[5 * d + e] && (l += nutArgMult[5 * d + e] * o[e]);
+    r += (nutArgCoeff[4 * d + 0] + nutArgCoeff[4 * d + 1] * i) * Math.sin(l), s += (nutArgCoeff[4 * d + 2] + nutArgCoeff[4 * d + 3] * i) * Math.cos(l)
   }
-  return g = w / 3.6e7, h = x / 3.6e7, [g, h]
+  return [r / 36e6, s / 36e6]
 }
 
-function ecliptoeq(c, g, h) {
-  var k, l, m;
-  return k = dtr(obliqeq(c)), log += "Obliquity: " + rtd(k) + "\n", l = rtd(Math.atan2(Math.cos(k) * Math.sin(dtr(g)) - Math.tan(dtr(h)) * Math.sin(k), Math.cos(dtr(g)))), log += "RA = " + l + "\n", l = fixangle(rtd(Math.atan2(Math.cos(k) * Math.sin(dtr(g)) - Math.tan(dtr(h)) * Math.sin(k), Math.cos(dtr(g))))), m = rtd(Math.asin(Math.sin(k) * Math.sin(dtr(g)) * Math.cos(dtr(h)) + Math.sin(dtr(h)) * Math.cos(k))), [l, m]
+function ecliptoeq(a, d, e) {
+  var f, h;
+  return f = dtr(obliqeq(a)), log += "Obliquity: " + rtd(f) + "\n", h = rtd(Math.atan2(Math.cos(f) * Math.sin(dtr(d)) - Math.tan(dtr(e)) * Math.sin(f), Math.cos(dtr(d)))), log += "RA = " + h + "\n", [h = fixangle(rtd(Math.atan2(Math.cos(f) * Math.sin(dtr(d)) - Math.tan(dtr(e)) * Math.sin(f), Math.cos(dtr(d))))), rtd(Math.asin(Math.sin(f) * Math.sin(dtr(d)) * Math.cos(dtr(e)) + Math.sin(dtr(e)) * Math.cos(f)))]
 }
 var deltaTtab = [121, 112, 103, 95, 88, 82, 77, 72, 68, 63, 60, 56, 53, 51, 48, 46, 44, 42, 40, 38, 35, 33, 31, 29, 26, 24, 22, 20, 18, 16, 14, 12, 11, 10, 9, 8, 7, 7, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 15, 15, 14, 13, 13.1, 12.5, 12.2, 12, 12, 12, 12, 12, 12, 11.9, 11.6, 11, 10.2, 9.2, 8.2, 7.1, 6.2, 5.6, 5.4, 5.3, 5.4, 5.6, 5.9, 6.2, 6.5, 6.8, 7.1, 7.3, 7.5, 7.6, 7.7, 7.3, 6.2, 5.2, 2.7, 1.4, -1.2, -2.8, -3.8, -4.8, -5.5, -5.3, -5.6, -5.7, -5.9, -6, -6.3, -6.5, -6.2, -4.7, -2.8, -0.1, 2.6, 5.3, 7.7, 10.4, 13.3, 16, 18.2, 20.2, 21.1, 22.4, 23.5, 23.8, 24.3, 24, 23.9, 23.9, 23.7, 24, 24.3, 25.3, 26.2, 27.3, 28.2, 29.1, 30, 30.7, 31.4, 32.2, 33.1, 34, 35, 36.5, 38.3, 40.2, 42.2, 44.5, 46.5, 48.5, 50.5, 52.2, 53.8, 54.9, 55.8, 56.9, 58.3, 60, 61.6, 63, 65, 66.6];
 
-function deltat(c) {
-  var g, h, k, l;
-  return 1620 <= c && 2e3 >= c ? (k = Math.floor((c - 1620) / 2), h = (c - 1620) / 2 - k, g = deltaTtab[k] + (deltaTtab[k + 1] - deltaTtab[k]) * h) : (l = (c - 2e3) / 100, 948 > c ? g = 2177 + 497 * l + 44.1 * l * l : (g = 102 + 102 * l + 25.3 * l * l, 2e3 < c && 2100 > c && (g += 0.37 * (c - 2100)))), g
+function deltat(a) {
+  var d, e, f, h;
+  return 1620 <= a && 2e3 >= a ? (e = (a - 1620) / 2 - (f = Math.floor((a - 1620) / 2)), d = deltaTtab[f] + (deltaTtab[f + 1] - deltaTtab[f]) * e) : (h = (a - 2e3) / 100, 948 > a ? d = 2177 + 497 * h + 44.1 * h * h : (d = 102 + 102 * h + 25.3 * h * h, 2e3 < a && 2100 > a && (d += .37 * (a - 2100)))), d
 }
 var EquinoxpTerms = [485, 324.96, 1934.136, 203, 337.23, 32964.467, 199, 342.08, 20.186, 182, 27.85, 445267.112, 156, 73.14, 45036.886, 136, 171.52, 22518.443, 77, 222.54, 65928.934, 74, 296.72, 3034.906, 70, 243.58, 9037.513, 58, 119.81, 33718.147, 52, 297.17, 150.678, 50, 21.02, 2281.226, 45, 247.54, 29929.562, 44, 325.15, 31555.956, 29, 60.93, 4443.417, 18, 155.12, 67555.328, 17, 288.79, 4562.452, 16, 198.04, 62894.029, 14, 199.76, 31436.921, 12, 95.39, 14577.848, 12, 287.11, 31931.756, 12, 320.81, 34777.259, 9, 227.73, 1222.114, 8, 15.45, 16859.074];
+
+function equinox(a, d) {
+  var e, f, h, i, l, n, o, r, s;
+  for (1e3 > a ? (l = JDE0tab1000, s = a / 1e3) : (l = JDE0tab2000, s = (a - 2e3) / 1e3), e = 1 + .0334 * dcos(r = 35999.373 * (o = ((i = l[d][0] + l[d][1] * s + l[d][2] * s * s + l[d][3] * s * s * s + l[d][4] * s * s * s * s) - 2451545) / 36525) - 2.47) + 7e-4 * dcos(2 * r), f = h = n = 0; 24 > f; f++) n += EquinoxpTerms[h] * dcos(EquinoxpTerms[h + 1] + EquinoxpTerms[h + 2] * o), h += 3;
+  return i + 1e-5 * n / e
+}
+
+function sunpos(a) {
+  var d, e, f, h, i, l, n, o, r, s, t, u, B;
+  return i = .016708634 + -42037e-9 * (d = (a - J2000) / JulianCentury) + -1.267e-7 * (e = d * d), n = (f = fixangle(f = 280.46646 + 36000.76983 * d + 3032e-7 * e)) + (l = (1.914602 + -.004817 * d + -14e-6 * e) * dsin(h = fixangle(h = 357.52911 + 35999.05029 * d + -1537e-7 * e)) + (.019993 - 101e-6 * d) * dsin(2 * h) + 289e-6 * dsin(3 * h)), r = 1.000001018 * (1 - i * i) / (1 + i * dcos(o = h + l)), t = n + -.00569 + -.00478 * dsin(s = 125.04 - 1934.136 * d), u = (B = obliqeq(a)) + .00256 * dcos(s), [f, h, i, l, n, o, r, t, fixangle(rtd(Math.atan2(dcos(B) * dsin(n), dcos(n)))), rtd(Math.asin(dsin(B) * dsin(n))), fixangle(rtd(Math.atan2(dcos(u) * dsin(t), dcos(t)))), rtd(Math.asin(dsin(u) * dsin(t)))]
+}
+
+function equationOfTime(a) {
+  var d, e;
+  return d = fixangle(280.4664567 + 360007.6982779 * (e = (a - J2000) / JulianMillennium) + .03032028 * e * e + e * e * e / 49931 + -e * e * e * e / 15300 + -e * e * e * e * e / 2e6) + -.0057183 + -sunpos(a)[10] + nutation(a)[0] * dcos(obliqeq(a) + nutation(a)[1]), (d -= 20 * Math.floor(d / 20)) / 1440
+}
 JDE0tab1000 = [
   [1721139.29189, 365242.1374, 0.06134, 0.00111, -0.00071],
   [1721233.25401, 365241.72562, -0.05323, 0.00907, 0.00025],
@@ -95,19 +111,3 @@ JDE0tab1000 = [
   [2451810.21715, 365242.01767, -0.11575, 0.00337, 0.00078],
   [2451900.05952, 365242.74049, -0.06223, -0.00823, 0.00032]
 ];
-
-function equinox(c, g) {
-  var h, k, l, m, n, o, p, q, s, w;
-  for (1e3 > c ? (o = JDE0tab1000, w = c / 1e3) : (o = JDE0tab2000, w = (c - 2e3) / 1e3), m = o[g][0] + o[g][1] * w + o[g][2] * w * w + o[g][3] * w * w * w + o[g][4] * w * w * w * w, q = (m - 2451545) / 36525, s = 35999.373 * q - 2.47, h = 1 + 0.0334 * dcos(s) + 7e-4 * dcos(2 * s), p = 0, k = l = 0; 24 > k; k++) p += EquinoxpTerms[l] * dcos(EquinoxpTerms[l + 1] + EquinoxpTerms[l + 2] * q), l += 3;
-  return n = m + 1e-5 * p / h, n
-}
-
-function sunpos(c) {
-  var g, h, k, l, m, n, o, p, q, s, w, x, y, z, A, B, D;
-  return g = (c - J2000) / JulianCentury, h = g * g, k = 280.46646 + 36000.76983 * g + 3.032e-4 * h, k = fixangle(k), l = 357.52911 + 35999.05029 * g + -1.537e-4 * h, l = fixangle(l), m = 0.016708634 + -4.2037e-5 * g + -1.267e-7 * h, n = (1.914602 + -0.004817 * g + -1.4e-5 * h) * dsin(l) + (0.019993 - 1.01e-4 * g) * dsin(2 * l) + 2.89e-4 * dsin(3 * l), o = k + n, p = l + n, q = 1.000001018 * (1 - m * m) / (1 + m * dcos(p)), s = 125.04 - 1934.136 * g, w = o + -0.00569 + -0.00478 * dsin(s), y = obliqeq(c), x = y + 0.00256 * dcos(s), z = rtd(Math.atan2(dcos(y) * dsin(o), dcos(o))), z = fixangle(z), A = rtd(Math.asin(dsin(y) * dsin(o))), B = rtd(Math.atan2(dcos(x) * dsin(w), dcos(w))), B = fixangle(B), D = rtd(Math.asin(dsin(x) * dsin(w))), [k, l, m, n, o, p, q, w, z, A, B, D]
-}
-
-function equationOfTime(c) {
-  var g, h, k, l, m, n;
-  return n = (c - J2000) / JulianMillennium, m = 280.4664567 + 360007.6982779 * n + 0.03032028 * n * n + n * n * n / 49931 + -(n * n * n * n / 15300) + -(n * n * n * n * n / 2e6), m = fixangle(m), g = sunpos(c)[10], h = nutation(c)[0], l = obliqeq(c) + nutation(c)[1], k = m + -0.0057183 + -g + h * dcos(l), k -= 20 * Math.floor(k / 20), k /= 1440, k
-}
