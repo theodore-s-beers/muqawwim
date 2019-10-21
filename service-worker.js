@@ -11,7 +11,7 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.2.0/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -25,6 +25,10 @@ self.addEventListener('message', (event) => {
  * See https://goo.gl/S9QRab
  */
 self.__precacheManifest = [
+  {
+    "url": "404.html",
+    "revision": "84c47eef7b55054f2bf7e981400e0d8c"
+  },
   {
     "url": "figures/hebrew_month_0.gif",
     "revision": "28bebe0e91ef128a01697d4d43b08e89"
@@ -123,19 +127,19 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "f6b9ed045bedb660bcdc89bce8cef8d2"
+    "revision": "b2885de98179b63d931d4ecb3100a47e"
   },
   {
     "url": "js/astro.js",
-    "revision": "7773d7bec3a6ca352ce34fa8bcd2f748"
+    "revision": "7b59e52c2bdb36b53b9f9fbe614f0ccc"
   },
   {
     "url": "js/calendar.js",
-    "revision": "776a2111f2ef9c0f7df419975e5fcc64"
+    "revision": "37caa9a11cc33f9520779d7065f0656d"
   },
   {
     "url": "manifest.json",
-    "revision": "449c0d059ee163ff2613439c11b5a019"
+    "revision": "8857b39ff5f0f861b26d1cd8bfe01f70"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
