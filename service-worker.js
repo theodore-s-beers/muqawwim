@@ -127,7 +127,7 @@ self.__precacheManifest = [
   },
   {
     "url": "index.html",
-    "revision": "78cc1abb5a28f4db20f9931bd3646558"
+    "revision": "3b9be0e24406a61345089fdc91bef296"
   },
   {
     "url": "js/astro.js",
