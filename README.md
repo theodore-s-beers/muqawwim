@@ -1,1 +1,1 @@
-Visit https://www.muqawwim.com/.
+Visit https://www.muqawwim.com/
