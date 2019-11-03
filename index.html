@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
   <head>
     <title>Calendar Converter for Near East Historians</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no"
     />
     <meta content="Theo Beers" name="author" />
     <meta
-      content="Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars."
       name="description"
+      content="Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars."
     />
     <meta content="#0066ff" name="theme-color" />
     <link href="manifest.json" rel="manifest" />
@@ -31,7 +31,6 @@
       body {
         font-family: "Noto Serif", serif;
       }
-
       select {
         padding-bottom: 0.1em;
       }
@@ -80,9 +79,8 @@
       }
     </script>
   </head>
-
   <body>
-    <div class="container" style="margin-top:0.6rem;">
+    <div class="container" style="margin-top:.6rem">
       <h2>Calendar Converter for Near East Historians</h2>
       <script>
         "serviceWorker" in navigator &&
@@ -148,7 +146,7 @@
       >
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center;"
+          style="max-width:36rem;text-align:center"
         >
           <tr>
             <td>
@@ -156,77 +154,52 @@
                 aria-label="Gregorian year"
                 id="gregYear"
                 name="year"
-                style="padding-left:0.2em;max-width:4em;"
+                style="padding-left:.2em;max-width:4em"
                 type="number"
                 value="1998"
               />
-              <select aria-label="Gregorian month" name="month">
-                <option value="1">
-                  January
-                </option>
-                <option value="2">
-                  February
-                </option>
-                <option value="3">
-                  March
-                </option>
-                <option value="4">
-                  April
-                </option>
-                <option value="5">
-                  May
-                </option>
-                <option value="6">
-                  June
-                </option>
-                <option value="7">
-                  July
-                </option>
-                <option value="8">
-                  August
-                </option>
-                <option value="9">
-                  September&thinsp;
-                </option>
-                <option value="10">
-                  October
-                </option>
-                <option value="11">
-                  November
-                </option>
-                <option value="12">
-                  December
-                </option>
-              </select>
+              <select aria-label="Gregorian month" name="month"
+                ><option value="1">January</option
+                ><option value="2">February</option
+                ><option value="3">March</option
+                ><option value="4">April</option
+                ><option value="5">May</option
+                ><option value="6">June</option
+                ><option value="7">July</option
+                ><option value="8">August</option
+                ><option value="9">September&thinsp;</option
+                ><option value="10">October</option
+                ><option value="11">November</option
+                ><option value="12">December</option></select
+              >
               <input
                 aria-label="Gregorian day"
                 id="gregDay"
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:0.2em;min-width:2.8em;max-width:2.8em;"
+                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
                 type="number"
                 value="1"
-              /><br />
-              <input
+              /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
-                readonly
-                style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;"
+                readonly="readonly"
+                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7.4em"
                 type="text"
                 value=""
               />
               <input
                 aria-label="Weekday"
                 name="wday"
-                readonly
-                style="color:forestgreen;padding-left:0.2em;max-width:7.4em;"
+                readonly="readonly"
+                style="color:#228b22;padding-left:.2em;max-width:7.4em"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none;">
+          <tr style="display:none">
             <td>
               <input name="hour" size="2" type="text" value="00" />:<input
                 name="min"
@@ -236,7 +209,7 @@
               />:<input name="sec" size="2" type="text" value="00" />
             </td>
           </tr>
-          <tr style="display:none;">
+          <tr style="display:none">
             <td>
               <input
                 name="wday2"
@@ -253,7 +226,7 @@
                 class="btn btn-primary"
                 id="gregCalcBtn"
                 onclick="calcGregorian();"
-                style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;"
+                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
                 type="submit"
                 value="Calculate"
               />
@@ -262,7 +235,7 @@
                 class="btn btn-secondary"
                 id="gregTodayBtn"
                 onclick="setDateToToday();calcGregorian();"
-                style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;"
+                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
                 type="button"
                 value="Today"
               />
@@ -273,7 +246,7 @@
       <script>
         setDateToToday();
       </script>
-      <div style="display:none;">
+      <div style="display:none">
         <form action="javascript:calcJulian();" id="julianday" name="julianday">
           <table>
             <tr>
@@ -319,7 +292,7 @@
       >
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center;"
+          style="max-width:36rem;text-align:center"
         >
           <tr>
             <td>
@@ -327,71 +300,46 @@
                 aria-label="Julian year"
                 id="julianYear"
                 name="year"
-                style="padding-left:0.2em;max-width:4em;"
+                style="padding-left:.2em;max-width:4em"
                 type="number"
                 value=""
               />
-              <select aria-label="Julian month" name="month">
-                <option value="1">
-                  January
-                </option>
-                <option value="2">
-                  February
-                </option>
-                <option value="3">
-                  March
-                </option>
-                <option value="4">
-                  April
-                </option>
-                <option value="5">
-                  May
-                </option>
-                <option value="6">
-                  June
-                </option>
-                <option value="7">
-                  July
-                </option>
-                <option value="8">
-                  August
-                </option>
-                <option value="9">
-                  September&thinsp;
-                </option>
-                <option value="10">
-                  October
-                </option>
-                <option value="11">
-                  November
-                </option>
-                <option value="12">
-                  December
-                </option>
-              </select>
+              <select aria-label="Julian month" name="month"
+                ><option value="1">January</option
+                ><option value="2">February</option
+                ><option value="3">March</option
+                ><option value="4">April</option
+                ><option value="5">May</option
+                ><option value="6">June</option
+                ><option value="7">July</option
+                ><option value="8">August</option
+                ><option value="9">September&thinsp;</option
+                ><option value="10">October</option
+                ><option value="11">November</option
+                ><option value="12">December</option></select
+              >
               <input
                 aria-label="Julian day"
                 id="julianCalDay"
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:0.2em;min-width:2.8em;max-width:2.8em;"
+                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
                 type="number"
                 value=""
-              /><br />
-              <input
+              /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
-                readonly
-                style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7.4em;"
+                readonly="readonly"
+                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7.4em"
                 type="text"
                 value=""
               />
               <input
                 aria-label="Weekday"
                 name="wday"
-                readonly
-                style="color:forestgreen;padding-left:0.2em;max-width:7.4em;"
+                readonly="readonly"
+                style="color:#228b22;padding-left:.2em;max-width:7.4em"
                 type="text"
                 value=""
               />
@@ -403,7 +351,7 @@
                 class="btn btn-primary"
                 id="julianBtn"
                 onclick="calcJulianCalendar();"
-                style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;"
+                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
                 type="submit"
                 value="Calculate"
               />
@@ -411,27 +359,27 @@
           </tr>
         </table>
       </form>
-      <div style="display:none;">
+      <div style="display:none">
         <form action="javascript:calcHebrew();" id="hebrew" name="hebrew">
           <table>
             <tr>
               <td>
                 <input name="year" size="5" type="text" value="" />
-                <select name="month" size="1">
-                  <option label="x" value="1"> </option>
-                  <option label="x" value="2"> </option>
-                  <option label="x" value="3"> </option>
-                  <option label="x" value="4"> </option>
-                  <option label="x" value="5"> </option>
-                  <option label="x" value="6"> </option>
-                  <option label="x" value="7"> </option>
-                  <option label="x" value="8"> </option>
-                  <option label="x" value="9"> </option>
-                  <option label="x" value="10"> </option>
-                  <option label="x" value="11"> </option>
-                  <option label="x" value="12"> </option>
-                  <option label="x" value="13"> </option>
-                </select>
+                <select name="month" size="1"
+                  ><option label="x" value="1"></option
+                  ><option label="x" value="2"></option
+                  ><option label="x" value="3"></option
+                  ><option label="x" value="4"></option
+                  ><option label="x" value="5"></option
+                  ><option label="x" value="6"></option
+                  ><option label="x" value="7"></option
+                  ><option label="x" value="8"></option
+                  ><option label="x" value="9"></option
+                  ><option label="x" value="10"></option
+                  ><option label="x" value="11"></option
+                  ><option label="x" value="12"></option
+                  ><option label="x" value="13"></option
+                ></select>
                 <input name="day" size="2" type="text" value="" />
                 <input
                   name="leap"
@@ -469,7 +417,7 @@
       <form action="javascript:calcIslamic();" id="islamic" name="islamic">
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center;"
+          style="max-width:36rem;text-align:center"
         >
           <tr>
             <td>
@@ -477,77 +425,52 @@
                 aria-label="Islamic year"
                 id="islamicYear"
                 name="year"
-                style="padding-left:0.2em;max-width:4em;"
+                style="padding-left:.2em;max-width:4em"
                 type="number"
                 value=""
               />
-              <select aria-label="Islamic month" name="month">
-                <option value="1">
-                  Muharram
-                </option>
-                <option value="2">
-                  Safar
-                </option>
-                <option value="3">
-                  Rabi‘ I
-                </option>
-                <option value="4">
-                  Rabi‘ II
-                </option>
-                <option value="5">
-                  Jumada I
-                </option>
-                <option value="6">
-                  Jumada II
-                </option>
-                <option value="7">
-                  Rajab
-                </option>
-                <option value="8">
-                  Sha‘ban
-                </option>
-                <option value="9">
-                  Ramadan
-                </option>
-                <option value="10">
-                  Shawwal
-                </option>
-                <option value="11">
-                  Dhu al-Qa‘dah&thinsp;
-                </option>
-                <option value="12">
-                  Dhu al-Hijjah
-                </option>
-              </select>
+              <select aria-label="Islamic month" name="month"
+                ><option value="1">Muharram</option
+                ><option value="2">Safar</option
+                ><option value="3">Rabi‘ I</option
+                ><option value="4">Rabi‘ II</option
+                ><option value="5">Jumada I</option
+                ><option value="6">Jumada II</option
+                ><option value="7">Rajab</option
+                ><option value="8">Sha‘ban</option
+                ><option value="9">Ramadan</option
+                ><option value="10">Shawwal</option
+                ><option value="11">Dhu al-Qa‘dah&thinsp;</option
+                ><option value="12">Dhu al-Hijjah</option></select
+              >
               <input
                 aria-label="Islamic day"
                 id="islamicDay"
                 max="30"
                 min="1"
                 name="day"
-                style="padding-left:0.2em;min-width:2.8em;max-width:2.8em;"
+                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
                 type="number"
                 value=""
-              /><br />
-              <input
+              /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
-                readonly
-                style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7em;"
+                readonly="readonly"
+                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7em"
                 type="text"
                 value=""
               />
               <input
                 aria-label="Arabic weekday"
                 name="wday"
-                readonly
-                style="color:forestgreen;padding-left:0.2em;max-width:10em;"
+                readonly="readonly"
+                style="color:#228b22;padding-left:.2em;max-width:10em"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none;">
+          <tr style="display:none">
             <td>
               <input
                 name="wday2"
@@ -564,7 +487,7 @@
                 class="btn btn-primary"
                 id="islamicBtn"
                 onclick="calcIslamic();"
-                style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;"
+                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
                 type="submit"
                 value="Calculate"
               />
@@ -576,7 +499,7 @@
       <form action="javascript:calcPersiana();" id="persiana" name="persiana">
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center;"
+          style="max-width:36rem;text-align:center"
         >
           <tr>
             <td>
@@ -584,77 +507,52 @@
                 aria-label="Persian year"
                 id="persYear"
                 name="year"
-                style="padding-left:0.2em;max-width:4em;"
+                style="padding-left:.2em;max-width:4em"
                 type="number"
                 value=""
               />
-              <select aria-label="Persian month" name="month">
-                <option value="1">
-                  Farvardin
-                </option>
-                <option value="2">
-                  Ordibehesht&thinsp;
-                </option>
-                <option value="3">
-                  Khordad
-                </option>
-                <option value="4">
-                  Tir
-                </option>
-                <option value="5">
-                  Mordad
-                </option>
-                <option value="6">
-                  Shahrivar
-                </option>
-                <option value="7">
-                  Mehr
-                </option>
-                <option value="8">
-                  Aban
-                </option>
-                <option value="9">
-                  Azar
-                </option>
-                <option value="10">
-                  Dey
-                </option>
-                <option value="11">
-                  Bahman
-                </option>
-                <option value="12">
-                  Esfand
-                </option>
-              </select>
+              <select aria-label="Persian month" name="month"
+                ><option value="1">Farvardin</option
+                ><option value="2">Ordibehesht&thinsp;</option
+                ><option value="3">Khordad</option
+                ><option value="4">Tir</option
+                ><option value="5">Mordad</option
+                ><option value="6">Shahrivar</option
+                ><option value="7">Mehr</option
+                ><option value="8">Aban</option
+                ><option value="9">Azar</option
+                ><option value="10">Dey</option
+                ><option value="11">Bahman</option
+                ><option value="12">Esfand</option></select
+              >
               <input
                 aria-label="Persian day"
                 id="persianDay"
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:0.2em;min-width:2.8em;max-width:2.8em;"
+                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
                 type="number"
                 value=""
-              /><br />
-              <input
+              /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
-                readonly
-                style="margin-top:0.25em;color:forestgreen;padding-left:0.2em;max-width:7em;"
+                readonly="readonly"
+                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7em"
                 type="text"
                 value=""
               />
               <input
                 aria-label="Persian weekday"
                 name="wday"
-                readonly
-                style="color:forestgreen;padding-left:0.2em;max-width:8.8em;"
+                readonly="readonly"
+                style="color:#228b22;padding-left:.2em;max-width:8.8em"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none;">
+          <tr style="display:none">
             <td>
               <input
                 name="wday2"
@@ -671,7 +569,7 @@
                 class="btn btn-primary"
                 id="persBtn"
                 onclick="calcPersiana();"
-                style="padding-top:0.25em;padding-bottom:0.25em;padding-left:0.5em;padding-right:0.5em;"
+                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
                 type="submit"
                 value="Calculate"
               />
@@ -679,7 +577,7 @@
           </tr>
         </table>
       </form>
-      <div class="card border-info mb-3" style="max-width:36rem;">
+      <div class="card border-info mb-3" style="max-width:36rem">
         <div class="card-body text-info">
           <p class="card-text" id="animalAnswer">
             In the Persianate adaptation of the Chinese-Uighur animal calendar,
@@ -696,9 +594,8 @@
             data-parent="#notesAccordion"
             data-toggle="collapse"
             href="#notes"
+            ><h4>Notes and References</h4></a
           >
-            <h4>Notes and References</h4>
-          </a>
           <div class="collapse" id="notes" role="tabpanel">
             <ul>
               <li>
@@ -842,8 +739,7 @@
         &copy; 2018&#8202;–19
         <a href="https://www.theobeers.com/" rel="noopener" target="_blank"
           >T. S. Beers</a
-        ><br />
-        The files relating to this page are available
+        ><br />The files relating to this page are available
         <a
           href="https://github.com/theodore-s-beers/calendars/"
           rel="noopener"
@@ -856,31 +752,30 @@
           rel="noopener"
           target="_blank"
           >MIT License</a
-        >.<br />
-        I’m not much of a developer. If anything is messed up, please let me
-        know <a href="mailto:tbeers@uchicago.edu">by email</a>!
+        >.<br />I’m not much of a developer. If anything is messed up, please
+        let me know <a href="mailto:tbeers@uchicago.edu">by email</a>!
       </p>
     </div>
-    <div style="display:none;">
+    <div style="display:none">
       <form action="javascript:calcPersian();" id="persian" name="persian">
         <table>
           <tr>
             <td>
               <input name="year" size="5" type="text" value="" />
-              <select name="month" size="1">
-                <option label="x" value="1"> </option>
-                <option label="x" value="2"> </option>
-                <option label="x" value="3"> </option>
-                <option label="x" value="4"> </option>
-                <option label="x" value="5"> </option>
-                <option label="x" value="6"> </option>
-                <option label="x" value="7"> </option>
-                <option label="x" value="8"> </option>
-                <option label="x" value="9"> </option>
-                <option label="x" value="10"> </option>
-                <option label="x" value="11"> </option>
-                <option label="x" value="12"> </option>
-              </select>
+              <select name="month" size="1"
+                ><option label="x" value="1"></option
+                ><option label="x" value="2"></option
+                ><option label="x" value="3"></option
+                ><option label="x" value="4"></option
+                ><option label="x" value="5"></option
+                ><option label="x" value="6"></option
+                ><option label="x" value="7"></option
+                ><option label="x" value="8"></option
+                ><option label="x" value="9"></option
+                ><option label="x" value="10"></option
+                ><option label="x" value="11"></option
+                ><option label="x" value="12"></option
+              ></select>
               <input name="day" size="2" type="text" value="" />
               <input
                 name="leap"
@@ -958,20 +853,20 @@
           <tr>
             <td>
               <input name="year" size="5" type="text" value="" />
-              <select name="month" size="1">
-                <option label="x" value="1"> </option>
-                <option label="x" value="2"> </option>
-                <option label="x" value="3"> </option>
-                <option label="x" value="4"> </option>
-                <option label="x" value="5"> </option>
-                <option label="x" value="6"> </option>
-                <option label="x" value="7"> </option>
-                <option label="x" value="8"> </option>
-                <option label="x" value="9"> </option>
-                <option label="x" value="10"> </option>
-                <option label="x" value="11"> </option>
-                <option label="x" value="12"> </option>
-              </select>
+              <select name="month" size="1"
+                ><option label="x" value="1"></option
+                ><option label="x" value="2"></option
+                ><option label="x" value="3"></option
+                ><option label="x" value="4"></option
+                ><option label="x" value="5"></option
+                ><option label="x" value="6"></option
+                ><option label="x" value="7"></option
+                ><option label="x" value="8"></option
+                ><option label="x" value="9"></option
+                ><option label="x" value="10"></option
+                ><option label="x" value="11"></option
+                ><option label="x" value="12"></option
+              ></select>
               <input name="day" size="3" type="text" value="" /><input
                 class="ctr"
                 name="weekday"
@@ -1008,43 +903,42 @@
               <input name="an" size="5" type="text" value="" /><select
                 name="mois"
                 size="1"
-              >
-                <option label="x" value="1"> </option>
-                <option label="x" value="2"> </option>
-                <option label="x" value="3"> </option>
-                <option label="x" value="4"> </option>
-                <option label="x" value="5"> </option>
-                <option label="x" value="6"> </option>
-                <option label="x" value="7"> </option>
-                <option label="x" value="8"> </option>
-                <option label="x" value="9"> </option>
-                <option label="x" value="10"> </option>
-                <option label="x" value="11"> </option>
-                <option label="x" value="12"> </option>
-                <option label="x" value="13"> </option> </select
-              ><select name="decade" size="1">
-                <option label="x" value="1"> </option>
-                <option label="x" value="2"> </option>
-                <option label="x" value="3"> </option> </select
-              ><select name="jour" size="1">
-                <option label="x" value="1"> </option>
-                <option label="x" value="2"> </option>
-                <option label="x" value="3"> </option>
-                <option label="x" value="4"> </option>
-                <option label="x" value="5"> </option>
-                <option label="x" value="6"> </option>
-                <option label="x" value="7"> </option>
-                <option label="x" value="8"> </option>
-                <option label="x" value="9"> </option>
-                <option label="x" value="10"> </option>
-                <option label="x" value="11"> </option>
-                <option label="x" value="12"> </option>
-                <option label="x" value="13"> </option>
-                <option label="x" value="14"> </option>
-                <option label="x" value="15"> </option>
-                <option label="x" value="16"> </option>
-                <option label="x" value="17"> </option>
-              </select>
+                ><option label="x" value="1"></option
+                ><option label="x" value="2"></option
+                ><option label="x" value="3"></option
+                ><option label="x" value="4"></option
+                ><option label="x" value="5"></option
+                ><option label="x" value="6"></option
+                ><option label="x" value="7"></option
+                ><option label="x" value="8"></option
+                ><option label="x" value="9"></option
+                ><option label="x" value="10"></option
+                ><option label="x" value="11"></option
+                ><option label="x" value="12"></option
+                ><option label="x" value="13"></option></select
+              ><select name="decade" size="1"
+                ><option label="x" value="1"></option
+                ><option label="x" value="2"></option
+                ><option label="x" value="3"></option></select
+              ><select name="jour" size="1"
+                ><option label="x" value="1"></option
+                ><option label="x" value="2"></option
+                ><option label="x" value="3"></option
+                ><option label="x" value="4"></option
+                ><option label="x" value="5"></option
+                ><option label="x" value="6"></option
+                ><option label="x" value="7"></option
+                ><option label="x" value="8"></option
+                ><option label="x" value="9"></option
+                ><option label="x" value="10"></option
+                ><option label="x" value="11"></option
+                ><option label="x" value="12"></option
+                ><option label="x" value="13"></option
+                ><option label="x" value="14"></option
+                ><option label="x" value="15"></option
+                ><option label="x" value="16"></option
+                ><option label="x" value="17"></option
+              ></select>
             </td>
           </tr>
           <tr>
