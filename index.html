@@ -1015,57 +1015,57 @@
     <script src="js/astro.js"></script>
     <script src="js/calendar.js"></script>
     <script>
-      setDateToToday();
-      "" == location.search
-        ? calcGregorian()
-        : presetDataToRequest(location.search.substring(1));
+      setDateToToday(),
+        "" == location.search
+          ? calcGregorian()
+          : presetDataToRequest(location.search.substring(1));
     </script>
     <script>
       function animalCalc() {
-        var b = document.getElementById("persYear").value % 12,
-          c = document.getElementById("persYear").value,
-          d = document.getElementById("animalAnswer"),
-          e = "",
+        let e = document.getElementById("persYear").value % 12,
+          a = document.getElementById("persYear").value,
+          b = document.getElementById("animalAnswer"),
+          c = "",
           g = "";
-        1 > c
-          ? (d.innerHTML =
+        1 > a
+          ? (b.innerHTML =
               "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.</em>")
-          : (0 == b
-              ? ((e = "Snake"), (g = "Yilan"))
-              : 1 == b
-              ? ((e = "Horse"), (g = "Yunt"))
-              : 2 == b
-              ? ((e = "Goat"), (g = "Quy"))
-              : 3 == b
-              ? ((e = "Monkey"), (g = "Pichin"))
-              : 4 == b
-              ? ((e = "Rooster"), (g = "Takhaquy"))
-              : 5 == b
-              ? ((e = "Dog"), (g = "It"))
-              : 6 == b
-              ? ((e = "Pig"), (g = "Tunguz"))
-              : 7 == b
-              ? ((e = "Rat"), (g = "Sichqan"))
-              : 8 == b
-              ? ((e = "Ox"), (g = "Ud"))
-              : 9 == b
-              ? ((e = "Tiger"), (g = "Bars"))
-              : 10 == b
-              ? ((e = "Rabbit"), (g = "Tavashqan"))
-              : ((e = "Dragon"), (g = "Luy")),
-            (d.innerHTML =
+          : (0 == e
+              ? ((c = "Snake"), (g = "Yilan"))
+              : 1 == e
+              ? ((c = "Horse"), (g = "Yunt"))
+              : 2 == e
+              ? ((c = "Goat"), (g = "Quy"))
+              : 3 == e
+              ? ((c = "Monkey"), (g = "Pichin"))
+              : 4 == e
+              ? ((c = "Rooster"), (g = "Takhaquy"))
+              : 5 == e
+              ? ((c = "Dog"), (g = "It"))
+              : 6 == e
+              ? ((c = "Pig"), (g = "Tunguz"))
+              : 7 == e
+              ? ((c = "Rat"), (g = "Sichqan"))
+              : 8 == e
+              ? ((c = "Ox"), (g = "Ud"))
+              : 9 == e
+              ? ((c = "Tiger"), (g = "Bars"))
+              : 10 == e
+              ? ((c = "Rabbit"), (g = "Tavashqan"))
+              : ((c = "Dragon"), (g = "Luy")),
+            (b.innerHTML =
               "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" +
-              e +
+              c +
               " (<em>" +
               g +
               "</em>)</strong>."));
       }
-      animalCalc();
-      $("#persBtn").on("click", animalCalc);
-      $("#gregCalcBtn").on("click", animalCalc);
-      $("#gregTodayBtn").on("click", animalCalc);
-      $("#julianBtn").on("click", animalCalc);
-      $("#islamicBtn").on("click", animalCalc);
+      animalCalc(),
+        $("#persBtn").on("click", animalCalc),
+        $("#gregCalcBtn").on("click", animalCalc),
+        $("#gregTodayBtn").on("click", animalCalc),
+        $("#julianBtn").on("click", animalCalc),
+        $("#islamicBtn").on("click", animalCalc);
     </script>
   </body>
 </html>

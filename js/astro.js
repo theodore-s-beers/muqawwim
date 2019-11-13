@@ -3,48 +3,38 @@ var J2000 = 2451545,
   JulianMillennium = 365250,
   AstronomicalUnit = 149597870,
   TropicalYear = 365.24219878;
-
 function astor(a) {
-  return a * (Math.PI / 648e3);
+  return (Math.PI / 648e3) * a;
 }
-
 function dtr(a) {
   return (a * Math.PI) / 180;
 }
-
 function rtd(a) {
   return (180 * a) / Math.PI;
 }
-
 function fixangle(a) {
   return a - 360 * Math.floor(a / 360);
 }
-
 function fixangr(a) {
   return a - 2 * Math.PI * Math.floor(a / (2 * Math.PI));
 }
-
 function dsin(a) {
   return Math.sin(dtr(a));
 }
-
 function dcos(a) {
   return Math.cos(dtr(a));
 }
-
 function mod(c, b) {
   return c - b * Math.floor(c / b);
 }
-
 function amod(c, b) {
   return mod(c - 1, b) + 1;
 }
-
 function jhms(a) {
-  var d;
   return (
-    (d = 86400 * ((a += 0.5) - Math.floor(a)) + 0.5),
-    [Math.floor(d / 3600), Math.floor((d / 60) % 60), Math.floor(d % 60)]
+    (a += 0.5),
+    (a = 86400 * (a - Math.floor(a)) + 0.5),
+    [Math.floor(a / 3600), Math.floor((a / 60) % 60), Math.floor(a % 60)]
   );
 }
 var Weekdays = [
@@ -56,7 +46,6 @@ var Weekdays = [
   "Friday",
   "Saturday"
 ];
-
 function jwday(a) {
   return mod(Math.floor(a + 1.5), 7);
 }
@@ -72,14 +61,13 @@ var oterms = [
   5.79,
   2.45
 ];
-
 function obliqeq(d) {
-  var b, e, f, h;
-  if (
-    ((f = e = (d - J2000) / 3652500), (b = 23.43929111111111), 1 > Math.abs(e))
-  )
-    for (h = 0; 10 > h; h++) (b += (oterms[h] / 3600) * f), (f *= e);
-  return b;
+  var f,
+    g,
+    h = (f = (d - J2000) / 3652500);
+  if (((d = 23 + 26 / 60 + 21.448 / 3600), 1 > Math.abs(f)))
+    for (g = 0; 10 > g; g++) (d += (oterms[g] / 3600) * h), (h *= f);
+  return d;
 }
 var nutArgMult = [
     0,
@@ -652,68 +640,60 @@ var nutArgMult = [
     0,
     0
   ];
-
-function nutation(d) {
-  var b,
-    e,
-    f,
-    h,
-    i,
-    l,
-    r = (d - 2451545) / 36525,
-    p = [],
-    n = 0,
-    s = 0;
+function nutation(h) {
+  var i,
+    j = (h - 2451545) / 36525;
+  h = [];
+  var k,
+    l = 0,
+    m = 0,
+    n = j * (i = j * j);
   for (
-    h = r * (f = r * r),
-      p[0] = dtr(297.850363 + 445267.11148 * r - 0.0019142 * f + h / 189474),
-      p[1] = dtr(357.52772 + 35999.05034 * r - 1603e-7 * f - h / 3e5),
-      p[2] = dtr(134.96298 + 477198.867398 * r + 0.0086972 * f + h / 56250),
-      p[3] = dtr(93.27191 + 483202.017538 * r - 0.0036825 * f + h / 327270),
-      p[4] = dtr(125.04452 - 1934.136261 * r + 0.0020708 * f + h / 45e4),
-      b = 0;
-    5 > b;
-    b++
+    h[0] = dtr(297.850363 + 445267.11148 * j - 0.0019142 * i + n / 189474),
+      h[1] = dtr(357.52772 + 35999.05034 * j - 1603e-7 * i - n / 3e5),
+      h[2] = dtr(134.96298 + 477198.867398 * j + 0.0086972 * i + n / 56250),
+      h[3] = dtr(93.27191 + 483202.017538 * j - 0.0036825 * i + n / 327270),
+      h[4] = dtr(125.04452 - 1934.136261 * j + 0.0020708 * i + n / 45e4),
+      i = 0;
+    5 > i;
+    i++
   )
-    p[b] = fixangr(p[b]);
-  for (i = r / 10, b = 0; 63 > b; b++) {
-    for (e = l = 0; 5 > e; e++)
-      0 != nutArgMult[5 * b + e] && (l += nutArgMult[5 * b + e] * p[e]);
-    (n += (nutArgCoeff[4 * b + 0] + nutArgCoeff[4 * b + 1] * i) * Math.sin(l)),
-      (s +=
-        (nutArgCoeff[4 * b + 2] + nutArgCoeff[4 * b + 3] * i) * Math.cos(l));
+    h[i] = fixangr(h[i]);
+  for (n = j / 10, i = 0; 63 > i; i++) {
+    for (j = k = 0; 5 > j; j++)
+      0 != nutArgMult[5 * i + j] && (k += nutArgMult[5 * i + j] * h[j]);
+    (l += (nutArgCoeff[4 * i] + nutArgCoeff[4 * i + 1] * n) * Math.sin(k)),
+      (m +=
+        (nutArgCoeff[4 * i + 2] + nutArgCoeff[4 * i + 3] * n) * Math.cos(k));
   }
-  return [n / 36e6, s / 36e6];
+  return [l / 36e6, m / 36e6];
 }
-
-function ecliptoeq(f, b, a) {
-  var c, g;
+function ecliptoeq(d, f, g) {
+  var c = dtr(obliqeq(d));
   return (
-    (c = dtr(obliqeq(f))),
     (log += "Obliquity: " + rtd(c) + "\n"),
-    (g = rtd(
+    (d = rtd(
       Math.atan2(
-        Math.cos(c) * Math.sin(dtr(b)) - Math.tan(dtr(a)) * Math.sin(c),
-        Math.cos(dtr(b))
+        Math.cos(c) * Math.sin(dtr(f)) - Math.tan(dtr(g)) * Math.sin(c),
+        Math.cos(dtr(f))
       )
     )),
-    (log += "RA = " + g + "\n"),
-    [
-      (g = fixangle(
-        rtd(
-          Math.atan2(
-            Math.cos(c) * Math.sin(dtr(b)) - Math.tan(dtr(a)) * Math.sin(c),
-            Math.cos(dtr(b))
-          )
-        )
-      )),
+    (log += "RA = " + d + "\n"),
+    (d = fixangle(
       rtd(
-        Math.asin(
-          Math.sin(c) * Math.sin(dtr(b)) * Math.cos(dtr(a)) +
-            Math.sin(dtr(a)) * Math.cos(c)
+        Math.atan2(
+          Math.cos(c) * Math.sin(dtr(f)) - Math.tan(dtr(g)) * Math.sin(c),
+          Math.cos(dtr(f))
         )
       )
-    ]
+    )),
+    (f = rtd(
+      Math.asin(
+        Math.sin(c) * Math.sin(dtr(f)) * Math.cos(dtr(g)) +
+          Math.sin(dtr(g)) * Math.cos(c)
+      )
+    )),
+    [d, f]
   );
 }
 var deltaTtab = [
@@ -910,20 +890,17 @@ var deltaTtab = [
   65,
   66.6
 ];
-
-function deltat(d) {
-  var b, e, f, h;
-  return (
-    1620 <= d && 2e3 >= d
-      ? ((e = (d - 1620) / 2 - (f = Math.floor((d - 1620) / 2))),
-        (b = deltaTtab[f] + (deltaTtab[f + 1] - deltaTtab[f]) * e))
-      : ((h = (d - 2e3) / 100),
-        948 > d
-          ? (b = 2177 + 497 * h + 44.1 * h * h)
-          : ((b = 102 + 102 * h + 25.3 * h * h),
-            2e3 < d && 2100 > d && (b += 0.37 * (d - 2100)))),
-    b
-  );
+function deltat(c) {
+  if (1620 <= c && 2e3 >= c) {
+    var b = Math.floor((c - 1620) / 2);
+    b = deltaTtab[b] + (deltaTtab[b + 1] - deltaTtab[b]) * ((c - 1620) / 2 - b);
+  } else
+    (b = (c - 2e3) / 100),
+      948 > c
+        ? (b = 2177 + 497 * b + 44.1 * b * b)
+        : ((b = 102 + 102 * b + 25.3 * b * b),
+          2e3 < c && 2100 > c && (b += 0.37 * (c - 2100)));
+  return b;
 }
 var EquinoxpTerms = [
   485,
@@ -999,95 +976,6 @@ var EquinoxpTerms = [
   15.45,
   16859.074
 ];
-
-function equinox(e, b) {
-  var a, f, h, i, l, n, o, r, s;
-  for (
-    1e3 > e
-      ? ((l = JDE0tab1000), (s = e / 1e3))
-      : ((l = JDE0tab2000), (s = (e - 2e3) / 1e3)),
-      a =
-        1 +
-        0.0334 *
-          dcos(
-            (r =
-              35999.373 *
-                (o =
-                  ((i =
-                    l[b][0] +
-                    l[b][1] * s +
-                    l[b][2] * s * s +
-                    l[b][3] * s * s * s +
-                    l[b][4] * s * s * s * s) -
-                    2451545) /
-                  36525) -
-              2.47)
-          ) +
-        7e-4 * dcos(2 * r),
-      f = h = n = 0;
-    24 > f;
-    f++
-  )
-    (n +=
-      EquinoxpTerms[h] * dcos(EquinoxpTerms[h + 1] + EquinoxpTerms[h + 2] * o)),
-      (h += 3);
-  return i + (1e-5 * n) / a;
-}
-
-function sunpos(d) {
-  var b, e, f, h, i, l, n, o, r, s, t, u, A;
-  return (
-    (i =
-      0.016708634 +
-      -42037e-9 * (b = (d - J2000) / JulianCentury) +
-      -1.267e-7 * (e = b * b)),
-    (n =
-      (f = fixangle((f = 280.46646 + 36000.76983 * b + 3032e-7 * e))) +
-      (l =
-        (1.914602 + -0.004817 * b + -14e-6 * e) *
-          dsin(
-            (h = fixangle((h = 357.52911 + 35999.05029 * b + -1537e-7 * e)))
-          ) +
-        (0.019993 - 101e-6 * b) * dsin(2 * h) +
-        289e-6 * dsin(3 * h))),
-    (r = (1.000001018 * (1 - i * i)) / (1 + i * dcos((o = h + l)))),
-    (t = n + -0.00569 + -0.00478 * dsin((s = 125.04 - 1934.136 * b))),
-    (u = (A = obliqeq(d)) + 0.00256 * dcos(s)),
-    [
-      f,
-      h,
-      i,
-      l,
-      n,
-      o,
-      r,
-      t,
-      fixangle(rtd(Math.atan2(dcos(A) * dsin(n), dcos(n)))),
-      rtd(Math.asin(dsin(A) * dsin(n))),
-      fixangle(rtd(Math.atan2(dcos(u) * dsin(t), dcos(t)))),
-      rtd(Math.asin(dsin(u) * dsin(t)))
-    ]
-  );
-}
-
-function equationOfTime(d) {
-  var b, e;
-  return (
-    (b =
-      fixangle(
-        280.4664567 +
-          360007.6982779 * (e = (d - J2000) / JulianMillennium) +
-          0.03032028 * e * e +
-          (e * e * e) / 49931 +
-          (-e * e * e * e) / 15300 +
-          (-e * e * e * e * e) / 2e6
-      ) +
-      -0.0057183 +
-      -sunpos(d)[10] +
-      nutation(d)[0] * dcos(obliqeq(d) + nutation(d)[1])),
-    (b -= 20 * Math.floor(b / 20)) / 1440
-  );
-}
 (JDE0tab1000 = [
   [1721139.29189, 365242.1374, 0.06134, 0.00111, -71e-5],
   [1721233.25401, 365241.72562, -0.05323, 0.00907, 25e-5],
@@ -1100,3 +988,73 @@ function equationOfTime(d) {
     [2451810.21715, 365242.01767, -0.11575, 0.00337, 78e-5],
     [2451900.05952, 365242.74049, -0.06223, -0.00823, 32e-5]
   ]);
+function equinox(i, b) {
+  var a, j, k;
+  if (1e3 > i)
+    var l = JDE0tab1000,
+      m = i / 1e3;
+  else (l = JDE0tab2000), (m = (i - 2e3) / 1e3);
+  (l =
+    l[b][0] +
+    l[b][1] * m +
+    l[b][2] * m * m +
+    l[b][3] * m * m * m +
+    l[b][4] * m * m * m * m),
+    (m = (l - 2451545) / 36525);
+  var n = 35999.373 * m - 2.47;
+  for (
+    n = 1 + 0.0334 * dcos(n) + 7e-4 * dcos(2 * n), a = j = k = 0;
+    24 > a;
+    a++
+  )
+    (k +=
+      EquinoxpTerms[j] * dcos(EquinoxpTerms[j + 1] + EquinoxpTerms[j + 2] * m)),
+      (j += 3);
+  return l + (1e-5 * k) / n;
+}
+function sunpos(i) {
+  var j = (i - J2000) / JulianCentury,
+    o = j * j,
+    p = fixangle(280.46646 + 36000.76983 * j + 3032e-7 * o),
+    e = fixangle(357.52911 + 35999.05029 * j + -1537e-7 * o),
+    g = 0.016708634 + -42037e-9 * j + -1.267e-7 * o;
+  o =
+    (1.914602 + -0.004817 * j + -14e-6 * o) * dsin(e) +
+    (0.019993 - 101e-6 * j) * dsin(2 * e) +
+    289e-6 * dsin(3 * e);
+  var f = p + o,
+    d = e + o,
+    h = (1.000001018 * (1 - g * g)) / (1 + g * dcos(d)),
+    n = 125.04 - 1934.136 * j;
+  j = f + -0.00569 + -0.00478 * dsin(n);
+  var q = obliqeq(i);
+  (n = q + 0.00256 * dcos(n)),
+    (i = rtd(Math.atan2(dcos(q) * dsin(f), dcos(f)))),
+    (i = fixangle(i)),
+    (q = rtd(Math.asin(dsin(q) * dsin(f))));
+  var r = rtd(Math.atan2(dcos(n) * dsin(j), dcos(j)));
+  return (
+    (r = fixangle(r)),
+    (n = rtd(Math.asin(dsin(n) * dsin(j)))),
+    [p, e, g, o, f, d, h, j, i, q, r, n]
+  );
+}
+function equationOfTime(d) {
+  var f = (d - J2000) / JulianMillennium,
+    g = fixangle(
+      280.4664567 +
+        360007.6982779 * f +
+        0.03032028 * f * f +
+        (f * f * f) / 49931 +
+        -((f * f * f * f) / 15300) +
+        -((f * f * f * f * f) / 2e6)
+    );
+  f = sunpos(d)[10];
+  var c = nutation(d)[0];
+  return (
+    (d = obliqeq(d) + nutation(d)[1]),
+    (d = g + -0.0057183 + -f + c * dcos(d)),
+    (d -= 20 * Math.floor(d / 20)),
+    d / 1440
+  );
+}
