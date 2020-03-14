@@ -97,7 +97,7 @@
       <hr />
       <h4>Gregorian Calendar</h4>
       <form
-        action="javascript:calcGregorian();"
+        action="JavaScript:calcGregorian();"
         id="gregorian"
         name="gregorian"
       >
@@ -201,7 +201,7 @@
         </table>
       </form>
       <div style="display:none">
-        <form action="javascript:calcJulian();" id="julianday" name="julianday">
+        <form action="JavaScript:calcJulian();" id="julianday" name="julianday">
           <table>
             <tr>
               <td><input name="day" size="16" type="text" value="" /></td>
@@ -218,7 +218,7 @@
           </table>
         </form>
         <form
-          action="javascript:calcModifiedJulian();"
+          action="JavaScript:calcModifiedJulian();"
           id="modifiedjulianday"
           name="modifiedjulianday"
         >
@@ -240,7 +240,7 @@
       </div>
       <h4>Julian Calendar</h4>
       <form
-        action="javascript:calcJulianCalendar();"
+        action="JavaScript:calcJulianCalendar();"
         id="juliancalendar"
         name="juliancalendar"
       >
@@ -314,7 +314,7 @@
         </table>
       </form>
       <div style="display:none">
-        <form action="javascript:calcHebrew();" id="hebrew" name="hebrew">
+        <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
           <table>
             <tr>
               <td>
@@ -368,7 +368,7 @@
         </form>
       </div>
       <h4>Islamic Calendar</h4>
-      <form action="javascript:calcIslamic();" id="islamic" name="islamic">
+      <form action="JavaScript:calcIslamic();" id="islamic" name="islamic">
         <table
           class="table table-bordered table-sm"
           style="max-width:36rem;text-align:center"
@@ -450,7 +450,7 @@
         </table>
       </form>
       <h4>Persian (Solar Hijri) Calendar</h4>
-      <form action="javascript:calcPersiana();" id="persiana" name="persiana">
+      <form action="JavaScript:calcPersiana();" id="persiana" name="persiana">
         <table
           class="table table-bordered table-sm"
           style="max-width:36rem;text-align:center"
@@ -711,7 +711,7 @@
       </p>
     </div>
     <div style="display:none">
-      <form action="javascript:calcPersian();" id="persian" name="persian">
+      <form action="JavaScript:calcPersian();" id="persian" name="persian">
         <table>
           <tr>
             <td>
@@ -759,7 +759,7 @@
         </table>
       </form>
       <form
-        action="javascript:calcMayanCount();"
+        action="JavaScript:calcMayanCount();"
         id="mayancount"
         name="mayancount"
       >
@@ -799,7 +799,7 @@
         </table>
       </form>
       <form
-        action="javascript:calcIndianCivilCalendar();"
+        action="JavaScript:calcIndianCivilCalendar();"
         id="indiancivilcalendar"
         name="indiancivilcalendar"
       >
@@ -850,7 +850,7 @@
           </tr>
         </table>
       </form>
-      <form action="javascript:calcFrench();" id="french" name="french">
+      <form action="JavaScript:calcFrench();" id="french" name="french">
         <table class="l">
           <tr>
             <td>
@@ -902,7 +902,7 @@
           </tr>
         </table>
       </form>
-      <form action="javascript:calcIsoWeek();" id="isoweek" name="isoweek">
+      <form action="JavaScript:calcIsoWeek();" id="isoweek" name="isoweek">
         <table class="l">
           <tr>
             <td>
@@ -921,7 +921,7 @@
           </tr>
         </table>
       </form>
-      <form action="javascript:calcIsoDay();" id="isoday" name="isoday">
+      <form action="JavaScript:calcIsoDay();" id="isoday" name="isoday">
         <table class="l">
           <tr>
             <td>
@@ -940,7 +940,7 @@
           </tr>
         </table>
       </form>
-      <form action="javascript:calcUnixTime();" id="unixtime" name="unixtime">
+      <form action="JavaScript:calcUnixTime();" id="unixtime" name="unixtime">
         <table class="l">
           <tr>
             <td><input name="time" size="14" type="text" value="" /></td>
@@ -957,7 +957,7 @@
         </table>
       </form>
       <form
-        action="javascript:calcExcelSerial1900();"
+        action="JavaScript:calcExcelSerial1900();"
         id="excelserial1900"
         name="excelserial1900"
       >
@@ -977,7 +977,7 @@
         </table>
       </form>
       <form
-        action="javascript:calcExcelSerial1904();"
+        action="JavaScript:calcExcelSerial1904();"
         id="excelserial1904"
         name="excelserial1904"
       >
@@ -1015,57 +1015,87 @@
     <script src="js/astro.js"></script>
     <script src="js/calendar.js"></script>
     <script>
-      setDateToToday(),
-        "" == location.search
-          ? calcGregorian()
-          : presetDataToRequest(location.search.substring(1));
+      // Set current date on page load
+      setDateToToday();
+
+      // Not sure what this does
+      if ("" === location.search) {
+        calcGregorian();
+      } else {
+        presetDataToRequest(location.search.substring(1));
+      }
     </script>
     <script>
       function animalCalc() {
-        let e = document.getElementById("persYear").value % 12,
-          a = document.getElementById("persYear").value,
-          b = document.getElementById("animalAnswer"),
-          c = "",
-          g = "";
-        1 > a
-          ? (b.innerHTML =
-              "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.</em>")
-          : (0 == e
-              ? ((c = "Snake"), (g = "Yilan"))
-              : 1 == e
-              ? ((c = "Horse"), (g = "Yunt"))
-              : 2 == e
-              ? ((c = "Goat"), (g = "Quy"))
-              : 3 == e
-              ? ((c = "Monkey"), (g = "Pichin"))
-              : 4 == e
-              ? ((c = "Rooster"), (g = "Takhaquy"))
-              : 5 == e
-              ? ((c = "Dog"), (g = "It"))
-              : 6 == e
-              ? ((c = "Pig"), (g = "Tunguz"))
-              : 7 == e
-              ? ((c = "Rat"), (g = "Sichqan"))
-              : 8 == e
-              ? ((c = "Ox"), (g = "Ud"))
-              : 9 == e
-              ? ((c = "Tiger"), (g = "Bars"))
-              : 10 == e
-              ? ((c = "Rabbit"), (g = "Tavashqan"))
-              : ((c = "Dragon"), (g = "Luy")),
-            (b.innerHTML =
-              "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" +
-              c +
-              " (<em>" +
-              g +
-              "</em>)</strong>."));
+        // Declare a few variables
+        const persYear = document.getElementById("persYear").value;
+        const persMod = persYear % 12;
+        const animalAnswer = document.getElementById("animalAnswer");
+        let animalEng = "";
+        let animalOrig = "";
+
+        // Determine animal sign
+        if (1 > persYear) {
+          animalAnswer.innerHTML =
+            "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.</em>";
+        } else {
+          if (0 === persMod) {
+            animalEng = "Snake";
+            animalOrig = "Yilan";
+          } else if (1 === persMod) {
+            animalEng = "Horse";
+            animalOrig = "Yunt";
+          } else if (2 === persMod) {
+            animalEng = "Goat";
+            animalOrig = "Quy";
+          } else if (3 === persMod) {
+            animalEng = "Monkey";
+            animalOrig = "Pichin";
+          } else if (4 === persMod) {
+            animalEng = "Rooster";
+            animalOrig = "Takhaquy";
+          } else if (5 === persMod) {
+            animalEng = "Dog";
+            animalOrig = "It";
+          } else if (6 === persMod) {
+            animalEng = "Pig";
+            animalOrig = "Tunguz";
+          } else if (7 === persMod) {
+            animalEng = "Rat";
+            animalOrig = "Sichqan";
+          } else if (8 === persMod) {
+            animalEng = "Ox";
+            animalOrig = "Ud";
+          } else if (9 === persMod) {
+            animalEng = "Tiger";
+            animalOrig = "Bars";
+          } else if (10 === persMod) {
+            animalEng = "Rabbit";
+            animalOrig = "Tavashqan";
+          } else {
+            animalEng = "Dragon";
+            animalOrig = "Luy";
+          }
+
+          // Set result text
+          animalAnswer.innerHTML =
+            "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" +
+            animalEng +
+            " (<em>" +
+            animalOrig +
+            "</em>)</strong>.";
+        }
       }
-      animalCalc(),
-        $("#persBtn").on("click", animalCalc),
-        $("#gregCalcBtn").on("click", animalCalc),
-        $("#gregTodayBtn").on("click", animalCalc),
-        $("#julianBtn").on("click", animalCalc),
-        $("#islamicBtn").on("click", animalCalc);
+
+      // Run function on page load
+      animalCalc();
+
+      // Set up event listeners
+      $("#gregCalcBtn").on("click", animalCalc);
+      $("#gregTodayBtn").on("click", animalCalc);
+      $("#julianBtn").on("click", animalCalc);
+      $("#islamicBtn").on("click", animalCalc);
+      $("#persBtn").on("click", animalCalc);
     </script>
   </body>
 </html>
