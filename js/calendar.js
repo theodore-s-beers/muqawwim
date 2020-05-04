@@ -1,339 +1,765 @@
-var J0000 = 1721424.5,
-  J1970 = 2440587.5,
-  JMJD = 2400000.5,
-  J1900 = 2415020.5,
-  J1904 = 2416480.5,
-  NormLeap = ["Normal year", "Leap year"];
-function weekday_before(b, c) {
-  return c - jwday(c - b);
+/*
+       JavaScript functions for the Fourmilab Calendar Converter
+
+                  by John Walker -- September, MIM
+              http://www.fourmilab.ch/documents/calendar/
+
+                This program is in the public domain.
+*/
+
+/*  You may notice that a variety of array variables logically local
+    to functions are declared globally here. In JavaScript, construction
+    of an array variable from source code occurs as the code is
+    interpreted. Making these variables pseudo-globals permits us
+    to avoid overhead constructing and disposing of them in each
+    call on the function in which whey are used.  */
+
+var J0000 = 1721424.5; // Julian date of Gregorian epoch: 0000-01-01
+var J1970 = 2440587.5; // Julian date at Unix epoch: 1970-01-01
+var JMJD = 2400000.5; // Epoch of Modified Julian Date system
+var J1900 = 2415020.5; // Epoch (day 1) of Excel 1900 date system (PC)
+var J1904 = 2416480.5; // Epoch (day 0) of Excel 1904 date system (Mac)
+
+var NormLeap = new Array("Normal year", "Leap year");
+
+/*  WEEKDAY_BEFORE -- Return Julian date of given weekday (0 = Sunday)
+                      in the seven days ending on jd.  */
+
+function weekday_before(weekday, jd) {
+  return jd - jwday(jd - weekday);
 }
-function search_weekday(c, e, a, b) {
-  return weekday_before(c, e + a * b);
+
+/*  SEARCH_WEEKDAY -- Determine the Julian date for: 
+
+          weekday     Day of week desired, 0 = Sunday
+          jd          Julian date to begin search
+          direction   1 = next weekday, -1 = last weekday
+          offset      Offset from jd to begin search
+
+*/
+
+function search_weekday(weekday, jd, direction, offset) {
+  return weekday_before(weekday, jd + direction * offset);
 }
-function nearest_weekday(b, c) {
-  return search_weekday(b, c, 1, 3);
+
+// Utility weekday functions, just wrappers for search_weekday
+
+function nearest_weekday(weekday, jd) {
+  return search_weekday(weekday, jd, 1, 3);
 }
-function next_weekday(b, c) {
-  return search_weekday(b, c, 1, 7);
+
+function next_weekday(weekday, jd) {
+  return search_weekday(weekday, jd, 1, 7);
 }
-function next_or_current_weekday(b, c) {
-  return search_weekday(b, c, 1, 6);
+
+function next_or_current_weekday(weekday, jd) {
+  return search_weekday(weekday, jd, 1, 6);
 }
-function previous_weekday(b, c) {
-  return search_weekday(b, c, -1, 1);
+
+function previous_weekday(weekday, jd) {
+  return search_weekday(weekday, jd, -1, 1);
 }
-function previous_or_current_weekday(b, c) {
-  return search_weekday(b, c, 1, 0);
+
+function previous_or_current_weekday(weekday, jd) {
+  return search_weekday(weekday, jd, 1, 0);
 }
+
 function TestSomething() {}
-function leap_gregorian(a) {
-  return 0 == a % 4 && (0 != a % 100 || 0 == a % 400);
+
+// LEAP_GREGORIAN -- Is a given year in the Gregorian calendar a leap year?
+
+function leap_gregorian(year) {
+  return year % 4 == 0 && !(year % 100 == 0 && year % 400 != 0);
 }
+
+// GREGORIAN_TO_JD -- Determine Julian day number from Gregorian calendar date
+
 var GREGORIAN_EPOCH = 1721425.5;
-function gregorian_to_jd(d, c, a) {
+
+function gregorian_to_jd(year, month, day) {
   return (
     GREGORIAN_EPOCH -
     1 +
-    365 * (d - 1) +
-    Math.floor((d - 1) / 4) +
-    -Math.floor((d - 1) / 100) +
-    Math.floor((d - 1) / 400) +
+    365 * (year - 1) +
+    Math.floor((year - 1) / 4) +
+    -Math.floor((year - 1) / 100) +
+    Math.floor((year - 1) / 400) +
     Math.floor(
-      (367 * c - 362) / 12 + (2 >= c ? 0 : leap_gregorian(d) ? -1 : -2) + a
+      (367 * month - 362) / 12 +
+        (month <= 2 ? 0 : leap_gregorian(year) ? -1 : -2) +
+        day
     )
   );
 }
-function jd_to_gregorian(a) {
-  a = Math.floor(a - 0.5) + 0.5;
-  var b = a - GREGORIAN_EPOCH,
-    c = Math.floor(b / 146097),
-    d = mod(b, 146097);
-  b = Math.floor(d / 36524);
-  var e = mod(d, 36524);
-  return (
-    (d = Math.floor(e / 1461)),
-    (e = mod(e, 1461)),
-    (e = Math.floor(e / 365)),
-    (c = 400 * c + 100 * b + 4 * d + e),
-    4 != b && 4 != e && c++,
-    (b = a - gregorian_to_jd(c, 1, 1)),
-    (d = a < gregorian_to_jd(c, 3, 1) ? 0 : leap_gregorian(c) ? 1 : 2),
-    (month = Math.floor((12 * (b + d) + 373) / 367)),
-    (day = a - gregorian_to_jd(c, month, 1) + 1),
-    [c, month, day]
-  );
+
+// JD_TO_GREGORIAN -- Calculate Gregorian calendar date from Julian day
+
+function jd_to_gregorian(jd) {
+  var wjd,
+    depoch,
+    quadricent,
+    dqc,
+    cent,
+    dcent,
+    quad,
+    dquad,
+    yindex,
+    dyindex,
+    year,
+    yearday,
+    leapadj;
+
+  wjd = Math.floor(jd - 0.5) + 0.5;
+  depoch = wjd - GREGORIAN_EPOCH;
+  quadricent = Math.floor(depoch / 146097);
+  dqc = mod(depoch, 146097);
+  cent = Math.floor(dqc / 36524);
+  dcent = mod(dqc, 36524);
+  quad = Math.floor(dcent / 1461);
+  dquad = mod(dcent, 1461);
+  yindex = Math.floor(dquad / 365);
+  year = quadricent * 400 + cent * 100 + quad * 4 + yindex;
+  if (!(cent == 4 || yindex == 4)) {
+    year++;
+  }
+  yearday = wjd - gregorian_to_jd(year, 1, 1);
+  leapadj =
+    wjd < gregorian_to_jd(year, 3, 1) ? 0 : leap_gregorian(year) ? 1 : 2;
+  month = Math.floor(((yearday + leapadj) * 12 + 373) / 367);
+  day = wjd - gregorian_to_jd(year, month, 1) + 1;
+
+  return new Array(year, month, day);
 }
-function n_weeks(c, e, a) {
-  var b = 7 * a;
-  return 0 < a ? b + previous_weekday(c, e) : b + next_weekday(c, e);
+
+// ISO_TO_JULIAN -- Return Julian day of given ISO year, week, and day
+
+function n_weeks(weekday, jd, nthweek) {
+  var j = 7 * nthweek;
+
+  if (nthweek > 0) {
+    j += previous_weekday(weekday, jd);
+  } else {
+    j += next_weekday(weekday, jd);
+  }
+  return j;
 }
-function iso_to_julian(d, c, a) {
-  return a + n_weeks(0, gregorian_to_jd(d - 1, 12, 28), c);
+
+function iso_to_julian(year, week, day) {
+  return day + n_weeks(0, gregorian_to_jd(year - 1, 12, 28), week);
 }
-function jd_to_iso(a) {
-  var b = jd_to_gregorian(a - 3)[0];
-  a >= iso_to_julian(b + 1, 1, 1) && b++;
-  var d = Math.floor((a - iso_to_julian(b, 1, 1)) / 7) + 1;
-  return (a = jwday(a)), 0 == a && (a = 7), [b, d, a];
+
+// JD_TO_ISO -- Return array of ISO (year, week, day) for Julian day
+
+function jd_to_iso(jd) {
+  var year, week, day;
+
+  year = jd_to_gregorian(jd - 3)[0];
+  if (jd >= iso_to_julian(year + 1, 1, 1)) {
+    year++;
+  }
+  week = Math.floor((jd - iso_to_julian(year, 1, 1)) / 7) + 1;
+  day = jwday(jd);
+  if (day == 0) {
+    day = 7;
+  }
+  return new Array(year, week, day);
 }
-function iso_day_to_julian(b, c) {
-  return c - 1 + gregorian_to_jd(b, 1, 1);
+
+// ISO_DAY_TO_JULIAN -- Return Julian day of given ISO year, and day of year
+
+function iso_day_to_julian(year, day) {
+  return day - 1 + gregorian_to_jd(year, 1, 1);
 }
-function jd_to_iso_day(a) {
-  var b = jd_to_gregorian(a)[0];
-  return (a = Math.floor(a - gregorian_to_jd(b, 1, 1)) + 1), [b, a];
+
+// JD_TO_ISO_DAY -- Return array of ISO (year, day_of_year) for Julian day
+
+function jd_to_iso_day(jd) {
+  var year, day;
+
+  year = jd_to_gregorian(jd)[0];
+  day = Math.floor(jd - gregorian_to_jd(year, 1, 1)) + 1;
+  return new Array(year, day);
 }
-function pad(a, d, e) {
-  for (a = a.toString(); a.length < d; ) a = e + a;
-  return a;
+
+// PAD -- Pad a string to a given length with a given fill character.
+
+function pad(str, howlong, padwith) {
+  var s = str.toString();
+
+  while (s.length < howlong) {
+    s = padwith + s;
+  }
+  return s;
 }
+
+// JULIAN_TO_JD -- Determine Julian day number from Julian calendar date
+
 var JULIAN_EPOCH = 1721423.5;
-function leap_julian(a) {
-  return mod(a, 4) == (0 < a ? 0 : 3);
+
+function leap_julian(year) {
+  return mod(year, 4) == (year > 0 ? 0 : 3);
 }
-function julian_to_jd(a, b, d) {
+
+function julian_to_jd(year, month, day) {
+  // Adjust negative common era years to the zero-based notation we use.
+
+  if (year < 1) {
+    year++;
+  }
+
+  // Algorithm as given in Meeus, Astronomical Algorithms, chapter 7, page 61
+
+  if (month <= 2) {
+    year--;
+    month += 12;
+  }
+
   return (
-    1 > a && a++,
-    2 >= b && (a--, (b += 12)),
-    Math.floor(365.25 * (a + 4716)) + Math.floor(30.6001 * (b + 1)) + d - 1524.5
+    Math.floor(365.25 * (year + 4716)) +
+    Math.floor(30.6001 * (month + 1)) +
+    day -
+    1524.5
   );
 }
-function jd_to_julian(a) {
-  var b = Math.floor(a + 0.5) + 1524,
-    d = Math.floor((b - 122.1) / 365.25),
-    e = Math.floor(365.25 * d),
-    i = Math.floor((b - e) / 30.6001);
-  return (
-    (a = Math.floor(14 > i ? i - 1 : i - 13)),
-    (d = Math.floor(2 < a ? d - 4716 : d - 4715)),
-    (b = b - e - Math.floor(30.6001 * i)),
-    1 > d && d--,
-    [d, a, b]
-  );
+
+// JD_TO_JULIAN -- Calculate Julian calendar date from Julian day
+
+function jd_to_julian(td) {
+  var z, a, alpha, b, c, d, e, year, month, day;
+
+  td += 0.5;
+  z = Math.floor(td);
+
+  a = z;
+  b = a + 1524;
+  c = Math.floor((b - 122.1) / 365.25);
+  d = Math.floor(365.25 * c);
+  e = Math.floor((b - d) / 30.6001);
+
+  month = Math.floor(e < 14 ? e - 1 : e - 13);
+  year = Math.floor(month > 2 ? c - 4716 : c - 4715);
+  day = b - d - Math.floor(30.6001 * e);
+
+  /*  If year is less than 1, subtract one to convert from
+        a zero based date system to the common era system in
+        which the year -1 (1 B.C.E) is followed by year 1 (1 C.E.).  */
+
+  if (year < 1) {
+    year--;
+  }
+
+  return new Array(year, month, day);
 }
+
+// HEBREW_TO_JD -- Determine Julian day from Hebrew date
+
 var HEBREW_EPOCH = 347995.5;
-function hebrew_leap(a) {
-  return 7 > mod(7 * a + 1, 19);
+
+// Is a given Hebrew year a leap year ?
+
+function hebrew_leap(year) {
+  return mod(year * 7 + 1, 19) < 7;
 }
-function hebrew_year_months(a) {
-  return hebrew_leap(a) ? 13 : 12;
+
+// How many months are there in a Hebrew year (12 = normal, 13 = leap)
+
+function hebrew_year_months(year) {
+  return hebrew_leap(year) ? 13 : 12;
 }
-function hebrew_delay_1(a) {
-  return (
-    (a = Math.floor((235 * a - 234) / 19)),
-    (day = 29 * a + Math.floor((12084 + 13753 * a) / 25920)),
-    3 > mod(3 * (day + 1), 7) && day++,
-    day
-  );
+
+// Test for delay of start of new year and to avoid
+// Sunday, Wednesday, and Friday as start of the new year.
+
+function hebrew_delay_1(year) {
+  var months, days, parts;
+
+  months = Math.floor((235 * year - 234) / 19);
+  parts = 12084 + 13753 * months;
+  day = months * 29 + Math.floor(parts / 25920);
+
+  if (mod(3 * (day + 1), 7) < 3) {
+    day++;
+  }
+  return day;
 }
-function hebrew_delay_2(d) {
-  var c = hebrew_delay_1(d - 1),
-    a = hebrew_delay_1(d);
-  return 356 == hebrew_delay_1(d + 1) - a ? 2 : 382 == a - c ? 1 : 0;
+
+// Check for delay in start of new year due to length of adjacent years
+
+function hebrew_delay_2(year) {
+  var last, present, next;
+
+  last = hebrew_delay_1(year - 1);
+  present = hebrew_delay_1(year);
+  next = hebrew_delay_1(year + 1);
+
+  return next - present == 356 ? 2 : present - last == 382 ? 1 : 0;
 }
-function hebrew_year_days(a) {
-  return hebrew_to_jd(a + 1, 7, 1) - hebrew_to_jd(a, 7, 1);
+
+// How many days are in a Hebrew year ?
+
+function hebrew_year_days(year) {
+  return hebrew_to_jd(year + 1, 7, 1) - hebrew_to_jd(year, 7, 1);
 }
-function hebrew_month_days(b, c) {
-  return 2 != c &&
-    4 != c &&
-    6 != c &&
-    10 != c &&
-    13 != c &&
-    (12 != c || hebrew_leap(b)) &&
-    (8 != c || 5 == mod(hebrew_year_days(b), 10)) &&
-    (9 != c || 3 != mod(hebrew_year_days(b), 10))
-    ? 30
-    : 29;
+
+// How many days are in a given month of a given year
+
+function hebrew_month_days(year, month) {
+  // First of all, dispose of fixed-length 29 day months
+
+  if (month == 2 || month == 4 || month == 6 || month == 10 || month == 13) {
+    return 29;
+  }
+
+  // If it's not a leap year, Adar has 29 days
+
+  if (month == 12 && !hebrew_leap(year)) {
+    return 29;
+  }
+
+  // If it's Heshvan, days depend on length of year
+
+  if (month == 8 && mod(hebrew_year_days(year), 10) != 5) {
+    return 29;
+  }
+
+  // Similarly, Kislev varies with the length of year
+
+  if (month == 9 && mod(hebrew_year_days(year), 10) == 3) {
+    return 29;
+  }
+
+  // Nope, it's a 30 day month
+
+  return 30;
 }
-function hebrew_to_jd(c, d, a) {
-  var e,
-    f = hebrew_year_months(c);
-  if (
-    ((a = HEBREW_EPOCH + hebrew_delay_1(c) + hebrew_delay_2(c) + a + 1), 7 > d)
-  ) {
-    for (e = 7; e <= f; e++) a += hebrew_month_days(c, e);
-    e = 1;
-  } else e = 7;
-  for (; e < d; e++) a += hebrew_month_days(c, e);
-  return a;
+
+// Finally, wrap it all up into...
+
+function hebrew_to_jd(year, month, day) {
+  var jd, mon, months;
+
+  months = hebrew_year_months(year);
+  jd = HEBREW_EPOCH + hebrew_delay_1(year) + hebrew_delay_2(year) + day + 1;
+
+  if (month < 7) {
+    for (mon = 7; mon <= months; mon++) {
+      jd += hebrew_month_days(year, mon);
+    }
+    for (mon = 1; mon < month; mon++) {
+      jd += hebrew_month_days(year, mon);
+    }
+  } else {
+    for (mon = 7; mon < month; mon++) {
+      jd += hebrew_month_days(year, mon);
+    }
+  }
+
+  return jd;
 }
-function jd_to_hebrew(a) {
-  var b;
-  a = Math.floor(a) + 0.5;
-  var c = Math.floor((98496 * (a - HEBREW_EPOCH)) / 35975351),
-    d = c - 1;
-  for (b = c; a >= hebrew_to_jd(b, 7, 1); b++) d++;
-  for (
-    c = b = a < hebrew_to_jd(d, 1, 1) ? 7 : 1;
-    a > hebrew_to_jd(d, b, hebrew_month_days(d, b));
-    b++
-  )
-    c++;
-  return (a = a - hebrew_to_jd(d, c, 1) + 1), [d, c, a];
+
+/*  JD_TO_HEBREW -- Convert Julian date to Hebrew date.
+                    This works by making multiple calls to
+                    the inverse function, and this is very
+                    slow.  */
+
+function jd_to_hebrew(jd) {
+  var year, month, day, i, count, first;
+
+  jd = Math.floor(jd) + 0.5;
+  count = Math.floor(((jd - HEBREW_EPOCH) * 98496.0) / 35975351.0);
+  year = count - 1;
+  for (i = count; jd >= hebrew_to_jd(i, 7, 1); i++) {
+    year++;
+  }
+  first = jd < hebrew_to_jd(year, 1, 1) ? 7 : 1;
+  month = first;
+  for (i = first; jd > hebrew_to_jd(year, i, hebrew_month_days(year, i)); i++) {
+    month++;
+  }
+  day = jd - hebrew_to_jd(year, month, 1) + 1;
+  return new Array(year, month, day);
 }
-function equinoxe_a_paris(b) {
-  var c = equinox(b, 2);
-  return (
-    c - deltat(b) / 86400 + equationOfTime(c) + (2 + 20 / 60 + 15 / 3600) / 360
-  );
+
+/*  EQUINOXE_A_PARIS -- Determine Julian day and fraction of the
+                        September equinox at the Paris meridian in
+                        a given Gregorian year.  */
+
+function equinoxe_a_paris(year) {
+  var equJED, equJD, equAPP, equParis, dtParis;
+
+  // September equinox in dynamical time
+  equJED = equinox(year, 2);
+
+  // Correct for delta T to obtain Universal time
+  equJD = equJED - deltat(year) / (24 * 60 * 60);
+
+  // Apply the equation of time to yield the apparent time at Greenwich
+  equAPP = equJD + equationOfTime(equJED);
+
+  /*  Finally, we must correct for the constant difference between
+        the Greenwich meridian and that of Paris, 2°20'15" to the
+        East.  */
+
+  dtParis = (2 + 20 / 60.0 + 15 / (60 * 60.0)) / 360;
+  equParis = equAPP + dtParis;
+
+  return equParis;
 }
-function paris_equinoxe_jd(a) {
-  return (a = equinoxe_a_paris(a)), Math.floor(a - 0.5) + 0.5;
+
+/*  PARIS_EQUINOXE_JD -- Calculate Julian day during which the
+                         September equinox, reckoned from the Paris
+                         meridian, occurred for a given Gregorian
+                         year.  */
+
+function paris_equinoxe_jd(year) {
+  var ep, epg;
+
+  ep = equinoxe_a_paris(year);
+  epg = Math.floor(ep - 0.5) + 0.5;
+
+  return epg;
 }
+
+/*  ANNEE_DE_LA_REVOLUTION -- Determine the year in the French
+                              revolutionary calendar in which a
+                              given Julian day falls. Returns an
+                              array of two elements:
+
+                                  [0] Année de la Révolution
+                                  [1] Julian day number containing
+                                      equinox for this year
+*/
+
 var FRENCH_REVOLUTIONARY_EPOCH = 2375839.5;
-function annee_da_la_revolution(b) {
-  var c,
-    d,
-    e = jd_to_gregorian(b)[0] - 2;
-  for (c = paris_equinoxe_jd(e); c > b; ) e--, (c = paris_equinoxe_jd(e));
-  for (d = c - 1; !(c <= b && b < d); )
-    (c = d), e++, (d = paris_equinoxe_jd(e));
-  return [Math.round((c - FRENCH_REVOLUTIONARY_EPOCH) / TropicalYear) + 1, c];
+
+function annee_da_la_revolution(jd) {
+  var guess = jd_to_gregorian(jd)[0] - 2,
+    lasteq,
+    nexteq,
+    adr;
+
+  lasteq = paris_equinoxe_jd(guess);
+  while (lasteq > jd) {
+    guess--;
+    lasteq = paris_equinoxe_jd(guess);
+  }
+  nexteq = lasteq - 1;
+  while (!(lasteq <= jd && jd < nexteq)) {
+    lasteq = nexteq;
+    guess++;
+    nexteq = paris_equinoxe_jd(guess);
+  }
+  adr = Math.round((lasteq - FRENCH_REVOLUTIONARY_EPOCH) / TropicalYear) + 1;
+
+  return new Array(adr, lasteq);
 }
-function jd_to_french_revolutionary(a) {
-  a = Math.floor(a) + 0.5;
-  var b = annee_da_la_revolution(a),
-    c = b[0],
-    g = b[1];
+
+/*  JD_TO_FRENCH_REVOLUTIONARY -- Calculate date in the French Revolutionary
+                                  calendar from Julian day. The five or six
+                                  "sansculottides" are considered a thirteenth
+                                  month in the results of this function.  */
+
+function jd_to_french_revolutionary(jd) {
+  var an, mois, decade, jour, adr, equinoxe;
+
+  jd = Math.floor(jd) + 0.5;
+  adr = annee_da_la_revolution(jd);
+  an = adr[0];
+  equinoxe = adr[1];
+  mois = Math.floor((jd - equinoxe) / 30) + 1;
+  jour = (jd - equinoxe) % 30;
+  decade = Math.floor(jour / 10) + 1;
+  jour = (jour % 10) + 1;
+
+  return new Array(an, mois, decade, jour);
+}
+
+/*  FRENCH_REVOLUTIONARY_TO_JD -- Obtain Julian day from a given French
+                                  Revolutionary calendar date.  */
+
+function french_revolutionary_to_jd(an, mois, decade, jour) {
+  var adr, equinoxe, guess, jd;
+
+  guess = FRENCH_REVOLUTIONARY_EPOCH + TropicalYear * (an - 1 - 1);
+  adr = new Array(an - 1, 0);
+
+  while (adr[0] < an) {
+    adr = annee_da_la_revolution(guess);
+    guess = adr[1] + (TropicalYear + 2);
+  }
+  equinoxe = adr[1];
+
+  jd = equinoxe + 30 * (mois - 1) + 10 * (decade - 1) + (jour - 1);
+  return jd;
+}
+
+// LEAP_ISLAMIC -- Is a given year a leap year in the Islamic calendar?
+
+function leap_islamic(year) {
+  return (year * 11 + 14) % 30 < 11;
+}
+
+// ISLAMIC_TO_JD -- Determine Julian day from Islamic date
+
+var ISLAMIC_EPOCH = 1948439.5;
+var ISLAMIC_WEEKDAYS = new Array(
+  "al-Ahad",
+  "al-Ithnayn",
+  "al-Thulatha\u2019",
+  "al-Arbi\u2018a\u2019",
+  "al-Khamis",
+  "al-Jum\u2018ah",
+  "al-Sabt"
+);
+
+function islamic_to_jd(year, month, day) {
   return (
-    (b = Math.floor((a - g) / 30) + 1),
-    (a = (a - g) % 30),
-    [c, b, Math.floor(a / 10) + 1, (a % 10) + 1]
-  );
-}
-function french_revolutionary_to_jd(e, f, a, b) {
-  var d,
-    g = FRENCH_REVOLUTIONARY_EPOCH + TropicalYear * (e - 1 - 1);
-  for (d = [e - 1, 0]; d[0] < e; )
-    (d = annee_da_la_revolution(g)), (g = d[1] + (TropicalYear + 2));
-  return d[1] + 30 * (f - 1) + 10 * (a - 1) + (b - 1);
-}
-function leap_islamic(a) {
-  return 11 > (11 * a + 14) % 30;
-}
-var ISLAMIC_EPOCH = 1948439.5,
-  ISLAMIC_WEEKDAYS = [
-    "al-Ahad",
-    "al-Ithnayn",
-    "al-Thulatha\u2019",
-    "al-Arbi\u2018a\u2019",
-    "al-Khamis",
-    "al-Jum\u2018ah",
-    "al-Sabt"
-  ];
-function islamic_to_jd(d, c, a) {
-  return (
-    a +
-    Math.ceil(29.5 * (c - 1)) +
-    354 * (d - 1) +
-    Math.floor((3 + 11 * d) / 30) +
+    day +
+    Math.ceil(29.5 * (month - 1)) +
+    (year - 1) * 354 +
+    Math.floor((3 + 11 * year) / 30) +
     ISLAMIC_EPOCH -
     1
   );
 }
-function jd_to_islamic(a) {
-  a = Math.floor(a) + 0.5;
-  var d = Math.floor((30 * (a - ISLAMIC_EPOCH) + 10646) / 10631),
-    e = Math.min(12, Math.ceil((a - (29 + islamic_to_jd(d, 1, 1))) / 29.5) + 1);
-  return (a = a - islamic_to_jd(d, e, 1) + 1), [d, e, a];
+
+// JD_TO_ISLAMIC -- Calculate Islamic date from Julian day
+
+function jd_to_islamic(jd) {
+  var year, month, day;
+
+  jd = Math.floor(jd) + 0.5;
+  year = Math.floor((30 * (jd - ISLAMIC_EPOCH) + 10646) / 10631);
+  month = Math.min(
+    12,
+    Math.ceil((jd - (29 + islamic_to_jd(year, 1, 1))) / 29.5) + 1
+  );
+  day = jd - islamic_to_jd(year, month, 1) + 1;
+  return new Array(year, month, day);
 }
-function tehran_equinox(b) {
-  var c = equinox(b, 0);
-  return c - deltat(b) / 86400 + equationOfTime(c) + 52.5 / 360;
+
+/*  TEHRAN_EQUINOX -- Determine Julian day and fraction of the
+                      March equinox at the Tehran meridian in
+                      a given Gregorian year.  */
+
+function tehran_equinox(year) {
+  var equJED, equJD, equAPP, equTehran, dtTehran;
+
+  // March equinox in dynamical time
+  equJED = equinox(year, 0);
+
+  // Correct for delta T to obtain Universal time
+  equJD = equJED - deltat(year) / (24 * 60 * 60);
+
+  // Apply the equation of time to yield the apparent time at Greenwich
+  equAPP = equJD + equationOfTime(equJED);
+
+  /*  Finally, we must correct for the constant difference between
+        the Greenwich meridian andthe time zone standard for
+	      Iran Standard time, 52°30' to the East.  */
+
+  dtTehran = (52 + 30 / 60.0 + 0 / (60.0 * 60.0)) / 360;
+  equTehran = equAPP + dtTehran;
+
+  return equTehran;
 }
-function tehran_equinox_jd(a) {
-  return (a = tehran_equinox(a)), Math.floor(a);
+
+/*  TEHRAN_EQUINOX_JD -- Calculate Julian day during which the
+                         March equinox, reckoned from the Tehran
+                         meridian, occurred for a given Gregorian
+                         year.  */
+
+function tehran_equinox_jd(year) {
+  var ep, epg;
+
+  ep = tehran_equinox(year);
+  epg = Math.floor(ep);
+
+  return epg;
 }
-var PERSIAN_EPOCH = 1948320.5,
-  PERSIAN_WEEKDAYS = [
-    "Yekshanbeh",
-    "Doshanbeh",
-    "Sehshanbeh",
-    "Chaharshanbeh",
-    "Panjshanbeh",
-    "Jom\u2018eh",
-    "Shanbeh"
-  ];
-function persiana_year(b) {
-  var c,
-    d,
-    e = jd_to_gregorian(b)[0] - 2;
-  for (c = tehran_equinox_jd(e); c > b; ) e--, (c = tehran_equinox_jd(e));
-  for (d = c - 1; !(c <= b && b < d); )
-    (c = d), e++, (d = tehran_equinox_jd(e));
-  return [Math.round((c - PERSIAN_EPOCH) / TropicalYear) + 1, c];
+
+/*  PERSIANA_YEAR -- Determine the year in the Persian
+                     astronomical calendar in which a
+                     given Julian day falls. Returns an
+             	       array of two elements:
+
+                        [0] Persian year
+                        [1] Julian day number containing
+                            equinox for this year
+*/
+
+var PERSIAN_EPOCH = 1948320.5;
+var PERSIAN_WEEKDAYS = new Array(
+  "Yekshanbeh",
+  "Doshanbeh",
+  "Sehshanbeh",
+  "Chaharshanbeh",
+  "Panjshanbeh",
+  "Jom\u2018eh",
+  "Shanbeh"
+);
+
+function persiana_year(jd) {
+  var guess = jd_to_gregorian(jd)[0] - 2,
+    lasteq,
+    nexteq,
+    adr;
+
+  lasteq = tehran_equinox_jd(guess);
+  while (lasteq > jd) {
+    guess--;
+    lasteq = tehran_equinox_jd(guess);
+  }
+  nexteq = lasteq - 1;
+  while (!(lasteq <= jd && jd < nexteq)) {
+    lasteq = nexteq;
+    guess++;
+    nexteq = tehran_equinox_jd(guess);
+  }
+  adr = Math.round((lasteq - PERSIAN_EPOCH) / TropicalYear) + 1;
+
+  return new Array(adr, lasteq);
 }
-function jd_to_persiana(a) {
-  a = Math.floor(a) + 0.5;
-  var d = persiana_year(a)[0],
-    e = Math.floor(a) - persiana_to_jd(d, 1, 1) + 1;
+
+/*  JD_TO_PERSIANA -- Calculate date in the Persian astronomical
+                      calendar from Julian day.  */
+
+function jd_to_persiana(jd) {
+  var year, month, day, adr, equinox, yday;
+
+  jd = Math.floor(jd) + 0.5;
+  adr = persiana_year(jd);
+  year = adr[0];
+  equinox = adr[1];
+  day = Math.floor((jd - equinox) / 30) + 1;
+
+  yday = Math.floor(jd) - persiana_to_jd(year, 1, 1) + 1;
+  month = yday <= 186 ? Math.ceil(yday / 31) : Math.ceil((yday - 6) / 30);
+  day = Math.floor(jd) - persiana_to_jd(year, month, 1) + 1;
+
+  return new Array(year, month, day);
+}
+
+/*  PERSIANA_TO_JD -- Obtain Julian day from a given Persian
+                    	astronomical calendar date.  */
+
+function persiana_to_jd(year, month, day) {
+  var adr, equinox, guess, jd;
+
+  guess = PERSIAN_EPOCH - 1 + TropicalYear * (year - 1 - 1);
+  adr = new Array(year - 1, 0);
+
+  while (adr[0] < year) {
+    adr = persiana_year(guess);
+    guess = adr[1] + (TropicalYear + 2);
+  }
+  equinox = adr[1];
+
+  jd =
+    equinox +
+    (month <= 7 ? (month - 1) * 31 : (month - 1) * 30 + 6) +
+    (day - 1);
+  return jd;
+}
+
+/*  LEAP_PERSIANA -- Is a given year a leap year in the Persian
+    	    	         astronomical calendar?  */
+
+function leap_persiana(year) {
+  return persiana_to_jd(year + 1, 1, 1) - persiana_to_jd(year, 1, 1) > 365;
+}
+
+// LEAP_PERSIAN -- Is a given year a leap year in the Persian calendar?
+
+function leap_persian(year) {
   return (
-    (e = 186 >= e ? Math.ceil(e / 31) : Math.ceil((e - 6) / 30)),
-    (a = Math.floor(a) - persiana_to_jd(d, e, 1) + 1),
-    [d, e, a]
+    ((((year - (year > 0 ? 474 : 473)) % 2820) + 474 + 38) * 682) % 2816 < 682
   );
 }
-function persiana_to_jd(c, e, a) {
-  var b,
-    f = PERSIAN_EPOCH - 1 + TropicalYear * (c - 1 - 1);
-  for (b = [c - 1, 0]; b[0] < c; )
-    (b = persiana_year(f)), (f = b[1] + (TropicalYear + 2));
-  return b[1] + (7 >= e ? 31 * (e - 1) : 30 * (e - 1) + 6) + (a - 1);
-}
-function leap_persiana(a) {
-  return 365 < persiana_to_jd(a + 1, 1, 1) - persiana_to_jd(a, 1, 1);
-}
-function leap_persian(a) {
-  return 682 > (682 * (((a - (0 < a ? 474 : 473)) % 2820) + 512)) % 2816;
-}
-function persian_to_jd(a, c, f) {
-  a -= 0 <= a ? 474 : 473;
-  var b = 474 + mod(a, 2820);
+
+// PERSIAN_TO_JD -- Determine Julian day from Persian date
+
+function persian_to_jd(year, month, day) {
+  var epbase, epyear;
+
+  epbase = year - (year >= 0 ? 474 : 473);
+  epyear = 474 + mod(epbase, 2820);
+
   return (
-    f +
-    (7 >= c ? 31 * (c - 1) : 30 * (c - 1) + 6) +
-    Math.floor((682 * b - 110) / 2816) +
-    365 * (b - 1) +
-    1029983 * Math.floor(a / 2820) +
+    day +
+    (month <= 7 ? (month - 1) * 31 : (month - 1) * 30 + 6) +
+    Math.floor((epyear * 682 - 110) / 2816) +
+    (epyear - 1) * 365 +
+    Math.floor(epbase / 2820) * 1029983 +
     (PERSIAN_EPOCH - 1)
   );
 }
-function jd_to_persian(a) {
-  a = Math.floor(a) + 0.5;
-  var b = a - persian_to_jd(475, 1, 1),
-    c = Math.floor(b / 1029983),
-    d = mod(b, 1029983);
+
+// JD_TO_PERSIAN -- Calculate Persian date from Julian day
+
+function jd_to_persian(jd) {
+  var year, month, day, depoch, cycle, cyear, ycycle, aux1, aux2, yday;
+
+  jd = Math.floor(jd) + 0.5;
+
+  depoch = jd - persian_to_jd(475, 1, 1);
+  cycle = Math.floor(depoch / 1029983);
+  cyear = mod(depoch, 1029983);
+  if (cyear == 1029982) {
+    ycycle = 2820;
+  } else {
+    aux1 = Math.floor(cyear / 366);
+    aux2 = mod(cyear, 366);
+    ycycle =
+      Math.floor((2134 * aux1 + 2816 * aux2 + 2815) / 1028522) + aux1 + 1;
+  }
+  year = ycycle + 2820 * cycle + 474;
+  if (year <= 0) {
+    year--;
+  }
+  yday = jd - persian_to_jd(year, 1, 1) + 1;
+  month = yday <= 186 ? Math.ceil(yday / 31) : Math.ceil((yday - 6) / 30);
+  day = jd - persian_to_jd(year, month, 1) + 1;
+  return new Array(year, month, day);
+}
+
+// MAYAN_COUNT_TO_JD -- Determine Julian day from Mayan long count
+
+var MAYAN_COUNT_EPOCH = 584282.5;
+
+function mayan_count_to_jd(baktun, katun, tun, uinal, kin) {
   return (
-    1029982 == d
-      ? (b = 2820)
-      : ((b = Math.floor(d / 366)),
-        (d = mod(d, 366)),
-        (b = Math.floor((2134 * b + 2816 * d + 2815) / 1028522) + b + 1)),
-    (c = b + 2820 * c + 474),
-    0 >= c && c--,
-    (b = a - persian_to_jd(c, 1, 1) + 1),
-    (b = 186 >= b ? Math.ceil(b / 31) : Math.ceil((b - 6) / 30)),
-    (a = a - persian_to_jd(c, b, 1) + 1),
-    [c, b, a]
+    MAYAN_COUNT_EPOCH +
+    baktun * 144000 +
+    katun * 7200 +
+    tun * 360 +
+    uinal * 20 +
+    kin
   );
 }
-var MAYAN_COUNT_EPOCH = 584282.5;
-function mayan_count_to_jd(e, f, a, b, d) {
-  return MAYAN_COUNT_EPOCH + 144e3 * e + 7200 * f + 360 * a + 20 * b + d;
+
+// JD_TO_MAYAN_COUNT -- Calculate Mayan long count from Julian day
+
+function jd_to_mayan_count(jd) {
+  var d, baktun, katun, tun, uinal, kin;
+
+  jd = Math.floor(jd) + 0.5;
+  d = jd - MAYAN_COUNT_EPOCH;
+  baktun = Math.floor(d / 144000);
+  d = mod(d, 144000);
+  katun = Math.floor(d / 7200);
+  d = mod(d, 7200);
+  tun = Math.floor(d / 360);
+  d = mod(d, 360);
+  uinal = Math.floor(d / 20);
+  kin = mod(d, 20);
+
+  return new Array(baktun, katun, tun, uinal, kin);
 }
-function jd_to_mayan_count(a) {
-  a = Math.floor(a) + 0.5;
-  var b = a - MAYAN_COUNT_EPOCH;
-  (a = Math.floor(b / 144e3)), (b = mod(b, 144e3));
-  var e = Math.floor(b / 7200);
-  b = mod(b, 7200);
-  var h = Math.floor(b / 360);
-  b = mod(b, 360);
-  var d = Math.floor(b / 20);
-  return (b = mod(b, 20)), [a, e, h, d, b];
-}
-var MAYAN_HAAB_MONTHS = [
+
+// JD_TO_MAYAN_HAAB -- Determine Mayan Haab "month" and day from Julian day
+
+var MAYAN_HAAB_MONTHS = new Array(
   "Pop",
   "Uo",
   "Zip",
@@ -353,15 +779,21 @@ var MAYAN_HAAB_MONTHS = [
   "Kayab",
   "Cumku",
   "Uayeb"
-];
-function jd_to_mayan_haab(a) {
-  return (
-    (a = Math.floor(a) + 0.5),
-    (a = mod(a - MAYAN_COUNT_EPOCH + 348, 365)),
-    [Math.floor(a / 20) + 1, mod(a, 20)]
-  );
+);
+
+function jd_to_mayan_haab(jd) {
+  var lcount, day;
+
+  jd = Math.floor(jd) + 0.5;
+  lcount = jd - MAYAN_COUNT_EPOCH;
+  day = mod(lcount + 8 + (18 - 1) * 20, 365);
+
+  return new Array(Math.floor(day / 20) + 1, mod(day, 20));
 }
-var MAYAN_TZOLKIN_MONTHS = [
+
+// JD_TO_MAYAN_TZOLKIN -- Determine Mayan Tzolkin "month" and day from Julian day
+
+var MAYAN_TZOLKIN_MONTHS = new Array(
   "Imix",
   "Ik",
   "Akbal",
@@ -382,15 +814,19 @@ var MAYAN_TZOLKIN_MONTHS = [
   "Etznab",
   "Cauac",
   "Ahau"
-];
-function jd_to_mayan_tzolkin(a) {
-  return (
-    (a = Math.floor(a) + 0.5),
-    (a -= MAYAN_COUNT_EPOCH),
-    [amod(a + 20, 20), amod(a + 4, 13)]
-  );
+);
+
+function jd_to_mayan_tzolkin(jd) {
+  var lcount;
+
+  jd = Math.floor(jd) + 0.5;
+  lcount = jd - MAYAN_COUNT_EPOCH;
+  return new Array(amod(lcount + 20, 20), amod(lcount + 4, 13));
 }
-var INDIAN_CIVIL_WEEKDAYS = [
+
+// INDIAN_CIVIL_TO_JD -- Obtain Julian day for Indian Civil date
+
+var INDIAN_CIVIL_WEEKDAYS = new Array(
   "ravivara",
   "somavara",
   "mangalavara",
@@ -398,415 +834,701 @@ var INDIAN_CIVIL_WEEKDAYS = [
   "brahaspativara",
   "sukravara",
   "sanivara"
-];
-function indian_civil_to_jd(a, c, f) {
-  var b = a + 78;
-  return (
-    ((a = leap_gregorian(b)), (b = gregorian_to_jd(b, 3, a ? 21 : 22)), 1 == c)
-      ? (a = b + (f - 1))
-      : ((a = b + (a ? 31 : 30) + 31 * Math.min(c - 2, 5)),
-        8 <= c && (a += 30 * (c - 7)),
-        (a += f - 1)),
-    a
-  );
+);
+
+function indian_civil_to_jd(year, month, day) {
+  var Caitra, gyear, leap, start, jd, m;
+
+  gyear = year + 78;
+  leap = leap_gregorian(gyear); // Is this a leap year ?
+  start = gregorian_to_jd(gyear, 3, leap ? 21 : 22);
+  Caitra = leap ? 31 : 30;
+
+  if (month == 1) {
+    jd = start + (day - 1);
+  } else {
+    jd = start + Caitra;
+    m = month - 2;
+    m = Math.min(m, 5);
+    jd += m * 31;
+    if (month >= 8) {
+      m = month - 7;
+      jd += m * 30;
+    }
+    jd += day - 1;
+  }
+
+  return jd;
 }
-function jd_to_indian_civil(a) {
-  a = Math.floor(a) + 0.5;
-  var b = jd_to_gregorian(a),
-    c = leap_gregorian(b[0]),
-    d = b[0] - 78;
-  return (
-    (b = gregorian_to_jd(b[0], 1, 1)),
-    (a -= b),
-    (c = c ? 31 : 30),
-    80 > a && (d--, (a += c + 155 + 90 + 10 + 80)),
-    (a -= 80),
-    a < c
-      ? ((month = 1), (day = a + 1))
-      : ((c = a - c),
-        155 > c
-          ? ((month = Math.floor(c / 31) + 2), (day = (c % 31) + 1))
-          : ((c -= 155),
-            (month = Math.floor(c / 30) + 7),
-            (day = (c % 30) + 1))),
-    [d, month, day]
-  );
+
+// JD_TO_INDIAN_CIVIL -- Calculate Indian Civil date from Julian day
+
+function jd_to_indian_civil(jd) {
+  var Caitra, Saka, greg, greg0, leap, start, year, yday, mday;
+
+  Saka = 79 - 1; // Offset in years from Saka era to Gregorian epoch
+  start = 80; // Day offset between Saka and Gregorian
+
+  jd = Math.floor(jd) + 0.5;
+  greg = jd_to_gregorian(jd); // Gregorian date for Julian day
+  leap = leap_gregorian(greg[0]); // Is this a leap year?
+  year = greg[0] - Saka; // Tentative year in Saka era
+  greg0 = gregorian_to_jd(greg[0], 1, 1); // JD at start of Gregorian year
+  yday = jd - greg0; // Day number (0 based) in Gregorian year
+  Caitra = leap ? 31 : 30; // Days in Caitra this year
+
+  if (yday < start) {
+    // Day is at the end of the preceding Saka year
+    year--;
+    yday += Caitra + 31 * 5 + 30 * 3 + 10 + start;
+  }
+
+  yday -= start;
+  if (yday < Caitra) {
+    month = 1;
+    day = yday + 1;
+  } else {
+    mday = yday - Caitra;
+    if (mday < 31 * 5) {
+      month = Math.floor(mday / 31) + 2;
+      day = (mday % 31) + 1;
+    } else {
+      mday -= 31 * 5;
+      month = Math.floor(mday / 30) + 7;
+      day = (mday % 30) + 1;
+    }
+  }
+
+  return new Array(year, month, day);
 }
+
+/*  updateFromGregorian -- Update all calendars from Gregorian.
+                           "Why not Julian date?" you ask. Because
+                           starting from Gregorian guarantees we're
+                           already snapped to an integral second, so
+                           we don't get roundoff errors in other
+                           calendars.  */
+
 function updateFromGregorian() {
-  var a = new Number(document.gregorian.year.value),
-    b = document.gregorian.month.selectedIndex,
-    c = new Number(document.gregorian.day.value),
-    d = new Number(document.gregorian.hour.value),
-    f = new Number(document.gregorian.min.value),
-    k = new Number(document.gregorian.sec.value);
-  switch (
-    ((b =
-      gregorian_to_jd(a, b + 1, c) +
-      Math.floor(k + 60 * (f + 60 * d) + 0.5) / 86400),
-    (document.julianday.day.value = b),
-    (document.modifiedjulianday.day.value = b - JMJD),
-    (c = jwday(b)),
-    (document.gregorian.wday.value = Weekdays[c]),
-    (document.gregorian.leap.value = NormLeap[leap_gregorian(a) ? 1 : 0]),
-    (c = jd_to_julian(b)),
-    (document.juliancalendar.year.value = c[0]),
-    (document.juliancalendar.month.selectedIndex = c[1] - 1),
-    (document.juliancalendar.day.value = c[2]),
-    (document.juliancalendar.leap.value = NormLeap[leap_julian(c[0]) ? 1 : 0]),
-    (c = jwday(b)),
-    (document.juliancalendar.wday.value = Weekdays[c]),
-    (a = jd_to_hebrew(b)),
-    hebrew_leap(a[0])
-      ? ((document.hebrew.month.options.length = 13),
-        (document.hebrew.month.options[11] = new Option("Adar I")),
-        (document.hebrew.month.options[12] = new Option("Veadar")))
-      : ((document.hebrew.month.options.length = 12),
-        (document.hebrew.month.options[11] = new Option("Adar"))),
-    (document.hebrew.year.value = a[0]),
-    (document.hebrew.month.selectedIndex = a[1] - 1),
-    (document.hebrew.day.value = a[2]),
-    (d = a[1]),
-    12 != d || hebrew_leap(a[0]) || (d = 14),
-    (document.hebrew.hebmonth.src = "figures/hebrew_month_" + d + ".gif"),
-    hebrew_year_days(a[0]))
-  ) {
+  var j,
+    year,
+    mon,
+    mday,
+    hour,
+    min,
+    sec,
+    weekday,
+    julcal,
+    hebcal,
+    islcal,
+    hmindex,
+    utime,
+    isoweek,
+    may_countcal,
+    mayhaabcal,
+    maytzolkincal,
+    frrcal,
+    indcal,
+    isoday,
+    xgregcal;
+
+  year = Number(document.gregorian.year.value);
+  mon = document.gregorian.month.selectedIndex;
+  mday = Number(document.gregorian.day.value);
+  hour = min = sec = 0;
+  hour = Number(document.gregorian.hour.value);
+  min = Number(document.gregorian.min.value);
+  sec = Number(document.gregorian.sec.value);
+
+  // Update Julian day
+
+  j =
+    gregorian_to_jd(year, mon + 1, mday) +
+    Math.floor(sec + 60 * (min + 60 * hour) + 0.5) / 86400.0;
+
+  document.julianday.day.value = j;
+  document.modifiedjulianday.day.value = j - JMJD;
+
+  // Update day of week in Gregorian box
+
+  weekday = jwday(j);
+  document.gregorian.wday.value = Weekdays[weekday];
+
+  // Update leap year status in Gregorian box
+
+  document.gregorian.leap.value = NormLeap[leap_gregorian(year) ? 1 : 0];
+
+  // Update Julian Calendar
+
+  julcal = jd_to_julian(j);
+  document.juliancalendar.year.value = julcal[0];
+  document.juliancalendar.month.selectedIndex = julcal[1] - 1;
+  document.juliancalendar.day.value = julcal[2];
+  document.juliancalendar.leap.value = NormLeap[leap_julian(julcal[0]) ? 1 : 0];
+  weekday = jwday(j);
+  document.juliancalendar.wday.value = Weekdays[weekday];
+
+  // Update Hebrew Calendar
+
+  hebcal = jd_to_hebrew(j);
+  if (hebrew_leap(hebcal[0])) {
+    document.hebrew.month.options.length = 13;
+    document.hebrew.month.options[11] = new Option("Adar I");
+    document.hebrew.month.options[12] = new Option("Veadar");
+  } else {
+    document.hebrew.month.options.length = 12;
+    document.hebrew.month.options[11] = new Option("Adar");
+  }
+  document.hebrew.year.value = hebcal[0];
+  document.hebrew.month.selectedIndex = hebcal[1] - 1;
+  document.hebrew.day.value = hebcal[2];
+  hmindex = hebcal[1];
+  if (hmindex == 12 && !hebrew_leap(hebcal[0])) {
+    hmindex = 14;
+  }
+  document.hebrew.hebmonth.src = "figures/hebrew_month_" + hmindex + ".gif";
+  switch (hebrew_year_days(hebcal[0])) {
     case 353:
       document.hebrew.leap.value = "Common deficient (353 days)";
       break;
+
     case 354:
       document.hebrew.leap.value = "Common regular (354 days)";
       break;
+
     case 355:
       document.hebrew.leap.value = "Common complete (355 days)";
       break;
+
     case 383:
       document.hebrew.leap.value = "Embolismic deficient (383 days)";
       break;
+
     case 384:
       document.hebrew.leap.value = "Embolismic regular (384 days)";
       break;
+
     case 385:
       document.hebrew.leap.value = "Embolismic complete (385 days)";
       break;
+
     default:
       document.hebrew.leap.value =
-        "Invalid year length: " + hebrew_year_days(a[0]) + " days.";
+        "Invalid year length: " + hebrew_year_days(hebcal[0]) + " days.";
+      break;
   }
-  document.getElementById("gregYear").blur(),
-    document.getElementById("gregDay").blur(),
-    document.getElementById("julianYear").blur(),
-    document.getElementById("julianCalDay").blur(),
-    document.getElementById("islamicYear").blur(),
-    document.getElementById("islamicDay").blur(),
-    document.getElementById("persYear").blur(),
-    document.getElementById("persianDay").blur(),
-    (a = jd_to_islamic(b)),
-    (document.islamic.year.value = a[0]),
-    (document.islamic.month.selectedIndex = a[1] - 1),
-    (document.islamic.day.value = a[2]),
-    (document.islamic.wday.value = "Yawm " + ISLAMIC_WEEKDAYS[c]),
-    (document.islamic.leap.value = NormLeap[leap_islamic(a[0]) ? 1 : 0]),
-    (perscal = jd_to_persian(b)),
-    (document.persian.year.value = perscal[0]),
-    (document.persian.month.selectedIndex = perscal[1] - 1),
-    (document.persian.day.value = perscal[2]),
-    (document.persian.wday.value = PERSIAN_WEEKDAYS[c]),
-    (document.persian.leap.value = NormLeap[leap_persian(perscal[0]) ? 1 : 0]),
-    (perscal = jd_to_persiana(b)),
-    (document.persiana.year.value = perscal[0]),
-    (document.persiana.month.selectedIndex = perscal[1] - 1),
-    (document.persiana.day.value = perscal[2]),
-    (document.persiana.wday.value = PERSIAN_WEEKDAYS[c]),
-    (document.persiana.leap.value =
-      NormLeap[leap_persiana(perscal[0]) ? 1 : 0]),
-    (a = jd_to_mayan_count(b)),
-    (document.mayancount.baktun.value = a[0]),
-    (document.mayancount.katun.value = a[1]),
-    (document.mayancount.tun.value = a[2]),
-    (document.mayancount.uinal.value = a[3]),
-    (document.mayancount.kin.value = a[4]),
-    (a = jd_to_mayan_haab(b)),
-    (document.mayancount.haab.value =
-      "" + a[1] + " " + MAYAN_HAAB_MONTHS[a[0] - 1]),
-    (a = jd_to_mayan_tzolkin(b)),
-    (document.mayancount.tzolkin.value =
-      "" + a[1] + " " + MAYAN_TZOLKIN_MONTHS[a[0] - 1]),
-    (a = jd_to_indian_civil(b)),
-    (document.indiancivilcalendar.year.value = a[0]),
-    (document.indiancivilcalendar.month.selectedIndex = a[1] - 1),
-    (document.indiancivilcalendar.day.value = a[2]),
-    (document.indiancivilcalendar.weekday.value = INDIAN_CIVIL_WEEKDAYS[c]),
-    (document.indiancivilcalendar.leap.value =
-      NormLeap[leap_gregorian(a[0] + 78) ? 1 : 0]),
-    (c = jd_to_french_revolutionary(b)),
-    (document.french.an.value = c[0]),
-    (document.french.mois.selectedIndex = c[1] - 1),
-    (document.french.decade.selectedIndex = c[2] - 1),
-    (document.french.jour.selectedIndex = (12 >= c[1] ? c[3] : c[3] + 11) - 1),
-    null != document.gregserial && (document.gregserial.day.value = b - J0000),
-    (document.excelserial1900.day.value =
-      b - J1900 + 1 + (2415078.5 < b ? 1 : 0)),
-    (document.excelserial1904.day.value = b - J1904),
-    (document.unixtime.time.value = Math.round((864e5 * (b - J1970)) / 1e3)),
-    (c = jd_to_iso(b)),
-    (document.isoweek.year.value = c[0]),
-    (document.isoweek.week.value = c[1]),
-    (document.isoweek.day.value = c[2]),
-    (b = jd_to_iso_day(b)),
-    (document.isoday.year.value = b[0]),
-    (document.isoday.day.value = b[1]);
+
+  // Update Islamic Calendar
+
+  islcal = jd_to_islamic(j);
+  document.islamic.year.value = islcal[0];
+  document.islamic.month.selectedIndex = islcal[1] - 1;
+  document.islamic.day.value = islcal[2];
+  document.islamic.wday.value = "Yawm " + ISLAMIC_WEEKDAYS[weekday];
+  document.islamic.leap.value = NormLeap[leap_islamic(islcal[0]) ? 1 : 0];
+
+  // Update Persian Calendar
+
+  perscal = jd_to_persian(j);
+  document.persian.year.value = perscal[0];
+  document.persian.month.selectedIndex = perscal[1] - 1;
+  document.persian.day.value = perscal[2];
+  document.persian.wday.value = PERSIAN_WEEKDAYS[weekday];
+  document.persian.leap.value = NormLeap[leap_persian(perscal[0]) ? 1 : 0];
+
+  // Update Persian Astronomical Calendar
+
+  perscal = jd_to_persiana(j);
+  document.persiana.year.value = perscal[0];
+  document.persiana.month.selectedIndex = perscal[1] - 1;
+  document.persiana.day.value = perscal[2];
+  document.persiana.wday.value = PERSIAN_WEEKDAYS[weekday];
+  document.persiana.leap.value = NormLeap[leap_persiana(perscal[0]) ? 1 : 0];
+
+  // Update Mayan Calendars
+
+  may_countcal = jd_to_mayan_count(j);
+  document.mayancount.baktun.value = may_countcal[0];
+  document.mayancount.katun.value = may_countcal[1];
+  document.mayancount.tun.value = may_countcal[2];
+  document.mayancount.uinal.value = may_countcal[3];
+  document.mayancount.kin.value = may_countcal[4];
+  mayhaabcal = jd_to_mayan_haab(j);
+  document.mayancount.haab.value =
+    "" + mayhaabcal[1] + " " + MAYAN_HAAB_MONTHS[mayhaabcal[0] - 1];
+  maytzolkincal = jd_to_mayan_tzolkin(j);
+  document.mayancount.tzolkin.value =
+    "" + maytzolkincal[1] + " " + MAYAN_TZOLKIN_MONTHS[maytzolkincal[0] - 1];
+
+  // Update Indian Civil Calendar
+
+  indcal = jd_to_indian_civil(j);
+  document.indiancivilcalendar.year.value = indcal[0];
+  document.indiancivilcalendar.month.selectedIndex = indcal[1] - 1;
+  document.indiancivilcalendar.day.value = indcal[2];
+  document.indiancivilcalendar.weekday.value = INDIAN_CIVIL_WEEKDAYS[weekday];
+  document.indiancivilcalendar.leap.value =
+    NormLeap[leap_gregorian(indcal[0] + 78) ? 1 : 0];
+
+  // Update French Republican Calendar
+
+  frrcal = jd_to_french_revolutionary(j);
+  document.french.an.value = frrcal[0];
+  document.french.mois.selectedIndex = frrcal[1] - 1;
+  document.french.decade.selectedIndex = frrcal[2] - 1;
+  document.french.jour.selectedIndex =
+    (frrcal[1] <= 12 ? frrcal[3] : frrcal[3] + 11) - 1;
+
+  // Update Gregorian serial number
+
+  if (document.gregserial != null) {
+    document.gregserial.day.value = j - J0000;
+  }
+
+  // Update Excel 1900 and 1904 day serial numbers
+
+  document.excelserial1900.day.value =
+    j -
+    J1900 +
+    1 +
+    /*  Microsoft marching morons thought 1900 was a leap year.
+                Adjust dates after 1900-02-28 to compensate for their
+                idiocy.  */
+    (j > 2415078.5 ? 1 : 0);
+  document.excelserial1904.day.value = j - J1904;
+
+  // Update Unix time()
+
+  utime = (j - J1970) * (60 * 60 * 24 * 1000);
+  document.unixtime.time.value = Math.round(utime / 1000);
+
+  // Update ISO Week
+
+  isoweek = jd_to_iso(j);
+  document.isoweek.year.value = isoweek[0];
+  document.isoweek.week.value = isoweek[1];
+  document.isoweek.day.value = isoweek[2];
+
+  // Update ISO Day
+
+  isoday = jd_to_iso_day(j);
+  document.isoday.year.value = isoday[0];
+  document.isoday.day.value = isoday[1];
 }
+
+// calcGregorian -- Perform calculation starting with a Gregorian date
+
 function calcGregorian() {
   updateFromGregorian();
 }
+
+// calcJulian -- Perform calculation starting with a Julian date
+
 function calcJulian() {
-  var a = new Number(document.julianday.day.value),
-    b = jd_to_gregorian(a);
-  (a = jhms(a)),
-    (document.gregorian.year.value = b[0]),
-    (document.gregorian.month.selectedIndex = b[1] - 1),
-    (document.gregorian.day.value = b[2]),
-    (document.gregorian.hour.value = pad(a[0], 2, " ")),
-    (document.gregorian.min.value = pad(a[1], 2, "0")),
-    (document.gregorian.sec.value = pad(a[2], 2, "0")),
-    updateFromGregorian();
+  var j, date, time;
+
+  j = Number(document.julianday.day.value);
+  date = jd_to_gregorian(j);
+  time = jhms(j);
+  document.gregorian.year.value = date[0];
+  document.gregorian.month.selectedIndex = date[1] - 1;
+  document.gregorian.day.value = date[2];
+  document.gregorian.hour.value = pad(time[0], 2, " ");
+  document.gregorian.min.value = pad(time[1], 2, "0");
+  document.gregorian.sec.value = pad(time[2], 2, "0");
+  updateFromGregorian();
 }
-function setJulian(a) {
-  (document.julianday.day.value = new Number(a)), calcJulian();
+
+// setJulian -- Set Julian date and update all calendars
+
+function setJulian(j) {
+  document.julianday.day.value = Number(j);
+  calcJulian();
 }
+
+// calcModifiedJulian -- Update from Modified Julian day
+
 function calcModifiedJulian() {
-  setJulian(new Number(document.modifiedjulianday.day.value) + JMJD);
+  setJulian(Number(document.modifiedjulianday.day.value) + JMJD);
 }
+
+// calcJulianCalendar -- Update from Julian calendar
+
 function calcJulianCalendar() {
   setJulian(
     julian_to_jd(
-      new Number(document.juliancalendar.year.value),
+      Number(document.juliancalendar.year.value),
       document.juliancalendar.month.selectedIndex + 1,
-      new Number(document.juliancalendar.day.value)
+      Number(document.juliancalendar.day.value)
     )
   );
 }
+
+// calcHebrew -- Update from Hebrew calendar
+
 function calcHebrew() {
   setJulian(
     hebrew_to_jd(
-      new Number(document.hebrew.year.value),
+      Number(document.hebrew.year.value),
       document.hebrew.month.selectedIndex + 1,
-      new Number(document.hebrew.day.value)
+      Number(document.hebrew.day.value)
     )
   );
 }
+
+// calcIslamic -- Update from Islamic calendar
+
 function calcIslamic() {
   setJulian(
     islamic_to_jd(
-      new Number(document.islamic.year.value),
+      Number(document.islamic.year.value),
       document.islamic.month.selectedIndex + 1,
-      new Number(document.islamic.day.value)
+      Number(document.islamic.day.value)
     )
   );
 }
+
+// calcPersian -- Update from Persian calendar
+
 function calcPersian() {
   setJulian(
     persian_to_jd(
-      new Number(document.persian.year.value),
+      Number(document.persian.year.value),
       document.persian.month.selectedIndex + 1,
-      new Number(document.persian.day.value)
+      Number(document.persian.day.value)
     )
   );
 }
+
+// calcPersiana -- Update from Persian astronomical calendar
+
 function calcPersiana() {
   setJulian(
     persiana_to_jd(
-      new Number(document.persiana.year.value),
+      Number(document.persiana.year.value),
       document.persiana.month.selectedIndex + 1,
-      new Number(document.persiana.day.value)
+      Number(document.persiana.day.value)
     ) + 0.5
   );
 }
+
+// calcMayanCount -- Update from the Mayan Long Count
+
 function calcMayanCount() {
   setJulian(
     mayan_count_to_jd(
-      new Number(document.mayancount.baktun.value),
-      new Number(document.mayancount.katun.value),
-      new Number(document.mayancount.tun.value),
-      new Number(document.mayancount.uinal.value),
-      new Number(document.mayancount.kin.value)
+      Number(document.mayancount.baktun.value),
+      Number(document.mayancount.katun.value),
+      Number(document.mayancount.tun.value),
+      Number(document.mayancount.uinal.value),
+      Number(document.mayancount.kin.value)
     )
   );
 }
+
+// calcIndianCivilCalendar -- Update from Indian Civil Calendar
+
 function calcIndianCivilCalendar() {
   setJulian(
     indian_civil_to_jd(
-      new Number(document.indiancivilcalendar.year.value),
+      Number(document.indiancivilcalendar.year.value),
       document.indiancivilcalendar.month.selectedIndex + 1,
-      new Number(document.indiancivilcalendar.day.value)
+      Number(document.indiancivilcalendar.day.value)
     )
   );
 }
+
+// calcFrench -- Update from French Republican calendar
+
 function calcFrench() {
-  var a = document.french.jour.selectedIndex,
-    b = document.french.decade.selectedIndex,
-    d = document.french.mois.selectedIndex;
-  9 < a && ((a -= 11), (b = 0), (d = 12)),
-    12 == d && ((b = 0), 5 < a && (a = 0)),
-    setJulian(
-      french_revolutionary_to_jd(
-        new Number(document.french.an.value),
-        d + 1,
-        b + 1,
-        a + 1
-      )
-    );
+  var decade, j, mois;
+
+  j = document.french.jour.selectedIndex;
+  decade = document.french.decade.selectedIndex;
+  mois = document.french.mois.selectedIndex;
+
+  /*  If the currently selected day is one of the sansculottides,
+        adjust the index to be within that period and force the
+        decade to zero and the month to 12, designating the
+        intercalary interval.  */
+
+  if (j > 9) {
+    j -= 11;
+    decade = 0;
+    mois = 12;
+  }
+
+  /*  If the selected month is the pseudo-month of the five or
+        six sansculottides, ensure that the decade is 0 and the day
+        number doesn't exceed six. To avoid additional overhead, we
+        don't test whether a day number of 6 is valid for this year,
+        but rather simply permit it to wrap into the first day of
+        the following year if this is a 365 day year.  */
+
+  if (mois == 12) {
+    decade = 0;
+    if (j > 5) {
+      j = 0;
+    }
+  }
+
+  setJulian(
+    french_revolutionary_to_jd(
+      Number(document.french.an.value),
+      mois + 1,
+      decade + 1,
+      j + 1
+    )
+  );
 }
+
+// calcGregSerial -- Update from Gregorian serial day number
+
 function calcGregSerial() {
-  setJulian(new Number(document.gregserial.day.value) + J0000);
+  setJulian(Number(document.gregserial.day.value) + J0000);
 }
+
+// calcExcelSerial1900 -- Perform calculation starting with an Excel 1900 serial date
+
 function calcExcelSerial1900() {
-  var a = new Number(document.excelserial1900.day.value);
-  60 < a && a--, setJulian(a - 1 + J1900);
+  var d = Number(document.excelserial1900.day.value);
+
+  /* Idiot Kode Kiddies didn't twig to the fact
+       (proclaimed in 1582) that 1900 wasn't a leap year,
+       so every Excel day number in every database on Earth
+       which represents a date subsequent to February 28,
+       1900 is off by one. Note that there is no
+       acknowledgement of this betrayal or warning of its
+       potential consequences in the Excel help file. Thank
+       you so much Mister Talking Paper Clip. Some day
+       we're going to celebrate your extinction like it was
+       February 29 ... 1900.  */
+
+  if (d > 60) {
+    d--;
+  }
+
+  setJulian(d - 1 + J1900);
 }
+
+// calcExcelSerial1904 -- Perform calculation starting with an Excel 1904 serial date
+
 function calcExcelSerial1904() {
-  setJulian(new Number(document.excelserial1904.day.value) + J1904);
+  setJulian(Number(document.excelserial1904.day.value) + J1904);
 }
+
+// calcUnixTime -- Update from specified Unix time() value
+
 function calcUnixTime() {
-  var a = new Number(document.unixtime.time.value);
-  setJulian(J1970 + a / 86400);
+  var t = Number(document.unixtime.time.value);
+
+  setJulian(J1970 + t / (60 * 60 * 24));
 }
+
+// calcIsoWeek -- Update from specified ISO year, week, and day
+
 function calcIsoWeek() {
-  var d = new Number(document.isoweek.year.value),
-    c = new Number(document.isoweek.week.value),
-    a = new Number(document.isoweek.day.value);
-  setJulian(iso_to_julian(d, c, a));
+  var year = Number(document.isoweek.year.value),
+    week = Number(document.isoweek.week.value),
+    day = Number(document.isoweek.day.value);
+
+  setJulian(iso_to_julian(year, week, day));
 }
+
+// calcIsoDay -- Update from specified ISO year and day of year
+
 function calcIsoDay() {
-  var b = new Number(document.isoday.year.value),
-    c = new Number(document.isoday.day.value);
-  setJulian(iso_day_to_julian(b, c));
+  var year = Number(document.isoday.year.value),
+    day = Number(document.isoday.day.value);
+
+  setJulian(iso_day_to_julian(year, day));
 }
+
+/*  setDateToToday -- Preset the fields in
+    the request form to today's date.  */
+
 function setDateToToday() {
-  var b = new Date(),
-    c = b.getYear();
-  1e3 > c && (c += 1900),
-    (document.gregorian.year.value = c),
-    (document.gregorian.month.selectedIndex = b.getMonth()),
-    (document.gregorian.day.value = b.getDate()),
-    (document.gregorian.hour.value = document.gregorian.min.value = document.gregorian.sec.value =
-      "00");
+  var today = new Date();
+
+  /*  The following idiocy is due to bizarre incompatibilities
+        in the behaviour of getYear() between Netscrape and
+        Exploder. The ideal solution is to use getFullYear(),
+        which returns the actual year number, but that would
+        break this code on versions of JavaScript prior to
+        1.2. So, for the moment we use the following code
+        which works for all versions of JavaScript and browsers
+        for all year numbers greater than 1000. When we're willing
+        to require JavaScript 1.2, this may be replaced by
+        the single line:
+
+            document.gregorian.year.value = today.getFullYear();
+
+        Thanks to Larry Gilbert for pointing out this problem.
+    */
+
+  var y = today.getYear();
+  if (y < 1000) {
+    y += 1900;
+  }
+
+  document.gregorian.year.value = y;
+  document.gregorian.month.selectedIndex = today.getMonth();
+  document.gregorian.day.value = today.getDate();
+  document.gregorian.hour.value = document.gregorian.min.value = document.gregorian.sec.value =
+    "00";
 }
-function presetDataToRequest(a) {
-  var c = a.indexOf("="),
-    d = !1;
-  if (-1 != c) {
-    var f = a.substring(0, c);
-    (a = decodeURIComponent(a.substring(c + 1))),
-      "gregorian" == f.toLowerCase()
-        ? ((f = a.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/)),
-          null == f
-            ? alert('Invalid Gregorian date "' + a + '" in search request')
-            : 1 <= f[2] &&
-              12 >= f[2] &&
-              1 <= f[3] &&
-              31 >= f[3] &&
-              (null == f[4] ||
-                (0 <= f[4].substring(1) && 23 >= f[4].substring(1))) &&
-              (null == f[5] ||
-                (0 <= f[5].substring(1) && 59 >= f[5].substring(1))) &&
-              (null == f[6] ||
-                (0 <= f[6].substring(1) && 59 >= f[6].substring(1)))
-            ? ((document.gregorian.year.value = f[1]),
-              (document.gregorian.month.selectedIndex = f[2] - 1),
-              (document.gregorian.day.value = +f[3]),
-              (document.gregorian.hour.value =
-                null == f[4] ? "00" : f[4].substring(1)),
-              (document.gregorian.min.value =
-                null == f[5] ? "00" : f[5].substring(1)),
-              (document.gregorian.sec.value =
-                null == f[6] ? "00" : f[6].substring(1)),
-              calcGregorian(),
-              (d = !0))
-            : alert('Invalid Gregorian date "' + a + '" in search request'))
-        : "julian" == f.toLowerCase()
-        ? ((f = a.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/)),
-          null == f
-            ? alert(
-                'Invalid Julian calendar date "' + a + '" in search request'
-              )
-            : 1 <= f[2] &&
-              12 >= f[2] &&
-              1 <= f[3] &&
-              31 >= f[3] &&
-              (null == f[4] ||
-                (0 <= f[4].substring(1) && 23 >= f[4].substring(1))) &&
-              (null == f[5] ||
-                (0 <= f[5].substring(1) && 59 >= f[5].substring(1))) &&
-              (null == f[6] ||
-                (0 <= f[6].substring(1) && 59 >= f[6].substring(1)))
-            ? ((document.juliancalendar.year.value = f[1]),
-              (document.juliancalendar.month.selectedIndex = f[2] - 1),
-              (document.juliancalendar.day.value = +f[3]),
-              calcJulianCalendar(),
-              (document.gregorian.hour.value =
-                null == f[4] ? "00" : f[4].substring(1)),
-              (document.gregorian.min.value =
-                null == f[5] ? "00" : f[5].substring(1)),
-              (document.gregorian.sec.value =
-                null == f[6] ? "00" : f[6].substring(1)),
-              (d = !0))
-            : alert(
-                'Invalid Julian calendar date "' + a + '" in search request'
-              ))
-        : "jd" == f.toLowerCase()
-        ? ((f = a.match(/^(\-?\d+\.?\d*)/)),
-          null == f
-            ? alert('Invalid Julian day "' + a + '" in search request')
-            : (setJulian(f[1]), (d = 1)))
-        : "mjd" == f.toLowerCase()
-        ? ((f = a.match(/^(\-?\d+\.?\d*)/)),
-          null == f
-            ? alert('Invalid Modified Julian day "' + a + '" in search request')
-            : ((document.modifiedjulianday.day.value = f[1]),
-              calcModifiedJulian(),
-              (d = 1)))
-        : "unixtime" == f.toLowerCase()
-        ? ((f = a.match(/^(\-?\d+\.?\d*)/)),
-          null == f
-            ? alert('Invalid Modified Julian day "' + a + '" in search request')
-            : ((document.unixtime.time.value = f[1]), calcUnixTime(), (d = 1)))
-        : "iso" == f.toLowerCase()
-        ? null == (f = a.match(/^(\-?\d+)\-(\d\d\d)/))
-          ? null == (f = a.match(/^(\-?\d+)\-?W(\d\d)\-?(\d)/i))
-            ? alert('Invalid ISO-8601 date "' + a + '" in search request')
-            : ((document.isoweek.year.value = f[1]),
-              (document.isoweek.week.value = f[2]),
-              (document.isoweek.day.value = f[3]),
-              calcIsoWeek(),
-              (d = 1))
-          : ((document.isoday.year.value = f[1]),
-            (document.isoday.day.value = f[2]),
-            calcIsoDay(),
-            (d = 1))
-        : "excel" == f.toLowerCase()
-        ? ((f = a.match(/^(\-?\d+\.?\d*)/)),
-          null == f
-            ? alert(
-                'Invalid Excel serial day (1900/PC) "' +
-                  a +
-                  '" in search request'
-              )
-            : ((document.excelserial1900.day.value = f[1]),
-              calcExcelSerial1900(),
-              (d = 1)))
-        : "excel1904" == f.toLowerCase()
-        ? ((f = a.match(/^(\-?\d+\.?\d*)/)),
-          null == f
-            ? alert(
-                'Invalid Excel serial day (1904/Mac) "' +
-                  a +
-                  '" in search request'
-              )
-            : ((document.excelserial1904.day.value = f[1]),
-              calcExcelSerial1904(),
-              (d = 1)))
-        : alert('Invalid calendar "' + f + '" in search request');
-  } else alert("Invalid search request: " + a);
-  d || (setDateToToday(), calcGregorian());
+
+/*  presetDataToRequest -- Preset the Gregorian date to the
+                           date requested by the URL
+                           search field.  */
+
+function presetDataToRequest(s) {
+  var eq = s.indexOf("=");
+  var set = false;
+  if (eq != -1) {
+    var calendar = s.substring(0, eq),
+      date = decodeURIComponent(s.substring(eq + 1));
+    var d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/);
+    if (calendar.toLowerCase() == "gregorian") {
+      d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/);
+      if (d != null) {
+        // Sanity check date and time components
+        if (
+          d[2] >= 1 &&
+          d[2] <= 12 &&
+          d[3] >= 1 &&
+          d[3] <= 31 &&
+          (d[4] == undefined ||
+            (d[4].substring(1) >= 0 && d[4].substring(1) <= 23)) &&
+          (d[5] == undefined ||
+            (d[5].substring(1) >= 0 && d[5].substring(1) <= 59)) &&
+          (d[6] == undefined ||
+            (d[6].substring(1) >= 0 && d[6].substring(1) <= 59))
+        ) {
+          document.gregorian.year.value = d[1];
+          document.gregorian.month.selectedIndex = d[2] - 1;
+          document.gregorian.day.value = Number(d[3]);
+          document.gregorian.hour.value =
+            d[4] == undefined ? "00" : d[4].substring(1);
+          document.gregorian.min.value =
+            d[5] == undefined ? "00" : d[5].substring(1);
+          document.gregorian.sec.value =
+            d[6] == undefined ? "00" : d[6].substring(1);
+          calcGregorian();
+          set = true;
+        } else {
+          alert('Invalid Gregorian date "' + date + '" in search request');
+        }
+      } else {
+        alert('Invalid Gregorian date "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "julian") {
+      d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/);
+      if (d != null) {
+        // Sanity check date and time components
+        if (
+          d[2] >= 1 &&
+          d[2] <= 12 &&
+          d[3] >= 1 &&
+          d[3] <= 31 &&
+          (d[4] == undefined ||
+            (d[4].substring(1) >= 0 && d[4].substring(1) <= 23)) &&
+          (d[5] == undefined ||
+            (d[5].substring(1) >= 0 && d[5].substring(1) <= 59)) &&
+          (d[6] == undefined ||
+            (d[6].substring(1) >= 0 && d[6].substring(1) <= 59))
+        ) {
+          document.juliancalendar.year.value = d[1];
+          document.juliancalendar.month.selectedIndex = d[2] - 1;
+          document.juliancalendar.day.value = Number(d[3]);
+          calcJulianCalendar();
+          document.gregorian.hour.value =
+            d[4] == undefined ? "00" : d[4].substring(1);
+          document.gregorian.min.value =
+            d[5] == undefined ? "00" : d[5].substring(1);
+          document.gregorian.sec.value =
+            d[6] == undefined ? "00" : d[6].substring(1);
+          set = true;
+        } else {
+          alert(
+            'Invalid Julian calendar date "' + date + '" in search request'
+          );
+        }
+      } else {
+        alert('Invalid Julian calendar date "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "jd") {
+      d = date.match(/^(\-?\d+\.?\d*)/);
+      if (d != null) {
+        setJulian(d[1]);
+        set = 1;
+      } else {
+        alert('Invalid Julian day "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "mjd") {
+      d = date.match(/^(\-?\d+\.?\d*)/);
+      if (d != null) {
+        document.modifiedjulianday.day.value = d[1];
+        calcModifiedJulian();
+        set = 1;
+      } else {
+        alert('Invalid Modified Julian day "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "unixtime") {
+      d = date.match(/^(\-?\d+\.?\d*)/);
+      if (d != null) {
+        document.unixtime.time.value = d[1];
+        calcUnixTime();
+        set = 1;
+      } else {
+        alert('Invalid Modified Julian day "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "iso") {
+      if ((d = date.match(/^(\-?\d+)\-(\d\d\d)/)) != null) {
+        document.isoday.year.value = d[1];
+        document.isoday.day.value = d[2];
+        calcIsoDay();
+        set = 1;
+      } else if ((d = date.match(/^(\-?\d+)\-?W(\d\d)\-?(\d)/i)) != null) {
+        document.isoweek.year.value = d[1];
+        document.isoweek.week.value = d[2];
+        document.isoweek.day.value = d[3];
+        calcIsoWeek();
+        set = 1;
+      } else {
+        alert('Invalid ISO-8601 date "' + date + '" in search request');
+      }
+    } else if (calendar.toLowerCase() == "excel") {
+      d = date.match(/^(\-?\d+\.?\d*)/);
+      if (d != null) {
+        document.excelserial1900.day.value = d[1];
+        calcExcelSerial1900();
+        set = 1;
+      } else {
+        alert(
+          'Invalid Excel serial day (1900/PC) "' + date + '" in search request'
+        );
+      }
+    } else if (calendar.toLowerCase() == "excel1904") {
+      d = date.match(/^(\-?\d+\.?\d*)/);
+      if (d != null) {
+        document.excelserial1904.day.value = d[1];
+        calcExcelSerial1904();
+        set = 1;
+      } else {
+        alert(
+          'Invalid Excel serial day (1904/Mac) "' + date + '" in search request'
+        );
+      }
+    } else {
+      alert('Invalid calendar "' + calendar + '" in search request');
+    }
+  } else {
+    alert("Invalid search request: " + s);
+  }
+
+  if (!set) {
+    setDateToToday();
+    calcGregorian();
+  }
 }

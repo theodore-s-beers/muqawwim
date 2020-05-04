@@ -17,12 +17,7 @@
     <link href="https://www.muqawwim.com/" rel="canonical" />
     <link href="img/icon.png" rel="icon" type="image/png" />
     <link href="img/icon-192.png" rel="apple-touch-icon" type="image/png" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400i&display=swap"
       rel="stylesheet"
@@ -37,7 +32,7 @@
     </style>
   </head>
   <body>
-    <div class="container" style="margin-top:1rem">
+    <div class="container" style="margin-top: 1rem;">
       <h2>Calendar Converter for Near East Historians</h2>
       <script>
         // Register service worker
@@ -105,7 +100,7 @@
       >
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center"
+          style="max-width: 36rem; text-align: center;"
         >
           <tr>
             <td>
@@ -113,7 +108,7 @@
                 aria-label="Gregorian year"
                 id="gregYear"
                 name="year"
-                style="padding-left:.2em;max-width:4em"
+                style="padding-left: 0.2em; max-width: 4em;"
                 type="number"
                 value="1998"
               />
@@ -137,14 +132,19 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
+                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
                 type="number"
                 value="1"
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7.4em"
+                style="
+                  margin-top: 0.25em;
+                  color: #228b22;
+                  padding-left: 0.2em;
+                  max-width: 7.4em;
+                "
                 type="text"
                 value=""
               />
@@ -152,13 +152,13 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color:#228b22;padding-left:.2em;max-width:7.4em"
+                style="color: #228b22; padding-left: 0.2em; max-width: 7.4em;"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none">
+          <tr style="display: none;">
             <td>
               <input name="hour" size="2" type="text" value="00" />:<input
                 name="min"
@@ -168,7 +168,7 @@
               />:<input name="sec" size="2" type="text" value="00" />
             </td>
           </tr>
-          <tr style="display:none">
+          <tr style="display: none;">
             <td>
               <input
                 name="wday2"
@@ -185,7 +185,12 @@
                 class="btn btn-primary"
                 id="gregCalcBtn"
                 onclick="calcGregorian();"
-                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
                 type="submit"
                 value="Calculate"
               />
@@ -194,7 +199,12 @@
                 class="btn btn-secondary"
                 id="gregTodayBtn"
                 onclick="setDateToToday();calcGregorian();"
-                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
                 type="button"
                 value="Today"
               />
@@ -202,7 +212,7 @@
           </tr>
         </table>
       </form>
-      <div style="display:none">
+      <div style="display: none;">
         <form action="JavaScript:calcJulian();" id="julianday" name="julianday">
           <table>
             <tr>
@@ -248,7 +258,7 @@
       >
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center"
+          style="max-width: 36rem; text-align: center;"
         >
           <tr>
             <td>
@@ -256,7 +266,7 @@
                 aria-label="Julian year"
                 id="julianYear"
                 name="year"
-                style="padding-left:.2em;max-width:4em"
+                style="padding-left: 0.2em; max-width: 4em;"
                 type="number"
                 value=""
               />
@@ -280,14 +290,19 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
+                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7.4em"
+                style="
+                  margin-top: 0.25em;
+                  color: #228b22;
+                  padding-left: 0.2em;
+                  max-width: 7.4em;
+                "
                 type="text"
                 value=""
               />
@@ -295,7 +310,7 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color:#228b22;padding-left:.2em;max-width:7.4em"
+                style="color: #228b22; padding-left: 0.2em; max-width: 7.4em;"
                 type="text"
                 value=""
               />
@@ -307,7 +322,12 @@
                 class="btn btn-primary"
                 id="julianBtn"
                 onclick="calcJulianCalendar();"
-                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
                 type="submit"
                 value="Calculate"
               />
@@ -315,7 +335,7 @@
           </tr>
         </table>
       </form>
-      <div style="display:none">
+      <div style="display: none;">
         <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
           <table>
             <tr>
@@ -373,7 +393,7 @@
       <form action="JavaScript:calcIslamic();" id="islamic" name="islamic">
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center"
+          style="max-width: 36rem; text-align: center;"
         >
           <tr>
             <td>
@@ -381,7 +401,7 @@
                 aria-label="Islamic year"
                 id="islamicYear"
                 name="year"
-                style="padding-left:.2em;max-width:4em"
+                style="padding-left: 0.2em; max-width: 4em;"
                 type="number"
                 value=""
               />
@@ -405,14 +425,19 @@
                 max="30"
                 min="1"
                 name="day"
-                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
+                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7em"
+                style="
+                  margin-top: 0.25em;
+                  color: #228b22;
+                  padding-left: 0.2em;
+                  max-width: 7em;
+                "
                 type="text"
                 value=""
               />
@@ -420,13 +445,13 @@
                 aria-label="Arabic weekday"
                 name="wday"
                 readonly="readonly"
-                style="color:#228b22;padding-left:.2em;max-width:10em"
+                style="color: #228b22; padding-left: 0.2em; max-width: 10em;"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none">
+          <tr style="display: none;">
             <td>
               <input
                 name="wday2"
@@ -443,7 +468,12 @@
                 class="btn btn-primary"
                 id="islamicBtn"
                 onclick="calcIslamic();"
-                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
                 type="submit"
                 value="Calculate"
               />
@@ -455,7 +485,7 @@
       <form action="JavaScript:calcPersiana();" id="persiana" name="persiana">
         <table
           class="table table-bordered table-sm"
-          style="max-width:36rem;text-align:center"
+          style="max-width: 36rem; text-align: center;"
         >
           <tr>
             <td>
@@ -463,7 +493,7 @@
                 aria-label="Persian year"
                 id="persYear"
                 name="year"
-                style="padding-left:.2em;max-width:4em"
+                style="padding-left: 0.2em; max-width: 4em;"
                 type="number"
                 value=""
               />
@@ -487,14 +517,19 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left:.2em;min-width:2.8em;max-width:2.8em"
+                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top:.25em;color:#228b22;padding-left:.2em;max-width:7em"
+                style="
+                  margin-top: 0.25em;
+                  color: #228b22;
+                  padding-left: 0.2em;
+                  max-width: 7em;
+                "
                 type="text"
                 value=""
               />
@@ -502,13 +537,13 @@
                 aria-label="Persian weekday"
                 name="wday"
                 readonly="readonly"
-                style="color:#228b22;padding-left:.2em;max-width:8.8em"
+                style="color: #228b22; padding-left: 0.2em; max-width: 8.8em;"
                 type="text"
                 value=""
               />
             </td>
           </tr>
-          <tr style="display:none">
+          <tr style="display: none;">
             <td>
               <input
                 name="wday2"
@@ -525,7 +560,12 @@
                 class="btn btn-primary"
                 id="persBtn"
                 onclick="calcPersiana();"
-                style="padding-top:.25em;padding-bottom:.25em;padding-left:.5em;padding-right:.5em"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
                 type="submit"
                 value="Calculate"
               />
@@ -533,7 +573,7 @@
           </tr>
         </table>
       </form>
-      <div class="card border-info mb-3" style="max-width:36rem">
+      <div class="card border-info mb-3" style="max-width: 36rem;">
         <div class="card-body text-info">
           <p class="card-text" id="animalAnswer">
             In the Persianate adaptation of the Chinese-Uighur animal calendar,
@@ -712,7 +752,7 @@
         let me know <a href="mailto:tbeers@uchicago.edu">by email</a>!
       </p>
     </div>
-    <div style="display:none">
+    <div style="display: none;">
       <form action="JavaScript:calcPersian();" id="persian" name="persian">
         <table>
           <tr>
@@ -999,21 +1039,9 @@
         </table>
       </form>
     </div>
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/astro.js"></script>
     <script src="js/calendar.js"></script>
     <script>
@@ -1073,7 +1101,7 @@
             animalOrig = "Bars";
           } else if (10 === persMod) {
             animalEng = "Rabbit";
-            animalOrig = "Tavashqan";
+            animalOrig = "Tawshqan";
           } else {
             animalEng = "Dragon";
             animalOrig = "Luy";

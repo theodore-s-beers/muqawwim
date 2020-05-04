@@ -1,43 +1,92 @@
-var J2000 = 2451545,
-  JulianCentury = 36525,
-  JulianMillennium = 365250,
-  AstronomicalUnit = 149597870,
-  TropicalYear = 365.24219878;
+/*
+            JavaScript functions for positional astronomy
+
+                  by John Walker -- September, MIM
+                      http://www.fourmilab.ch/
+
+                This program is in the public domain.
+*/
+
+// Frequently-used constants
+
+var J2000 = 2451545.0, // Julian day of J2000 epoch
+  JulianCentury = 36525.0, // Days in Julian century
+  JulianMillennium = JulianCentury * 10, // Days in Julian millennium
+  AstronomicalUnit = 149597870.0, // Astronomical unit in kilometres
+  TropicalYear = 365.24219878; // Mean solar tropical year
+
+// ASTOR -- Arc-seconds to radians
+
 function astor(a) {
-  return (Math.PI / 648e3) * a;
+  return a * (Math.PI / (180.0 * 3600.0));
 }
-function dtr(a) {
-  return (a * Math.PI) / 180;
+
+// DTR -- Degrees to radians
+
+function dtr(d) {
+  return (d * Math.PI) / 180.0;
 }
-function rtd(a) {
-  return (180 * a) / Math.PI;
+
+// RTD -- Radians to degrees
+
+function rtd(r) {
+  return (r * 180.0) / Math.PI;
 }
+
+// FIXANGLE -- Range reduce angle in degrees
+
 function fixangle(a) {
-  return a - 360 * Math.floor(a / 360);
+  return a - 360.0 * Math.floor(a / 360.0);
 }
+
+// FIXANGR -- Range reduce angle in radians
+
 function fixangr(a) {
   return a - 2 * Math.PI * Math.floor(a / (2 * Math.PI));
 }
-function dsin(a) {
-  return Math.sin(dtr(a));
+
+// DSIN -- Sine of an angle in degrees
+
+function dsin(d) {
+  return Math.sin(dtr(d));
 }
-function dcos(a) {
-  return Math.cos(dtr(a));
+
+// DCOS -- Cosine of an angle in degrees
+
+function dcos(d) {
+  return Math.cos(dtr(d));
 }
-function mod(c, b) {
-  return c - b * Math.floor(c / b);
+
+// MOD -- Modulus function which works for non-integers
+
+function mod(a, b) {
+  return a - b * Math.floor(a / b);
 }
-function amod(c, b) {
-  return mod(c - 1, b) + 1;
+
+// AMOD -- Modulus function which returns numerator if modulus is zero
+
+function amod(a, b) {
+  return mod(a - 1, b) + 1;
 }
-function jhms(a) {
-  return (
-    (a += 0.5),
-    (a = 86400 * (a - Math.floor(a)) + 0.5),
-    [Math.floor(a / 3600), Math.floor((a / 60) % 60), Math.floor(a % 60)]
+
+/*  JHMS -- Convert Julian time to hour, minutes, and seconds,
+            returned as a three-element array.  */
+
+function jhms(j) {
+  var ij;
+
+  j += 0.5; // Astronomical to civil
+  ij = (j - Math.floor(j)) * 86400.0 + 0.5;
+  return new Array(
+    Math.floor(ij / 3600),
+    Math.floor((ij / 60) % 60),
+    Math.floor(ij % 60)
   );
 }
-var Weekdays = [
+
+// JWDAY -- Calculate day of week from Julian day
+
+var Weekdays = new Array(
   "Sunday",
   "Monday",
   "Tuesday",
@@ -45,11 +94,24 @@ var Weekdays = [
   "Thursday",
   "Friday",
   "Saturday"
-];
-function jwday(a) {
-  return mod(Math.floor(a + 1.5), 7);
+);
+
+function jwday(j) {
+  return mod(Math.floor(j + 1.5), 7);
 }
-var oterms = [
+
+/*  OBLIQEQ -- Calculate the obliquity of the ecliptic for a given
+               Julian date. This uses Laskar's tenth-degree
+               polynomial fit (J. Laskar, Astronomy and
+               Astrophysics, Vol. 157, page 68 [1986]) which is
+               accurate to within 0.01 arc second between AD 1000
+               and AD 3000, and within a few seconds of arc for
+               +/-10000 years around AD 2000. If we're outside the
+               range in which this fit is valid (deep time) we
+               simply return the J2000 value of the obliquity, which
+               happens to be almost precisely the mean.  */
+
+var oterms = new Array(
   -4680.93,
   -1.55,
   1999.25,
@@ -60,643 +122,715 @@ var oterms = [
   27.87,
   5.79,
   2.45
-];
-function obliqeq(d) {
-  var f,
-    g,
-    h = (f = (d - J2000) / 3652500);
-  if (((d = 23 + 26 / 60 + 21.448 / 3600), 1 > Math.abs(f)))
-    for (g = 0; 10 > g; g++) (d += (oterms[g] / 3600) * h), (h *= f);
-  return d;
-}
-var nutArgMult = [
-    0,
-    0,
-    0,
-    0,
-    1,
-    -2,
-    0,
-    0,
-    2,
-    2,
-    0,
-    0,
-    0,
-    2,
-    2,
-    0,
-    0,
-    0,
-    0,
-    2,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    -2,
-    1,
-    0,
-    2,
-    2,
-    0,
-    0,
-    0,
-    2,
-    1,
-    0,
-    0,
-    1,
-    2,
-    2,
-    -2,
-    -1,
-    0,
-    2,
-    2,
-    -2,
-    0,
-    1,
-    0,
-    0,
-    -2,
-    0,
-    0,
-    2,
-    1,
-    0,
-    0,
-    -1,
-    2,
-    2,
-    2,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    0,
-    1,
-    2,
-    0,
-    -1,
-    2,
-    2,
-    0,
-    0,
-    -1,
-    0,
-    1,
-    0,
-    0,
-    1,
-    2,
-    1,
-    -2,
-    0,
-    2,
-    0,
-    0,
-    0,
-    0,
-    -2,
-    2,
-    1,
-    2,
-    0,
-    0,
-    2,
-    2,
-    0,
-    0,
-    2,
-    2,
-    2,
-    0,
-    0,
-    2,
-    0,
-    0,
-    -2,
-    0,
-    1,
-    2,
-    2,
-    0,
-    0,
-    0,
-    2,
-    0,
-    -2,
-    0,
-    0,
-    2,
-    0,
-    0,
-    0,
-    -1,
-    2,
-    1,
-    0,
-    2,
-    0,
-    0,
-    0,
-    2,
-    0,
-    -1,
-    0,
-    1,
-    -2,
-    2,
-    0,
-    2,
-    2,
-    0,
-    1,
-    0,
-    0,
-    1,
-    -2,
-    0,
-    1,
-    0,
-    1,
-    0,
-    -1,
-    0,
-    0,
-    1,
-    0,
-    0,
-    2,
-    -2,
-    0,
-    2,
-    0,
-    -1,
-    2,
-    1,
-    2,
-    0,
-    1,
-    2,
-    2,
-    0,
-    1,
-    0,
-    2,
-    2,
-    -2,
-    1,
-    1,
-    0,
-    0,
-    0,
-    -1,
-    0,
-    2,
-    2,
-    2,
-    0,
-    0,
-    2,
-    1,
-    2,
-    0,
-    1,
-    0,
-    0,
-    -2,
-    0,
-    2,
-    2,
-    2,
-    -2,
-    0,
-    1,
-    2,
-    1,
-    2,
-    0,
-    -2,
-    0,
-    1,
-    2,
-    0,
-    0,
-    0,
-    1,
-    0,
-    -1,
-    1,
-    0,
-    0,
-    -2,
-    -1,
-    0,
-    2,
-    1,
-    -2,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    2,
-    2,
-    1,
-    -2,
-    0,
-    2,
-    0,
-    1,
-    -2,
-    1,
-    0,
-    2,
-    1,
-    0,
-    0,
-    1,
-    -2,
-    0,
-    -1,
-    0,
-    1,
-    0,
-    0,
-    -2,
-    1,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    1,
-    2,
-    0,
-    -1,
-    -1,
-    1,
-    0,
-    0,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    -1,
-    1,
-    2,
-    2,
-    2,
-    -1,
-    -1,
-    2,
-    2,
-    0,
-    0,
-    -2,
-    2,
-    2,
-    0,
-    0,
-    3,
-    2,
-    2,
-    2,
-    -1,
-    0,
-    2,
-    2
-  ],
-  nutArgCoeff = [
-    -171996,
-    -1742,
-    92095,
-    89,
-    -13187,
-    -16,
-    5736,
-    -31,
-    -2274,
-    -2,
-    977,
-    -5,
-    2062,
-    2,
-    -895,
-    5,
-    1426,
-    -34,
-    54,
-    -1,
-    712,
-    1,
-    -7,
-    0,
-    -517,
-    12,
-    224,
-    -6,
-    -386,
-    -4,
-    200,
-    0,
-    -301,
-    0,
-    129,
-    -1,
-    217,
-    -5,
-    -95,
-    3,
-    -158,
-    0,
-    0,
-    0,
-    129,
-    1,
-    -70,
-    0,
-    123,
-    0,
-    -53,
-    0,
-    63,
-    0,
-    0,
-    0,
-    63,
-    1,
-    -33,
-    0,
-    -59,
-    0,
-    26,
-    0,
-    -58,
-    -1,
-    32,
-    0,
-    -51,
-    0,
-    27,
-    0,
-    48,
-    0,
-    0,
-    0,
-    46,
-    0,
-    -24,
-    0,
-    -38,
-    0,
-    16,
-    0,
-    -31,
-    0,
-    13,
-    0,
-    29,
-    0,
-    0,
-    0,
-    29,
-    0,
-    -12,
-    0,
-    26,
-    0,
-    0,
-    0,
-    -22,
-    0,
-    0,
-    0,
-    21,
-    0,
-    -10,
-    0,
-    17,
-    -1,
-    0,
-    0,
-    16,
-    0,
-    -8,
-    0,
-    -16,
-    1,
-    7,
-    0,
-    -15,
-    0,
-    9,
-    0,
-    -13,
-    0,
-    7,
-    0,
-    -12,
-    0,
-    6,
-    0,
-    11,
-    0,
-    0,
-    0,
-    -10,
-    0,
-    5,
-    0,
-    -8,
-    0,
-    3,
-    0,
-    7,
-    0,
-    -3,
-    0,
-    -7,
-    0,
-    0,
-    0,
-    -7,
-    0,
-    3,
-    0,
-    -7,
-    0,
-    3,
-    0,
-    6,
-    0,
-    0,
-    0,
-    6,
-    0,
-    -3,
-    0,
-    6,
-    0,
-    -3,
-    0,
-    -6,
-    0,
-    3,
-    0,
-    -6,
-    0,
-    3,
-    0,
-    5,
-    0,
-    0,
-    0,
-    -5,
-    0,
-    3,
-    0,
-    -5,
-    0,
-    3,
-    0,
-    -5,
-    0,
-    3,
-    0,
-    4,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    4,
-    0,
-    0,
-    0,
-    -4,
-    0,
-    0,
-    0,
-    -4,
-    0,
-    0,
-    0,
-    -4,
-    0,
-    0,
-    0,
-    3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0,
-    -3,
-    0,
-    0,
-    0
-  ];
-function nutation(h) {
-  var i,
-    j = (h - 2451545) / 36525;
-  h = [];
-  var k,
-    l = 0,
-    m = 0,
-    n = j * (i = j * j);
-  for (
-    h[0] = dtr(297.850363 + 445267.11148 * j - 0.0019142 * i + n / 189474),
-      h[1] = dtr(357.52772 + 35999.05034 * j - 1603e-7 * i - n / 3e5),
-      h[2] = dtr(134.96298 + 477198.867398 * j + 0.0086972 * i + n / 56250),
-      h[3] = dtr(93.27191 + 483202.017538 * j - 0.0036825 * i + n / 327270),
-      h[4] = dtr(125.04452 - 1934.136261 * j + 0.0020708 * i + n / 45e4),
-      i = 0;
-    5 > i;
-    i++
-  )
-    h[i] = fixangr(h[i]);
-  for (n = j / 10, i = 0; 63 > i; i++) {
-    for (j = k = 0; 5 > j; j++)
-      0 != nutArgMult[5 * i + j] && (k += nutArgMult[5 * i + j] * h[j]);
-    (l += (nutArgCoeff[4 * i] + nutArgCoeff[4 * i + 1] * n) * Math.sin(k)),
-      (m +=
-        (nutArgCoeff[4 * i + 2] + nutArgCoeff[4 * i + 3] * n) * Math.cos(k));
+);
+
+function obliqeq(jd) {
+  var eps, u, v, i;
+
+  v = u = (jd - J2000) / (JulianCentury * 100);
+
+  eps = 23 + 26 / 60.0 + 21.448 / 3600.0;
+
+  if (Math.abs(u) < 1.0) {
+    for (i = 0; i < 10; i++) {
+      eps += (oterms[i] / 3600.0) * v;
+      v *= u;
+    }
   }
-  return [l / 36e6, m / 36e6];
+  return eps;
 }
-function ecliptoeq(d, f, g) {
-  var c = dtr(obliqeq(d));
-  return (
-    (log += "Obliquity: " + rtd(c) + "\n"),
-    (d = rtd(
-      Math.atan2(
-        Math.cos(c) * Math.sin(dtr(f)) - Math.tan(dtr(g)) * Math.sin(c),
-        Math.cos(dtr(f))
-      )
-    )),
-    (log += "RA = " + d + "\n"),
-    (d = fixangle(
-      rtd(
-        Math.atan2(
-          Math.cos(c) * Math.sin(dtr(f)) - Math.tan(dtr(g)) * Math.sin(c),
-          Math.cos(dtr(f))
-        )
-      )
-    )),
-    (f = rtd(
-      Math.asin(
-        Math.sin(c) * Math.sin(dtr(f)) * Math.cos(dtr(g)) +
-          Math.sin(dtr(g)) * Math.cos(c)
-      )
-    )),
-    [d, f]
+
+/*  Periodic terms for nutation in longiude (delta \Psi) and
+    obliquity (delta \Epsilon) as given in table 21.A of
+    Meeus, "Astronomical Algorithms," first edition.  */
+
+var nutArgMult = new Array(
+  0,
+  0,
+  0,
+  0,
+  1,
+  -2,
+  0,
+  0,
+  2,
+  2,
+  0,
+  0,
+  0,
+  2,
+  2,
+  0,
+  0,
+  0,
+  0,
+  2,
+  0,
+  1,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  0,
+  0,
+  -2,
+  1,
+  0,
+  2,
+  2,
+  0,
+  0,
+  0,
+  2,
+  1,
+  0,
+  0,
+  1,
+  2,
+  2,
+  -2,
+  -1,
+  0,
+  2,
+  2,
+  -2,
+  0,
+  1,
+  0,
+  0,
+  -2,
+  0,
+  0,
+  2,
+  1,
+  0,
+  0,
+  -1,
+  2,
+  2,
+  2,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  0,
+  1,
+  2,
+  0,
+  -1,
+  2,
+  2,
+  0,
+  0,
+  -1,
+  0,
+  1,
+  0,
+  0,
+  1,
+  2,
+  1,
+  -2,
+  0,
+  2,
+  0,
+  0,
+  0,
+  0,
+  -2,
+  2,
+  1,
+  2,
+  0,
+  0,
+  2,
+  2,
+  0,
+  0,
+  2,
+  2,
+  2,
+  0,
+  0,
+  2,
+  0,
+  0,
+  -2,
+  0,
+  1,
+  2,
+  2,
+  0,
+  0,
+  0,
+  2,
+  0,
+  -2,
+  0,
+  0,
+  2,
+  0,
+  0,
+  0,
+  -1,
+  2,
+  1,
+  0,
+  2,
+  0,
+  0,
+  0,
+  2,
+  0,
+  -1,
+  0,
+  1,
+  -2,
+  2,
+  0,
+  2,
+  2,
+  0,
+  1,
+  0,
+  0,
+  1,
+  -2,
+  0,
+  1,
+  0,
+  1,
+  0,
+  -1,
+  0,
+  0,
+  1,
+  0,
+  0,
+  2,
+  -2,
+  0,
+  2,
+  0,
+  -1,
+  2,
+  1,
+  2,
+  0,
+  1,
+  2,
+  2,
+  0,
+  1,
+  0,
+  2,
+  2,
+  -2,
+  1,
+  1,
+  0,
+  0,
+  0,
+  -1,
+  0,
+  2,
+  2,
+  2,
+  0,
+  0,
+  2,
+  1,
+  2,
+  0,
+  1,
+  0,
+  0,
+  -2,
+  0,
+  2,
+  2,
+  2,
+  -2,
+  0,
+  1,
+  2,
+  1,
+  2,
+  0,
+  -2,
+  0,
+  1,
+  2,
+  0,
+  0,
+  0,
+  1,
+  0,
+  -1,
+  1,
+  0,
+  0,
+  -2,
+  -1,
+  0,
+  2,
+  1,
+  -2,
+  0,
+  0,
+  0,
+  1,
+  0,
+  0,
+  2,
+  2,
+  1,
+  -2,
+  0,
+  2,
+  0,
+  1,
+  -2,
+  1,
+  0,
+  2,
+  1,
+  0,
+  0,
+  1,
+  -2,
+  0,
+  -1,
+  0,
+  1,
+  0,
+  0,
+  -2,
+  1,
+  0,
+  0,
+  0,
+  1,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  2,
+  0,
+  -1,
+  -1,
+  1,
+  0,
+  0,
+  0,
+  1,
+  1,
+  0,
+  0,
+  0,
+  -1,
+  1,
+  2,
+  2,
+  2,
+  -1,
+  -1,
+  2,
+  2,
+  0,
+  0,
+  -2,
+  2,
+  2,
+  0,
+  0,
+  3,
+  2,
+  2,
+  2,
+  -1,
+  0,
+  2,
+  2
+);
+
+var nutArgCoeff = new Array(
+  -171996,
+  -1742,
+  92095,
+  89 /*  0,  0,  0,  0,  1 */,
+  -13187,
+  -16,
+  5736,
+  -31 /* -2,  0,  0,  2,  2 */,
+  -2274,
+  -2,
+  977,
+  -5 /*  0,  0,  0,  2,  2 */,
+  2062,
+  2,
+  -895,
+  5 /*  0,  0,  0,  0,  2 */,
+  1426,
+  -34,
+  54,
+  -1 /*  0,  1,  0,  0,  0 */,
+  712,
+  1,
+  -7,
+  0 /*  0,  0,  1,  0,  0 */,
+  -517,
+  12,
+  224,
+  -6 /* -2,  1,  0,  2,  2 */,
+  -386,
+  -4,
+  200,
+  0 /*  0,  0,  0,  2,  1 */,
+  -301,
+  0,
+  129,
+  -1 /*  0,  0,  1,  2,  2 */,
+  217,
+  -5,
+  -95,
+  3 /* -2, -1,  0,  2,  2 */,
+  -158,
+  0,
+  0,
+  0 /* -2,  0,  1,  0,  0 */,
+  129,
+  1,
+  -70,
+  0 /* -2,  0,  0,  2,  1 */,
+  123,
+  0,
+  -53,
+  0 /*  0,  0, -1,  2,  2 */,
+  63,
+  0,
+  0,
+  0 /*  2,  0,  0,  0,  0 */,
+  63,
+  1,
+  -33,
+  0 /*  0,  0,  1,  0,  1 */,
+  -59,
+  0,
+  26,
+  0 /*  2,  0, -1,  2,  2 */,
+  -58,
+  -1,
+  32,
+  0 /*  0,  0, -1,  0,  1 */,
+  -51,
+  0,
+  27,
+  0 /*  0,  0,  1,  2,  1 */,
+  48,
+  0,
+  0,
+  0 /* -2,  0,  2,  0,  0 */,
+  46,
+  0,
+  -24,
+  0 /*  0,  0, -2,  2,  1 */,
+  -38,
+  0,
+  16,
+  0 /*  2,  0,  0,  2,  2 */,
+  -31,
+  0,
+  13,
+  0 /*  0,  0,  2,  2,  2 */,
+  29,
+  0,
+  0,
+  0 /*  0,  0,  2,  0,  0 */,
+  29,
+  0,
+  -12,
+  0 /* -2,  0,  1,  2,  2 */,
+  26,
+  0,
+  0,
+  0 /*  0,  0,  0,  2,  0 */,
+  -22,
+  0,
+  0,
+  0 /* -2,  0,  0,  2,  0 */,
+  21,
+  0,
+  -10,
+  0 /*  0,  0, -1,  2,  1 */,
+  17,
+  -1,
+  0,
+  0 /*  0,  2,  0,  0,  0 */,
+  16,
+  0,
+  -8,
+  0 /*  2,  0, -1,  0,  1 */,
+  -16,
+  1,
+  7,
+  0 /* -2,  2,  0,  2,  2 */,
+  -15,
+  0,
+  9,
+  0 /*  0,  1,  0,  0,  1 */,
+  -13,
+  0,
+  7,
+  0 /* -2,  0,  1,  0,  1 */,
+  -12,
+  0,
+  6,
+  0 /*  0, -1,  0,  0,  1 */,
+  11,
+  0,
+  0,
+  0 /*  0,  0,  2, -2,  0 */,
+  -10,
+  0,
+  5,
+  0 /*  2,  0, -1,  2,  1 */,
+  -8,
+  0,
+  3,
+  0 /*  2,  0,  1,  2,  2 */,
+  7,
+  0,
+  -3,
+  0 /*  0,  1,  0,  2,  2 */,
+  -7,
+  0,
+  0,
+  0 /* -2,  1,  1,  0,  0 */,
+  -7,
+  0,
+  3,
+  0 /*  0, -1,  0,  2,  2 */,
+  -7,
+  0,
+  3,
+  0 /*  2,  0,  0,  2,  1 */,
+  6,
+  0,
+  0,
+  0 /*  2,  0,  1,  0,  0 */,
+  6,
+  0,
+  -3,
+  0 /* -2,  0,  2,  2,  2 */,
+  6,
+  0,
+  -3,
+  0 /* -2,  0,  1,  2,  1 */,
+  -6,
+  0,
+  3,
+  0 /*  2,  0, -2,  0,  1 */,
+  -6,
+  0,
+  3,
+  0 /*  2,  0,  0,  0,  1 */,
+  5,
+  0,
+  0,
+  0 /*  0, -1,  1,  0,  0 */,
+  -5,
+  0,
+  3,
+  0 /* -2, -1,  0,  2,  1 */,
+  -5,
+  0,
+  3,
+  0 /* -2,  0,  0,  0,  1 */,
+  -5,
+  0,
+  3,
+  0 /*  0,  0,  2,  2,  1 */,
+  4,
+  0,
+  0,
+  0 /* -2,  0,  2,  0,  1 */,
+  4,
+  0,
+  0,
+  0 /* -2,  1,  0,  2,  1 */,
+  4,
+  0,
+  0,
+  0 /*  0,  0,  1, -2,  0 */,
+  -4,
+  0,
+  0,
+  0 /* -1,  0,  1,  0,  0 */,
+  -4,
+  0,
+  0,
+  0 /* -2,  1,  0,  0,  0 */,
+  -4,
+  0,
+  0,
+  0 /*  1,  0,  0,  0,  0 */,
+  3,
+  0,
+  0,
+  0 /*  0,  0,  1,  2,  0 */,
+  -3,
+  0,
+  0,
+  0 /* -1, -1,  1,  0,  0 */,
+  -3,
+  0,
+  0,
+  0 /*  0,  1,  1,  0,  0 */,
+  -3,
+  0,
+  0,
+  0 /*  0, -1,  1,  2,  2 */,
+  -3,
+  0,
+  0,
+  0 /*  2, -1, -1,  2,  2 */,
+  -3,
+  0,
+  0,
+  0 /*  0,  0, -2,  2,  2 */,
+  -3,
+  0,
+  0,
+  0 /*  0,  0,  3,  2,  2 */,
+  -3,
+  0,
+  0,
+  0 /*  2, -1,  0,  2,  2 */
+);
+
+/*  NUTATION -- Calculate the nutation in longitude, deltaPsi, and
+                obliquity, deltaEpsilon for a given Julian date
+                jd. Results are returned as a two element Array
+                giving (deltaPsi, deltaEpsilon) in degrees.  */
+
+function nutation(jd) {
+  var deltaPsi,
+    deltaEpsilon,
+    i,
+    j,
+    t = (jd - 2451545.0) / 36525.0,
+    t2,
+    t3,
+    to10,
+    ta = [],
+    dp = 0,
+    de = 0,
+    ang;
+
+  t3 = t * (t2 = t * t);
+
+  /*  Calculate angles. The correspondence between the elements
+      of our array and the terms cited in Meeus are:
+
+      ta[0] = D  ta[0] = M  ta[2] = M'  ta[3] = F  ta[4] = \Omega
+
+  */
+
+  ta[0] = dtr(297.850363 + 445267.11148 * t - 0.0019142 * t2 + t3 / 189474.0);
+  ta[1] = dtr(357.52772 + 35999.05034 * t - 0.0001603 * t2 - t3 / 300000.0);
+  ta[2] = dtr(134.96298 + 477198.867398 * t + 0.0086972 * t2 + t3 / 56250.0);
+  ta[3] = dtr(93.27191 + 483202.017538 * t - 0.0036825 * t2 + t3 / 327270);
+  ta[4] = dtr(125.04452 - 1934.136261 * t + 0.0020708 * t2 + t3 / 450000.0);
+
+  /*  Range reduce the angles in case the sine and cosine functions
+      don't do it as accurately or quickly.  */
+
+  for (i = 0; i < 5; i++) {
+    ta[i] = fixangr(ta[i]);
+  }
+
+  to10 = t / 10.0;
+  for (i = 0; i < 63; i++) {
+    ang = 0;
+    for (j = 0; j < 5; j++) {
+      if (nutArgMult[i * 5 + j] != 0) {
+        ang += nutArgMult[i * 5 + j] * ta[j];
+      }
+    }
+    dp +=
+      (nutArgCoeff[i * 4 + 0] + nutArgCoeff[i * 4 + 1] * to10) * Math.sin(ang);
+    de +=
+      (nutArgCoeff[i * 4 + 2] + nutArgCoeff[i * 4 + 3] * to10) * Math.cos(ang);
+  }
+
+  /*  Return the result, converting from ten thousandths of arc
+      seconds to radians in the process.  */
+
+  deltaPsi = dp / (3600.0 * 10000.0);
+  deltaEpsilon = de / (3600.0 * 10000.0);
+
+  return new Array(deltaPsi, deltaEpsilon);
+}
+
+/*  ECLIPTOEQ -- Convert celestial (ecliptical) longitude and
+                 latitude into right ascension (in degrees) and
+                 declination. We must supply the time of the
+                 conversion in order to compensate correctly for the
+                 varying obliquity of the ecliptic over time.
+                 The right ascension and declination are returned
+                 as a two-element Array in that order.  */
+
+function ecliptoeq(jd, Lambda, Beta) {
+  var eps, Ra, Dec;
+
+  // Obliquity of the ecliptic
+
+  eps = dtr(obliqeq(jd));
+  log += "Obliquity: " + rtd(eps) + "\n";
+
+  Ra = rtd(
+    Math.atan2(
+      Math.cos(eps) * Math.sin(dtr(Lambda)) -
+        Math.tan(dtr(Beta)) * Math.sin(eps),
+      Math.cos(dtr(Lambda))
+    )
   );
+  log += "RA = " + Ra + "\n";
+  Ra = fixangle(
+    rtd(
+      Math.atan2(
+        Math.cos(eps) * Math.sin(dtr(Lambda)) -
+          Math.tan(dtr(Beta)) * Math.sin(eps),
+        Math.cos(dtr(Lambda))
+      )
+    )
+  );
+  Dec = rtd(
+    Math.asin(
+      Math.sin(eps) * Math.sin(dtr(Lambda)) * Math.cos(dtr(Beta)) +
+        Math.sin(dtr(Beta)) * Math.cos(eps)
+    )
+  );
+
+  return new Array(Ra, Dec);
 }
-var deltaTtab = [
+
+/*  DELTAT -- Determine the difference, in seconds, between
+              Dynamical time and Universal time.  */
+
+/*  Table of observed Delta T values at the beginning of
+    even numbered years from 1620 through 2002.  */
+
+var deltaTtab = new Array(
   121,
   112,
   103,
@@ -889,20 +1023,42 @@ var deltaTtab = [
   63,
   65,
   66.6
-];
-function deltat(c) {
-  if (1620 <= c && 2e3 >= c) {
-    var b = Math.floor((c - 1620) / 2);
-    b = deltaTtab[b] + (deltaTtab[b + 1] - deltaTtab[b]) * ((c - 1620) / 2 - b);
-  } else
-    (b = (c - 2e3) / 100),
-      948 > c
-        ? (b = 2177 + 497 * b + 44.1 * b * b)
-        : ((b = 102 + 102 * b + 25.3 * b * b),
-          2e3 < c && 2100 > c && (b += 0.37 * (c - 2100)));
-  return b;
+);
+
+function deltat(year) {
+  var dt, f, i, t;
+
+  if (year >= 1620 && year <= 2000) {
+    i = Math.floor((year - 1620) / 2);
+    f = (year - 1620) / 2 - i; // Fractional part of year
+    dt = deltaTtab[i] + (deltaTtab[i + 1] - deltaTtab[i]) * f;
+  } else {
+    t = (year - 2000) / 100;
+    if (year < 948) {
+      dt = 2177 + 497 * t + 44.1 * t * t;
+    } else {
+      dt = 102 + 102 * t + 25.3 * t * t;
+      if (year > 2000 && year < 2100) {
+        dt += 0.37 * (year - 2100);
+      }
+    }
+  }
+  return dt;
 }
-var EquinoxpTerms = [
+
+/*  EQUINOX -- Determine the Julian Ephemeris Day of an
+               equinox or solstice. The "which" argument
+               selects the item to be computed:
+
+                  0   March equinox
+                  1   June solstice
+                  2   September equinox
+                  3   December solstice     
+*/
+
+// Periodic terms to obtain true time
+
+var EquinoxpTerms = new Array(
   485,
   324.96,
   1934.136,
@@ -975,86 +1131,187 @@ var EquinoxpTerms = [
   8,
   15.45,
   16859.074
-];
-(JDE0tab1000 = [
-  [1721139.29189, 365242.1374, 0.06134, 0.00111, -71e-5],
-  [1721233.25401, 365241.72562, -0.05323, 0.00907, 25e-5],
-  [1721325.70455, 365242.49558, -0.11677, -0.00297, 74e-5],
-  [1721414.39987, 365242.88257, -0.00769, -0.00933, -6e-5]
-]),
-  (JDE0tab2000 = [
-    [2451623.80984, 365242.37404, 0.05169, -0.00411, -57e-5],
-    [2451716.56767, 365241.62603, 0.00325, 0.00888, -3e-4],
-    [2451810.21715, 365242.01767, -0.11575, 0.00337, 78e-5],
-    [2451900.05952, 365242.74049, -0.06223, -0.00823, 32e-5]
-  ]);
-function equinox(i, b) {
-  var a, j, k;
-  if (1e3 > i)
-    var l = JDE0tab1000,
-      m = i / 1e3;
-  else (l = JDE0tab2000), (m = (i - 2e3) / 1e3);
-  (l =
-    l[b][0] +
-    l[b][1] * m +
-    l[b][2] * m * m +
-    l[b][3] * m * m * m +
-    l[b][4] * m * m * m * m),
-    (m = (l - 2451545) / 36525);
-  var n = 35999.373 * m - 2.47;
-  for (
-    n = 1 + 0.0334 * dcos(n) + 7e-4 * dcos(2 * n), a = j = k = 0;
-    24 > a;
-    a++
-  )
-    (k +=
-      EquinoxpTerms[j] * dcos(EquinoxpTerms[j + 1] + EquinoxpTerms[j + 2] * m)),
-      (j += 3);
-  return l + (1e-5 * k) / n;
+);
+
+JDE0tab1000 = new Array(
+  new Array(1721139.29189, 365242.1374, 0.06134, 0.00111, -0.00071),
+  new Array(1721233.25401, 365241.72562, -0.05323, 0.00907, 0.00025),
+  new Array(1721325.70455, 365242.49558, -0.11677, -0.00297, 0.00074),
+  new Array(1721414.39987, 365242.88257, -0.00769, -0.00933, -0.00006)
+);
+
+JDE0tab2000 = new Array(
+  new Array(2451623.80984, 365242.37404, 0.05169, -0.00411, -0.00057),
+  new Array(2451716.56767, 365241.62603, 0.00325, 0.00888, -0.0003),
+  new Array(2451810.21715, 365242.01767, -0.11575, 0.00337, 0.00078),
+  new Array(2451900.05952, 365242.74049, -0.06223, -0.00823, 0.00032)
+);
+
+function equinox(year, which) {
+  var deltaL, i, j, JDE0, JDE, JDE0tab, S, T, W, Y;
+
+  /*  Initialise terms for mean equinox and solstices. We
+      have two sets: one for years prior to 1000 and a second
+      for subsequent years.  */
+
+  if (year < 1000) {
+    JDE0tab = JDE0tab1000;
+    Y = year / 1000;
+  } else {
+    JDE0tab = JDE0tab2000;
+    Y = (year - 2000) / 1000;
+  }
+
+  JDE0 =
+    JDE0tab[which][0] +
+    JDE0tab[which][1] * Y +
+    JDE0tab[which][2] * Y * Y +
+    JDE0tab[which][3] * Y * Y * Y +
+    JDE0tab[which][4] * Y * Y * Y * Y;
+
+  // document.debug.log.value += "JDE0 = " + JDE0 + "\n";
+
+  T = (JDE0 - 2451545.0) / 36525;
+  // document.debug.log.value += "T = " + T + "\n";
+  W = 35999.373 * T - 2.47;
+  // document.debug.log.value += "W = " + W + "\n";
+  deltaL = 1 + 0.0334 * dcos(W) + 0.0007 * dcos(2 * W);
+  // document.debug.log.value += "deltaL = " + deltaL + "\n";
+
+  // Sum the periodic terms for time T
+
+  S = 0;
+  for (i = j = 0; i < 24; i++) {
+    S +=
+      EquinoxpTerms[j] * dcos(EquinoxpTerms[j + 1] + EquinoxpTerms[j + 2] * T);
+    j += 3;
+  }
+
+  // document.debug.log.value += "S = " + S + "\n";
+  // document.debug.log.value += "Corr = " + ((S * 0.00001) / deltaL) + "\n";
+
+  JDE = JDE0 + (S * 0.00001) / deltaL;
+
+  return JDE;
 }
-function sunpos(i) {
-  var j = (i - J2000) / JulianCentury,
-    o = j * j,
-    p = fixangle(280.46646 + 36000.76983 * j + 3032e-7 * o),
-    e = fixangle(357.52911 + 35999.05029 * j + -1537e-7 * o),
-    g = 0.016708634 + -42037e-9 * j + -1.267e-7 * o;
-  o =
-    (1.914602 + -0.004817 * j + -14e-6 * o) * dsin(e) +
-    (0.019993 - 101e-6 * j) * dsin(2 * e) +
-    289e-6 * dsin(3 * e);
-  var f = p + o,
-    d = e + o,
-    h = (1.000001018 * (1 - g * g)) / (1 + g * dcos(d)),
-    n = 125.04 - 1934.136 * j;
-  j = f + -0.00569 + -0.00478 * dsin(n);
-  var q = obliqeq(i);
-  (n = q + 0.00256 * dcos(n)),
-    (i = rtd(Math.atan2(dcos(q) * dsin(f), dcos(f)))),
-    (i = fixangle(i)),
-    (q = rtd(Math.asin(dsin(q) * dsin(f))));
-  var r = rtd(Math.atan2(dcos(n) * dsin(j), dcos(j)));
-  return (
-    (r = fixangle(r)),
-    (n = rtd(Math.asin(dsin(n) * dsin(j)))),
-    [p, e, g, o, f, d, h, j, i, q, r, n]
+
+/*  SUNPOS -- Position of the Sun. Please see the comments
+              on the return statement at the end of this function
+              which describe the array it returns. We return
+              intermediate values because they are useful in a
+              variety of other contexts.  */
+
+function sunpos(jd) {
+  var T,
+    T2,
+    L0,
+    M,
+    e,
+    C,
+    sunLong,
+    sunAnomaly,
+    sunR,
+    Omega,
+    Lambda,
+    epsilon,
+    epsilon0,
+    Alpha,
+    Delta,
+    AlphaApp,
+    DeltaApp;
+
+  T = (jd - J2000) / JulianCentury;
+  // document.debug.log.value += "Sunpos. T = " + T + "\n";
+  T2 = T * T;
+  L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T2;
+  // document.debug.log.value += "L0 = " + L0 + "\n";
+  L0 = fixangle(L0);
+  // document.debug.log.value += "L0 = " + L0 + "\n";
+  M = 357.52911 + 35999.05029 * T + -0.0001537 * T2;
+  // document.debug.log.value += "M = " + M + "\n";
+  M = fixangle(M);
+  // document.debug.log.value += "M = " + M + "\n";
+  e = 0.016708634 + -0.000042037 * T + -0.0000001267 * T2;
+  // document.debug.log.value += "e = " + e + "\n";
+  C =
+    (1.914602 + -0.004817 * T + -0.000014 * T2) * dsin(M) +
+    (0.019993 - 0.000101 * T) * dsin(2 * M) +
+    0.000289 * dsin(3 * M);
+  // document.debug.log.value += "C = " + C + "\n";
+  sunLong = L0 + C;
+  // document.debug.log.value += "sunLong = " + sunLong + "\n";
+  sunAnomaly = M + C;
+  // document.debug.log.value += "sunAnomaly = " + sunAnomaly + "\n";
+  sunR = (1.000001018 * (1 - e * e)) / (1 + e * dcos(sunAnomaly));
+  // document.debug.log.value += "sunR = " + sunR + "\n";
+  Omega = 125.04 - 1934.136 * T;
+  // document.debug.log.value += "Omega = " + Omega + "\n";
+  Lambda = sunLong + -0.00569 + -0.00478 * dsin(Omega);
+  // document.debug.log.value += "Lambda = " + Lambda + "\n";
+  epsilon0 = obliqeq(jd);
+  // document.debug.log.value += "epsilon0 = " + epsilon0 + "\n";
+  epsilon = epsilon0 + 0.00256 * dcos(Omega);
+  // document.debug.log.value += "epsilon = " + epsilon + "\n";
+  Alpha = rtd(Math.atan2(dcos(epsilon0) * dsin(sunLong), dcos(sunLong)));
+  // document.debug.log.value += "Alpha = " + Alpha + "\n";
+  Alpha = fixangle(Alpha);
+  // document.debug.log.value += "Alpha = " + Alpha + "\n";
+  Delta = rtd(Math.asin(dsin(epsilon0) * dsin(sunLong)));
+  // document.debug.log.value += "Delta = " + Delta + "\n";
+  AlphaApp = rtd(Math.atan2(dcos(epsilon) * dsin(Lambda), dcos(Lambda)));
+  // document.debug.log.value += "AlphaApp = " + AlphaApp + "\n";
+  AlphaApp = fixangle(AlphaApp);
+  // document.debug.log.value += "AlphaApp = " + AlphaApp + "\n";
+  DeltaApp = rtd(Math.asin(dsin(epsilon) * dsin(Lambda)));
+  // document.debug.log.value += "DeltaApp = " + DeltaApp + "\n";
+
+  return new Array( // Angular quantities are expressed in decimal degrees
+    L0, // [0] Geometric mean longitude of the Sun
+    M, // [1] Mean anomaly of the Sun
+    e, // [2] Eccentricity of the Earth's orbit
+    C, // [3] Sun's equation of the Centre
+    sunLong, // [4] Sun's true longitude
+    sunAnomaly, // [5] Sun's true anomaly
+    sunR, // [6] Sun's radius vector in AU
+    Lambda, // [7] Sun's apparent longitude at true equinox of the date
+    Alpha, // [8] Sun's true right ascension
+    Delta, // [9] Sun's true declination
+    AlphaApp, // [10] Sun's apparent right ascension
+    DeltaApp // [11] Sun's apparent declination
   );
 }
-function equationOfTime(d) {
-  var f = (d - J2000) / JulianMillennium,
-    g = fixangle(
-      280.4664567 +
-        360007.6982779 * f +
-        0.03032028 * f * f +
-        (f * f * f) / 49931 +
-        -((f * f * f * f) / 15300) +
-        -((f * f * f * f * f) / 2e6)
-    );
-  f = sunpos(d)[10];
-  var c = nutation(d)[0];
-  return (
-    (d = obliqeq(d) + nutation(d)[1]),
-    (d = g + -0.0057183 + -f + c * dcos(d)),
-    (d -= 20 * Math.floor(d / 20)),
-    d / 1440
-  );
+
+/*  EQUATIONOFTIME -- Compute equation of time for a given moment.
+                      Returns the equation of time as a fraction of
+                      a day.  */
+
+function equationOfTime(jd) {
+  var alpha, deltaPsi, E, epsilon, L0, tau;
+
+  tau = (jd - J2000) / JulianMillennium;
+  // document.debug.log.value += "equationOfTime. tau = " + tau + "\n";
+  L0 =
+    280.4664567 +
+    360007.6982779 * tau +
+    0.03032028 * tau * tau +
+    (tau * tau * tau) / 49931 +
+    -((tau * tau * tau * tau) / 15300) +
+    -((tau * tau * tau * tau * tau) / 2000000);
+  // document.debug.log.value += "L0 = " + L0 + "\n";
+  L0 = fixangle(L0);
+  // document.debug.log.value += "L0 = " + L0 + "\n";
+  alpha = sunpos(jd)[10];
+  // document.debug.log.value += "alpha = " + alpha + "\n";
+  deltaPsi = nutation(jd)[0];
+  // document.debug.log.value += "deltaPsi = " + deltaPsi + "\n";
+  epsilon = obliqeq(jd) + nutation(jd)[1];
+  // document.debug.log.value += "epsilon = " + epsilon + "\n";
+  E = L0 + -0.0057183 + -alpha + deltaPsi * dcos(epsilon);
+  // document.debug.log.value += "E = " + E + "\n";
+  E = E - 20.0 * Math.floor(E / 20.0);
+  // document.debug.log.value += "Efixed = " + E + "\n";
+  E = E / (24 * 60);
+  // document.debug.log.value += "Eday = " + E + "\n";
+
+  return E;
 }
