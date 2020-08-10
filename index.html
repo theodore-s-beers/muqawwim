@@ -10,7 +10,7 @@
     <meta content="Theo Beers" name="author" />
     <meta
       name="description"
-      content="Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars."
+      content="Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars."
     />
     <meta content="#0066ff" name="theme-color" />
     <link href="manifest.json" rel="manifest" />
@@ -44,7 +44,7 @@
       </script>
       <p>
         This is a simple calendar conversion utility that displays a given date
-        according to four different standards:
+        according to five different standards:
         <a
           href="https://en.wikipedia.org/wiki/Gregorian_calendar"
           rel="noopener"
@@ -56,6 +56,12 @@
           rel="noopener"
           target="_blank"
           >Julian</a
+        >,
+        <a
+          href="https://en.wikipedia.org/wiki/Hebrew_calendar"
+          rel="noopener"
+          target="_blank"
+          >Hebrew</a
         >,
         <a
           href="https://en.wikipedia.org/wiki/Islamic_calendar"
@@ -70,15 +76,20 @@
           >Solar Hijri</a
         >). Change the date in any of the tables below, then click the
         corresponding “Calculate” button, and the equivalent date will appear in
-        the other three calendars. Additionally&#8202;—&#8202;and perhaps most
-        helpfully, for historians of the later medieval and early modern
-        Persianate world&#8202;—&#8202;this page will indicate the
+        the other four calendars. In the Hebrew case, the year is also listed
+        according to the
+        <a
+          href="https://en.wikipedia.org/wiki/Seleucid_era"
+          rel="noopener"
+          target="_blank"
+          >Seleucid era</a
+        >. For the benefit of historians of the later medieval and early modern
+        Persianate world, this page further indicates the
         <em>animal year</em> in which the given date falls. (See the “Notes and
-        References” section below for further information on this and other
-        arcane points.)
+        References” section below for further discussion of such arcane points.)
       </p>
       <p>
-        Nearly all of this project was derived from the more extensive work of
+        The core of this project was adapted from the more extensive work of
         <a href="https://www.fourmilab.ch/" rel="noopener" target="_blank"
           >John Walker</a
         >. I encourage you to spend some time exploring his
@@ -132,7 +143,7 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
+                style="padding-left: 0.2em; width: 2.8em;"
                 type="number"
                 value="1"
               /><br /><input
@@ -290,7 +301,7 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
+                style="padding-left: 0.2em; width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
@@ -335,60 +346,100 @@
           </tr>
         </table>
       </form>
-      <div style="display: none;">
-        <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
-          <table>
-            <tr>
-              <td>
-                <input name="year" size="5" type="text" value="" />
-                <select name="month" size="1"
-                  ><option label="x" value="1"></option
-                  ><option label="x" value="2"></option
-                  ><option label="x" value="3"></option
-                  ><option label="x" value="4"></option
-                  ><option label="x" value="5"></option
-                  ><option label="x" value="6"></option
-                  ><option label="x" value="7"></option
-                  ><option label="x" value="8"></option
-                  ><option label="x" value="9"></option
-                  ><option label="x" value="10"></option
-                  ><option label="x" value="11"></option
-                  ><option label="x" value="12"></option
-                  ><option label="x" value="13"></option
-                ></select>
-                <input name="day" size="2" type="text" value="" />
-                <input
-                  name="leap"
-                  readonly="readonly"
-                  size="36"
-                  type="text"
-                  value=""
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <img
-                  alt=""
-                  height="51"
-                  id="hebmonth"
-                  name="hebmonth"
-                  src="figures/hebrew_month_0.gif"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input
-                  onclick="calcHebrew();"
-                  type="button"
-                  value="Calculate"
-                />
-              </td>
-            </tr>
-          </table>
-        </form>
+
+      <h4>Hebrew Calendar</h4>
+      <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
+        <table
+          class="table table-bordered table-sm"
+          style="max-width: 36rem; text-align: center;"
+        >
+          <tr>
+            <td>
+              <input
+                name="year"
+                id="hebYear"
+                type="number"
+                value=""
+                style="padding-left: 0.2em; max-width: 4em;"
+              />
+              <select name="month" size="1"
+                ><option label="Nisan" value="1"></option
+                ><option label="Iyar" value="2"></option
+                ><option label="Sivan" value="3"></option
+                ><option label="Tammuz" value="4"></option
+                ><option label="Av" value="5"></option
+                ><option label="Elul" value="6"></option
+                ><option label="Tishrei" value="7"></option
+                ><option label="Cheshvan&thinsp;" value="8"></option
+                ><option label="Kislev" value="9"></option
+                ><option label="Tevet" value="10"></option
+                ><option label="Shevat" value="11"></option
+                ><option label="Adar" value="12"></option
+                ><option label="Veadar" value="13"></option
+              ></select>
+              <input
+                name="day"
+                max="30"
+                min="1"
+                type="number"
+                value=""
+                style="padding-left: 0.2em; width: 2.8em;"
+              />
+              <br />
+              <input
+                name="leap"
+                readonly="readonly"
+                type="text"
+                value=""
+                style="
+                  margin-top: 0.25em;
+                  color: #228b22;
+                  padding-left: 0.2em;
+                  width: 16.5em;
+                "
+              />
+            </td>
+          </tr>
+          <tr style="display: none;">
+            <td>
+              <img
+                alt=""
+                height="51"
+                id="hebmonth"
+                name="hebmonth"
+                src="figures/hebrew_month_0.gif"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                onclick="calcHebrew();"
+                value="Calculate"
+                class="btn btn-primary"
+                type="submit"
+                style="
+                  padding-top: 0.25em;
+                  padding-bottom: 0.25em;
+                  padding-left: 0.5em;
+                  padding-right: 0.5em;
+                "
+                id="hebrewBtn"
+              />
+            </td>
+          </tr>
+        </table>
+      </form>
+
+      <div class="card border-info mb-3" style="max-width: 36rem;">
+        <div class="card-body text-info">
+          <p class="card-text" id="seleucidAnswer">
+            In the Seleucid era, as used by some medieval Jewish communities,
+            this is year …
+          </p>
+        </div>
       </div>
+
       <h4>Islamic Calendar</h4>
       <form action="JavaScript:calcIslamic();" id="islamic" name="islamic">
         <table
@@ -425,7 +476,7 @@
                 max="30"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
+                style="padding-left: 0.2em; width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
@@ -517,7 +568,7 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; min-width: 2.8em; max-width: 2.8em;"
+                style="padding-left: 0.2em; width: 2.8em;"
                 type="number"
                 value=""
               /><br /><input
@@ -598,11 +649,11 @@
                 Calendrical problems can be notoriously difficult for historians
                 to resolve. After all, a calendar is no better than the way in
                 which it has been observed by particular institutions, or the
-                scrupulousness with which dates were recorded in the source
+                scrupulousness with which dates are recorded in the source
                 materials available to us. With this in mind, a conversion
-                program based on the formal rules of the included calendars may
-                not answer all questions. The idea is to provide accurate
-                calculations assuming ideal circumstances.
+                program based on the formal rules of the included calendars is
+                unlikely to answer all questions. The idea is to provide
+                accurate calculations assuming ideal circumstances.
               </li>
               <li>
                 If you find that a certain date appears to have been converted
@@ -610,6 +661,24 @@
                 <a href="mailto:tbeers@uchicago.edu">by email</a>. (This would
                 come as a surprise. I’ve relied on the algorithms coded by John
                 Walker for years, with nary a problem.)
+              </li>
+              <li>
+                In the Hebrew calendar widget, the months are listed starting
+                with Nisan, but each new year begins with Tishrei. This is
+                simply a point of convention. With regard to the Seleucid era, I
+                have followed the method of subtracting 3,449 from
+                <em>anno mundi</em>. That is, Seleucid year 1 opens with the
+                month of Tishrei in 3450 AM, or September 312 BCE in the Julian
+                calendar. If I have understood correctly, this was the
+                predominant way of reckoning the Seleucid era in Jewish
+                contexts. See the
+                <a
+                  href="https://iranicaonline.org/articles/seleucid-era"
+                  rel="noopener"
+                  target="_blank"
+                  >Encyclopædia Iranica</a
+                >
+                entry for a bit more background discussion.
               </li>
               <li>
                 In several of the Arab countries that use the Gregorian calendar
@@ -620,8 +689,8 @@
                   target="_blank"
                   >set of names</a
                 >
-                is sometimes applied to the twelve months. Similarly, the Solar
-                Hijri calendar is followed in Afghanistan, but with
+                is applied to the twelve months. Similarly, the Solar Hijri
+                calendar is followed in Afghanistan, but with
                 <a
                   href="https://en.wikipedia.org/wiki/Solar_Hijri_calendar#In_Afghanistan"
                   rel="noopener"
@@ -663,11 +732,11 @@
                   >proleptically</a
                 >
                 for calculations involving <em>years</em> in earlier periods of
-                Iranian history. The practical significance of this will be made
+                Iranian history. The practical significance of this will become
                 clear in the following note…
               </li>
               <li>
-                Most people are probably familiar with the
+                Most people are likely familiar with the
                 <a
                   href="https://en.wikipedia.org/wiki/Chinese_zodiac"
                   rel="noopener"
@@ -689,19 +758,18 @@
                 years at the March equinox. This convention took on importance
                 in the historiography of the Timurid and Safavid
                 periods&#8202;—&#8202;especially the latter. In several key
-                Safavid Persian chronicles, to the extent that an annalistic
-                format is employed, each year-section begins at Nowruz and is
-                labeled with the corresponding animal. (Months and days are
-                given in the Islamic calendar only.) It is clear that authors of
-                the time had some difficulty maintaining concordance between the
-                solar and lunar schemes that they used; and this has
-                occasionally led to confusion among modern historians. But that
-                is a topic best left for another conversation. Returning to the
-                matter of the Solar Hijri calendar, we have an accurate way of
-                tracking the passage of solar years in Iran from one March
-                equinox to the next, and so we need only a bit of modular
-                arithmetic to calculate the animal sign associated with any
-                date.
+                Safavid Persian chronicles, insofar as an annalistic format is
+                employed, each year-section begins at Nowruz and is labeled with
+                the corresponding animal. (Months and days are given in the
+                Islamic calendar only.) It is clear that authors of the time had
+                some difficulty maintaining concordance between the solar and
+                lunar schemes that they used; and this has occasionally led to
+                confusion among modern historians. But that is a topic best left
+                for another conversation. Returning to the matter of the Solar
+                Hijri calendar, we have an accurate way of tracking the passage
+                of solar years in Iran from one March equinox to the next, and
+                so we need only a bit of modular arithmetic to calculate the
+                animal sign associated with any date.
               </li>
               <li>
                 For more on the use of the twelve-animal cycle in Persian, see
@@ -1055,77 +1123,6 @@
         presetDataToRequest(location.search.substring(1));
       }
     </script>
-    <script>
-      function animalCalc() {
-        // Declare a few variables
-        const persYear = document.getElementById("persYear").value;
-        const persMod = persYear % 12;
-        const animalAnswer = document.getElementById("animalAnswer");
-        let animalEng = "";
-        let animalOrig = "";
-
-        // Determine animal sign
-        if (1 > persYear) {
-          animalAnswer.innerHTML =
-            "<em>No Chinese-Uighur animal sign has been calculated for this date, since the year entered is too early.</em>";
-        } else {
-          if (0 === persMod) {
-            animalEng = "Snake";
-            animalOrig = "Yilan";
-          } else if (1 === persMod) {
-            animalEng = "Horse";
-            animalOrig = "Yunt";
-          } else if (2 === persMod) {
-            animalEng = "Goat";
-            animalOrig = "Quy";
-          } else if (3 === persMod) {
-            animalEng = "Monkey";
-            animalOrig = "Pichin";
-          } else if (4 === persMod) {
-            animalEng = "Rooster";
-            animalOrig = "Takhaquy";
-          } else if (5 === persMod) {
-            animalEng = "Dog";
-            animalOrig = "It";
-          } else if (6 === persMod) {
-            animalEng = "Pig";
-            animalOrig = "Tunguz";
-          } else if (7 === persMod) {
-            animalEng = "Rat";
-            animalOrig = "Sichqan";
-          } else if (8 === persMod) {
-            animalEng = "Ox";
-            animalOrig = "Ud";
-          } else if (9 === persMod) {
-            animalEng = "Tiger";
-            animalOrig = "Bars";
-          } else if (10 === persMod) {
-            animalEng = "Rabbit";
-            animalOrig = "Tawshqan";
-          } else {
-            animalEng = "Dragon";
-            animalOrig = "Luy";
-          }
-
-          // Set result text
-          animalAnswer.innerHTML =
-            "In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>" +
-            animalEng +
-            " (<em>" +
-            animalOrig +
-            "</em>)</strong>.";
-        }
-      }
-
-      // Run function on page load
-      animalCalc();
-
-      // Set up event listeners
-      $("#gregCalcBtn").on("click", animalCalc);
-      $("#gregTodayBtn").on("click", animalCalc);
-      $("#julianBtn").on("click", animalCalc);
-      $("#islamicBtn").on("click", animalCalc);
-      $("#persBtn").on("click", animalCalc);
-    </script>
+    <script src="js/extras.js"></script>
   </body>
 </html>
