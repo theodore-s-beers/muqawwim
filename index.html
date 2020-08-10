@@ -346,7 +346,6 @@
           </tr>
         </table>
       </form>
-
       <h4>Hebrew Calendar</h4>
       <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
         <table
@@ -356,13 +355,14 @@
           <tr>
             <td>
               <input
+                aria-label="Hebrew year"
                 name="year"
                 id="hebYear"
                 type="number"
                 value=""
                 style="padding-left: 0.2em; max-width: 4em;"
               />
-              <select name="month" size="1"
+              <select name="month" aria-label="Hebrew month"
                 ><option label="Nisan" value="1"></option
                 ><option label="Iyar" value="2"></option
                 ><option label="Sivan" value="3"></option
@@ -378,6 +378,7 @@
                 ><option label="Veadar" value="13"></option
               ></select>
               <input
+                aria-label="Hebrew day"
                 name="day"
                 max="30"
                 min="1"
@@ -387,6 +388,7 @@
               />
               <br />
               <input
+                aria-label="Type of year"
                 name="leap"
                 readonly="readonly"
                 type="text"
@@ -430,7 +432,6 @@
           </tr>
         </table>
       </form>
-
       <div class="card border-info mb-3" style="max-width: 36rem;">
         <div class="card-body text-info">
           <p class="card-text" id="seleucidAnswer">
@@ -439,7 +440,6 @@
           </p>
         </div>
       </div>
-
       <h4>Islamic Calendar</h4>
       <form action="JavaScript:calcIslamic();" id="islamic" name="islamic">
         <table
