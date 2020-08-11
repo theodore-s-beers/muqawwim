@@ -1,0 +1,14 @@
+To find the animal year, take the Persian calendar year (per Fourmilab) and calculate mod 12. Then…
+
+0 = Snake
+1 = Horse
+2 = Goat
+3 = Monkey
+4 = Rooster
+5 = Dog
+6 = Pig
+7 = Rat
+8 = Ox
+9 = Tiger
+10 = Rabbit
+11 = Dragon
