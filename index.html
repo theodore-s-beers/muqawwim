@@ -26,6 +26,12 @@
       body {
         font-family: "Noto Serif", serif;
       }
+      h1 {
+        font-size: xx-large;
+      }
+      h2 {
+        font-size: x-large;
+      }
       select {
         padding-bottom: 0.1em;
       }
@@ -33,7 +39,7 @@
   </head>
   <body>
     <div class="container" style="margin-top: 0.6rem">
-      <h2>Calendar Converter for Near East Historians</h2>
+      <h1>Calendar Converter for Near East Historians</h1>
       <script>
         // Register service worker
         if ("serviceWorker" in navigator) {
@@ -103,7 +109,7 @@
         domain.
       </p>
       <hr />
-      <h4>Gregorian Calendar</h4>
+      <h2>Gregorian Calendar</h2>
       <form
         action="JavaScript:calcGregorian();"
         id="gregorian"
@@ -261,7 +267,7 @@
           </table>
         </form>
       </div>
-      <h4>Julian Calendar</h4>
+      <h2>Julian Calendar</h2>
       <form
         action="JavaScript:calcJulianCalendar();"
         id="juliancalendar"
@@ -346,7 +352,7 @@
           </tr>
         </table>
       </form>
-      <h4>Hebrew Calendar</h4>
+      <h2>Hebrew Calendar</h2>
       <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
         <table
           class="table table-bordered table-sm"
@@ -438,7 +444,7 @@
           </p>
         </div>
       </div>
-      <h4>Islamic Calendar</h4>
+      <h2>Islamic Calendar</h2>
       <form action="JavaScript:calcIslamic();" id="islamic" name="islamic">
         <table
           class="table table-bordered table-sm"
@@ -530,7 +536,7 @@
           </tr>
         </table>
       </form>
-      <h4>Persian (Solar Hijri) Calendar</h4>
+      <h2>Persian (Solar Hijri) Calendar</h2>
       <form action="JavaScript:calcPersiana();" id="persiana" name="persiana">
         <table
           class="table table-bordered table-sm"
@@ -639,7 +645,7 @@
             data-parent="#notes-accordion"
             data-toggle="collapse"
             href="#notes"
-            ><h4>Notes and References</h4></a
+            ><h2>Notes and References</h2></a
           >
           <div class="collapse" id="notes" role="tabpanel">
             <ul>
