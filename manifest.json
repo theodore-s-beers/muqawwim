@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#339999",
   "theme_color": "#0066ff",
-  "description": "Easily and accurately convert dates among the Gregorian, Julian, Islamic, and Persian calendars.",
+  "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars.",
   "icons": [
     {
       "src": "img/app-icon-48.png",
@@ -41,6 +41,12 @@
       "src": "img/app-icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "img/maskable-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
