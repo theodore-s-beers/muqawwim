@@ -117,7 +117,7 @@
             <td>
               <input
                 aria-label="Gregorian year"
-                id="gregYear"
+                id="greg-year"
                 name="year"
                 style="padding-left: 0.2em; max-width: 4em"
                 type="number"
@@ -139,7 +139,7 @@
               </select>
               <input
                 aria-label="Gregorian day"
-                id="gregDay"
+                id="greg-day"
                 max="31"
                 min="1"
                 name="day"
@@ -194,7 +194,7 @@
             <td>
               <input
                 class="btn btn-primary"
-                id="gregCalcBtn"
+                id="greg-calc-btn"
                 onclick="calcGregorian();"
                 style="
                   padding-top: 0.25em;
@@ -208,7 +208,7 @@
               &nbsp;
               <input
                 class="btn btn-secondary"
-                id="gregTodayBtn"
+                id="greg-today-btn"
                 onclick="setDateToToday();calcGregorian();"
                 style="
                   padding-top: 0.25em;
@@ -275,7 +275,7 @@
             <td>
               <input
                 aria-label="Julian year"
-                id="julianYear"
+                id="julian-year"
                 name="year"
                 style="padding-left: 0.2em; max-width: 4em"
                 type="number"
@@ -297,7 +297,7 @@
               </select>
               <input
                 aria-label="Julian day"
-                id="julianCalDay"
+                id="julian-cal-day"
                 max="31"
                 min="1"
                 name="day"
@@ -331,7 +331,7 @@
             <td>
               <input
                 class="btn btn-primary"
-                id="julianBtn"
+                id="julian-btn"
                 onclick="calcJulianCalendar();"
                 style="
                   padding-top: 0.25em;
@@ -357,7 +357,7 @@
               <input
                 aria-label="Hebrew year"
                 name="year"
-                id="hebYear"
+                id="heb-year"
                 type="number"
                 value=""
                 style="padding-left: 0.2em; max-width: 4em"
@@ -424,7 +424,7 @@
                   padding-left: 0.5em;
                   padding-right: 0.5em;
                 "
-                id="hebrewBtn"
+                id="hebrew-btn"
               />
             </td>
           </tr>
@@ -432,7 +432,7 @@
       </form>
       <div class="card border-info mb-3" style="max-width: 36rem">
         <div class="card-body text-info">
-          <p class="card-text" id="seleucidAnswer">
+          <p class="card-text" id="seleucid-answer">
             In the Seleucid era, as used by some medieval Jewish communities,
             this is year …
           </p>
@@ -448,7 +448,7 @@
             <td>
               <input
                 aria-label="Islamic year"
-                id="islamicYear"
+                id="islamic-year"
                 name="year"
                 style="padding-left: 0.2em; max-width: 4em"
                 type="number"
@@ -470,7 +470,7 @@
               </select>
               <input
                 aria-label="Islamic day"
-                id="islamicDay"
+                id="islamic-day"
                 max="30"
                 min="1"
                 name="day"
@@ -515,7 +515,7 @@
             <td>
               <input
                 class="btn btn-primary"
-                id="islamicBtn"
+                id="islamic-btn"
                 onclick="calcIslamic();"
                 style="
                   padding-top: 0.25em;
@@ -540,7 +540,7 @@
             <td>
               <input
                 aria-label="Persian year"
-                id="persYear"
+                id="pers-year"
                 name="year"
                 style="padding-left: 0.2em; max-width: 4em"
                 type="number"
@@ -562,7 +562,7 @@
               </select>
               <input
                 aria-label="Persian day"
-                id="persianDay"
+                id="persian-day"
                 max="31"
                 min="1"
                 name="day"
@@ -607,7 +607,7 @@
             <td>
               <input
                 class="btn btn-primary"
-                id="persBtn"
+                id="pers-btn"
                 onclick="calcPersiana();"
                 style="
                   padding-top: 0.25em;
@@ -624,19 +624,19 @@
       </form>
       <div class="card border-info mb-3" style="max-width: 36rem">
         <div class="card-body text-info">
-          <p class="card-text" id="animalAnswer">
+          <p class="card-text" id="animal-answer">
             In the Persianate adaptation of the Chinese-Uighur animal calendar,
             this date falls in a year of the …
           </p>
         </div>
       </div>
       <hr />
-      <div data-children=".item" id="notesAccordion">
+      <div data-children=".item" id="notes-accordion">
         <div class="item">
           <a
             aria-controls="notes"
             aria-expanded="false"
-            data-parent="#notesAccordion"
+            data-parent="#notes-accordion"
             data-toggle="collapse"
             href="#notes"
             ><h4>Notes and References</h4></a
@@ -1123,12 +1123,12 @@
     </script>
     <script src="js/extras.js"></script>
     <script>
-      $("#gregCalcBtn").on("click", extras);
-      $("#gregTodayBtn").on("click", extras);
-      $("#julianBtn").on("click", extras);
-      $("#hebrewBtn").on("click", extras);
-      $("#islamicBtn").on("click", extras);
-      $("#persBtn").on("click", extras);
+      $("#greg-calc-btn").on("click", extras);
+      $("#greg-today-btn").on("click", extras);
+      $("#julian-btn").on("click", extras);
+      $("#hebrew-btn").on("click", extras);
+      $("#islamic-btn").on("click", extras);
+      $("#pers-btn").on("click", extras);
     </script>
   </body>
 </html>

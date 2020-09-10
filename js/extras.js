@@ -1,9 +1,9 @@
 // Function for animal years
 function animalCalc () {
   // Declare a few variables
-  const persYear = document.getElementById('persYear').value
+  const persYear = document.getElementById('pers-year').value
   const persMod = persYear % 12
-  const animalAnswer = document.getElementById('animalAnswer')
+  const animalAnswer = document.getElementById('animal-answer')
   let animalEng = ''
   let animalOrig = ''
 
@@ -63,9 +63,9 @@ function animalCalc () {
 // Function for Seleucid era
 function seleucidCalc () {
   // Define variables; calculate result
-  const hebYear = document.getElementById('hebYear').value
+  const hebYear = document.getElementById('heb-year').value
   const seleucidYear = hebYear - 3449
-  const seleucidAnswer = document.getElementById('seleucidAnswer')
+  const seleucidAnswer = document.getElementById('seleucid-answer')
 
   // Set result text
   seleucidAnswer.innerHTML =
