@@ -35,13 +35,35 @@
       h2 {
         font-size: 160%;
       }
+      input {
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
       li,
       p {
         hyphens: auto;
       }
       select {
-        padding-top: 0.1em;
-        padding-bottom: 0.2em;
+        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
     </style>
   </head>
@@ -133,11 +155,15 @@
                 aria-label="Gregorian year"
                 id="greg-year"
                 name="year"
-                style="padding-left: 0.2em; max-width: 4em"
+                style="width: 5.5em"
                 type="number"
                 value="1998"
               />
-              <select aria-label="Gregorian month" name="month">
+              <select
+                aria-label="Gregorian month"
+                name="month"
+                style="width: 8em"
+              >
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -146,7 +172,7 @@
                 <option value="6">June</option>
                 <option value="7">July</option>
                 <option value="8">August</option>
-                <option value="9">September&thinsp;</option>
+                <option value="9">September</option>
                 <option value="10">October</option>
                 <option value="11">November</option>
                 <option value="12">December</option>
@@ -157,19 +183,14 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; width: 2.8em"
+                style="width: 4.25em"
                 type="number"
                 value="1"
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="
-                  margin-top: 0.25em;
-                  color: #228b22;
-                  padding-left: 0.2em;
-                  max-width: 7.4em;
-                "
+                style="margin-top: 0.25em; color: #228b22; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -177,7 +198,7 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; padding-left: 0.2em; max-width: 7.4em"
+                style="color: #228b22; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -210,26 +231,14 @@
                 class="btn btn-primary"
                 id="greg-calc-btn"
                 onclick="calcGregorian();"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 type="submit"
                 value="Calculate"
               />
-              &nbsp;
+              &ensp;
               <input
                 class="btn btn-secondary"
                 id="greg-today-btn"
                 onclick="setDateToToday();calcGregorian();"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 type="button"
                 value="Today"
               />
@@ -291,11 +300,11 @@
                 aria-label="Julian year"
                 id="julian-year"
                 name="year"
-                style="padding-left: 0.2em; max-width: 4em"
+                style="width: 5.5em"
                 type="number"
                 value=""
               />
-              <select aria-label="Julian month" name="month">
+              <select aria-label="Julian month" name="month" style="width: 8em">
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -304,7 +313,7 @@
                 <option value="6">June</option>
                 <option value="7">July</option>
                 <option value="8">August</option>
-                <option value="9">September&thinsp;</option>
+                <option value="9">September</option>
                 <option value="10">October</option>
                 <option value="11">November</option>
                 <option value="12">December</option>
@@ -315,19 +324,14 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; width: 2.8em"
+                style="width: 4.25em"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="
-                  margin-top: 0.25em;
-                  color: #228b22;
-                  padding-left: 0.2em;
-                  max-width: 7.4em;
-                "
+                style="margin-top: 0.25em; color: #228b22; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -335,7 +339,7 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; padding-left: 0.2em; max-width: 7.4em"
+                style="color: #228b22; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -347,12 +351,6 @@
                 class="btn btn-primary"
                 id="julian-btn"
                 onclick="calcJulianCalendar();"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 type="submit"
                 value="Calculate"
               />
@@ -374,9 +372,9 @@
                 id="heb-year"
                 type="number"
                 value=""
-                style="padding-left: 0.2em; max-width: 4em"
+                style="width: 5.5em"
               />
-              <select name="month" aria-label="Hebrew month">
+              <select name="month" aria-label="Hebrew month" style="width: 8em">
                 <option label="Nisan" value="1"></option>
                 <option label="Iyar" value="2"></option>
                 <option label="Sivan" value="3"></option>
@@ -384,7 +382,7 @@
                 <option label="Av" value="5"></option>
                 <option label="Elul" value="6"></option>
                 <option label="Tishrei" value="7"></option>
-                <option label="Cheshvan&thinsp;" value="8"></option>
+                <option label="Cheshvan" value="8"></option>
                 <option label="Kislev" value="9"></option>
                 <option label="Tevet" value="10"></option>
                 <option label="Shevat" value="11"></option>
@@ -398,19 +396,14 @@
                 min="1"
                 type="number"
                 value=""
-                style="padding-left: 0.2em; width: 2.8em"
+                style="width: 4.25em"
               /><br /><input
                 aria-label="Type of year"
                 name="leap"
                 readonly="readonly"
                 type="text"
                 value=""
-                style="
-                  margin-top: 0.25em;
-                  color: #228b22;
-                  padding-left: 0.2em;
-                  width: 16.5em;
-                "
+                style="margin-top: 0.25em; color: #228b22; width: 18.5em"
               />
             </td>
           </tr>
@@ -432,12 +425,6 @@
                 value="Calculate"
                 class="btn btn-primary"
                 type="submit"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 id="hebrew-btn"
               />
             </td>
@@ -464,11 +451,15 @@
                 aria-label="Islamic year"
                 id="islamic-year"
                 name="year"
-                style="padding-left: 0.2em; max-width: 4em"
+                style="width: 5.5em"
                 type="number"
                 value=""
               />
-              <select aria-label="Islamic month" name="month">
+              <select
+                aria-label="Islamic month"
+                name="month"
+                style="width: 9.5em"
+              >
                 <option value="1">Muharram</option>
                 <option value="2">Safar</option>
                 <option value="3">Rabi‘ I</option>
@@ -479,7 +470,7 @@
                 <option value="8">Sha‘ban</option>
                 <option value="9">Ramadan</option>
                 <option value="10">Shawwal</option>
-                <option value="11">Dhu al-Qa‘dah&thinsp;</option>
+                <option value="11">Dhu al-Qa‘dah</option>
                 <option value="12">Dhu al-Hijjah</option>
               </select>
               <input
@@ -488,19 +479,14 @@
                 max="30"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; width: 2.8em"
+                style="width: 4.25em"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="
-                  margin-top: 0.25em;
-                  color: #228b22;
-                  padding-left: 0.2em;
-                  max-width: 7em;
-                "
+                style="margin-top: 0.25em; color: #228b22; width: 8.9em"
                 type="text"
                 value=""
               />
@@ -508,7 +494,7 @@
                 aria-label="Arabic weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; padding-left: 0.2em; max-width: 10em"
+                style="color: #228b22; width: 10.8em"
                 type="text"
                 value=""
               />
@@ -531,12 +517,6 @@
                 class="btn btn-primary"
                 id="islamic-btn"
                 onclick="calcIslamic();"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 type="submit"
                 value="Calculate"
               />
@@ -556,13 +536,17 @@
                 aria-label="Persian year"
                 id="pers-year"
                 name="year"
-                style="padding-left: 0.2em; max-width: 4em"
+                style="width: 5.5em"
                 type="number"
                 value=""
               />
-              <select aria-label="Persian month" name="month">
+              <select
+                aria-label="Persian month"
+                name="month"
+                style="width: 9em"
+              >
                 <option value="1">Farvardin</option>
-                <option value="2">Ordibehesht&thinsp;</option>
+                <option value="2">Ordibehesht</option>
                 <option value="3">Khordad</option>
                 <option value="4">Tir</option>
                 <option value="5">Mordad</option>
@@ -580,19 +564,14 @@
                 max="31"
                 min="1"
                 name="day"
-                style="padding-left: 0.2em; width: 2.8em"
+                style="width: 4.25em"
                 type="number"
                 value=""
               /><br /><input
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="
-                  margin-top: 0.25em;
-                  color: #228b22;
-                  padding-left: 0.2em;
-                  max-width: 7em;
-                "
+                style="margin-top: 0.25em; color: #228b22; width: 9em"
                 type="text"
                 value=""
               />
@@ -600,7 +579,7 @@
                 aria-label="Persian weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; padding-left: 0.2em; max-width: 8.8em"
+                style="color: #228b22; width: 10.2em"
                 type="text"
                 value=""
               />
@@ -623,12 +602,6 @@
                 class="btn btn-primary"
                 id="pers-btn"
                 onclick="calcPersiana();"
-                style="
-                  padding-top: 0.25em;
-                  padding-bottom: 0.25em;
-                  padding-left: 0.5em;
-                  padding-right: 0.5em;
-                "
                 type="submit"
                 value="Calculate"
               />
