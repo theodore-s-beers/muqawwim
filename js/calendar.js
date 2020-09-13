@@ -2161,7 +2161,7 @@ function updateFromGregorian () {
   if (hmindex === 12 && !hebrewLeap(hebcal[0])) {
     hmindex = 14
   }
-  document.hebrew.hebmonth.src = 'figures/hebrew_month_' + hmindex + '.gif'
+  document.hebrew.hebmonth.src = 'figures/hebrew_month_0.gif'
   switch (hebrewYearDays(hebcal[0])) {
     case 353:
       document.hebrew.leap.value = 'Common deficient (353 days)'
