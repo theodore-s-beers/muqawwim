@@ -1,0 +1,27 @@
+{
+  "name": "muqawwim",
+  "version": "1.0.0",
+  "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars.",
+  "main": "js/calendar.js",
+  "scripts": {
+    "build": "terser js/calendar.js --mangle --source-map -o js/calendar.min.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theodore-s-beers/calendars.git"
+  },
+  "keywords": [
+    "calendars",
+    "muqawwim"
+  ],
+  "author": "Theo Beers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/theodore-s-beers/calendars/issues"
+  },
+  "homepage": "https://github.com/theodore-s-beers/calendars#readme",
+  "dependencies": {
+    "terser": "^5.3.1"
+  }
+}
