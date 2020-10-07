@@ -57,25 +57,6 @@ function mod (a, b) {
   return a - b * Math.floor(a / b)
 }
 
-// AMOD -- Modulus function which returns numerator if modulus is zero
-
-function amod (a, b) {
-  return mod(a - 1, b) + 1
-}
-
-/*  JHMS -- Convert Julian time to hour, minutes, and seconds,
-            returned as a three-element array.  */
-
-function jhms (j) {
-  j += 0.5 // Astronomical to civil
-  const ij = (j - Math.floor(j)) * 86400.0 + 0.5
-  return [
-    Math.floor(ij / 3600),
-    Math.floor((ij / 60) % 60),
-    Math.floor(ij % 60)
-  ]
-}
-
 // JWDAY -- Calculate day of week from Julian day
 
 const Weekdays = [
@@ -464,6 +445,9 @@ const J1904 = 2416480.5 // Epoch (day 0) of Excel 1904 date system (Mac)
 
 const NormLeap = ['Normal year', 'Leap year']
 
+// A global variable for the Julian day value
+let julianDay
+
 /*  WEEKDAY_BEFORE -- Return Julian date of given weekday (0 = Sunday)
                       in the seven days ending on jd.  */
 
@@ -564,46 +548,10 @@ function isoToJulian (year, week, day) {
   return day + nWeeks(0, gregorianToJd(year - 1, 12, 28), week)
 }
 
-// JD_TO_ISO -- Return array of ISO (year, week, day) for Julian day
-
-function jdToIso (jd) {
-  let year, day
-
-  year = jdToGregorian(jd - 3)[0]
-  if (jd >= isoToJulian(year + 1, 1, 1)) {
-    year++
-  }
-  const week = Math.floor((jd - isoToJulian(year, 1, 1)) / 7) + 1
-  day = jwday(jd)
-  if (day === 0) {
-    day = 7
-  }
-  return [year, week, day]
-}
-
 // ISO_DAY_TO_JULIAN -- Return Julian day of given ISO year, and day of year
 
 function isoDayToJulian (year, day) {
   return day - 1 + gregorianToJd(year, 1, 1)
-}
-
-// JD_TO_ISO_DAY -- Return array of ISO (year, dayOfYear) for Julian day
-
-function jdToIsoDay (jd) {
-  const year = jdToGregorian(jd)[0]
-  const day = Math.floor(jd - gregorianToJd(year, 1, 1)) + 1
-  return [year, day]
-}
-
-// PAD -- Pad a string to a given length with a given fill character.
-
-function pad (str, howlong, padwith) {
-  let s = str.toString()
-
-  while (s.length < howlong) {
-    s = padwith + s
-  }
-  return s
 }
 
 // JULIAN_TO_JD -- Determine Julian day number from Julian calendar date
@@ -794,115 +742,6 @@ function jdToHebrew (jd) {
   return [year, month, day]
 }
 
-/*  EQUINOXE_A_PARIS -- Determine Julian day and fraction of the
-                        September equinox at the Paris meridian in
-                        a given Gregorian year.  */
-
-function equinoxeAParis (year) {
-  // September equinox in dynamical time
-  const equJED = equinox(year, 2)
-
-  // Correct for delta T to obtain Universal time
-  const equJD = equJED - deltat(year) / (24 * 60 * 60)
-
-  // Apply the equation of time to yield the apparent time at Greenwich
-  const equAPP = equJD + equationOfTime(equJED)
-
-  /*  Finally, we must correct for the constant difference between
-        the Greenwich meridian and that of Paris, 2°20'15" to the
-        East.  */
-
-  const dtParis = (2 + 20 / 60.0 + 15 / (60 * 60.0)) / 360
-  const equParis = equAPP + dtParis
-
-  return equParis
-}
-
-/*  PARIS_EQUINOXE_JD -- Calculate Julian day during which the
-                         September equinox, reckoned from the Paris
-                         meridian, occurred for a given Gregorian
-                         year.  */
-
-function parisEquinoxeJd (year) {
-  const ep = equinoxeAParis(year)
-  const epg = Math.floor(ep - 0.5) + 0.5
-
-  return epg
-}
-
-/*  ANNEE_DE_LA_REVOLUTION -- Determine the year in the French
-                              revolutionary calendar in which a
-                              given Julian day falls. Returns an
-                              array of two elements:
-
-                                  [0] Année de la Révolution
-                                  [1] Julian day number containing
-                                      equinox for this year
-*/
-
-const FRENCH_REVOLUTIONARY_EPOCH = 2375839.5
-
-function anneeDeLaRevolution (jd) {
-  let guess = jdToGregorian(jd)[0] - 2
-  let lasteq
-  let nexteq
-
-  lasteq = parisEquinoxeJd(guess)
-  while (lasteq > jd) {
-    guess--
-    lasteq = parisEquinoxeJd(guess)
-  }
-  nexteq = lasteq - 1
-  while (!(lasteq <= jd && jd < nexteq)) {
-    lasteq = nexteq
-    guess++
-    nexteq = parisEquinoxeJd(guess)
-  }
-  const adr =
-    Math.round((lasteq - FRENCH_REVOLUTIONARY_EPOCH) / TropicalYear) + 1
-
-  return [adr, lasteq]
-}
-
-/*  JD_TO_FRENCH_REVOLUTIONARY -- Calculate date in the French Revolutionary
-                                  calendar from Julian day. The five or six
-                                  "sansculottides" are considered a thirteenth
-                                  month in the results of this function.  */
-
-function jdToFrenchRevolutionary (jd) {
-  let jour
-
-  jd = Math.floor(jd) + 0.5
-  const adr = anneeDeLaRevolution(jd)
-  const an = adr[0]
-  const equinoxe = adr[1]
-  const mois = Math.floor((jd - equinoxe) / 30) + 1
-  jour = (jd - equinoxe) % 30
-  const decade = Math.floor(jour / 10) + 1
-  jour = (jour % 10) + 1
-
-  return [an, mois, decade, jour]
-}
-
-/*  FRENCH_REVOLUTIONARY_TO_JD -- Obtain Julian day from a given French
-                                  Revolutionary calendar date.  */
-
-function frenchRevolutionaryToJd (an, mois, decade, jour) {
-  let adr, guess
-
-  guess = FRENCH_REVOLUTIONARY_EPOCH + TropicalYear * (an - 1 - 1)
-  adr = [an - 1, 0]
-
-  while (adr[0] < an) {
-    adr = anneeDeLaRevolution(guess)
-    guess = adr[1] + (TropicalYear + 2)
-  }
-  const equinoxe = adr[1]
-
-  const jd = equinoxe + 30 * (mois - 1) + 10 * (decade - 1) + (jour - 1)
-  return jd
-}
-
 // LEAP_ISLAMIC -- Is a given year a leap year in the Islamic calendar?
 
 function leapIslamic (year) {
@@ -1072,14 +911,6 @@ function leapPersiana (year) {
   return persianaToJd(year + 1, 1, 1) - persianaToJd(year, 1, 1) > 365
 }
 
-// LEAP_PERSIAN -- Is a given year a leap year in the Persian calendar?
-
-function leapPersian (year) {
-  return (
-    ((((year - (year > 0 ? 474 : 473)) % 2820) + 474 + 38) * 682) % 2816 < 682
-  )
-}
-
 // PERSIAN_TO_JD -- Determine Julian day from Persian date
 
 function persianToJd (year, month, day) {
@@ -1124,183 +955,6 @@ function jdToPersian (jd) {
   return [year, month, day]
 }
 
-// MAYAN_COUNT_TO_JD -- Determine Julian day from Mayan long count
-
-const MAYAN_COUNT_EPOCH = 584282.5
-
-function mayanCountToJd (baktun, katun, tun, uinal, kin) {
-  return (
-    MAYAN_COUNT_EPOCH +
-    baktun * 144000 +
-    katun * 7200 +
-    tun * 360 +
-    uinal * 20 +
-    kin
-  )
-}
-
-// JD_TO_MAYAN_COUNT -- Calculate Mayan long count from Julian day
-
-function jdToMayanCount (jd) {
-  let d
-
-  jd = Math.floor(jd) + 0.5
-  d = jd - MAYAN_COUNT_EPOCH
-  const baktun = Math.floor(d / 144000)
-  d = mod(d, 144000)
-  const katun = Math.floor(d / 7200)
-  d = mod(d, 7200)
-  const tun = Math.floor(d / 360)
-  d = mod(d, 360)
-  const uinal = Math.floor(d / 20)
-  const kin = mod(d, 20)
-
-  return [baktun, katun, tun, uinal, kin]
-}
-
-// JD_TO_MAYAN_HAAB -- Determine Mayan Haab "month" and day from Julian day
-
-const MAYAN_HAAB_MONTHS = [
-  'Pop',
-  'Uo',
-  'Zip',
-  'Zotz',
-  'Tzec',
-  'Xul',
-  'Yaxkin',
-  'Mol',
-  'Chen',
-  'Yax',
-  'Zac',
-  'Ceh',
-  'Mac',
-  'Kankin',
-  'Muan',
-  'Pax',
-  'Kayab',
-  'Cumku',
-  'Uayeb'
-]
-
-function jdToMayanHaab (jd) {
-  jd = Math.floor(jd) + 0.5
-  const lcount = jd - MAYAN_COUNT_EPOCH
-  const day = mod(lcount + 8 + (18 - 1) * 20, 365)
-
-  return [Math.floor(day / 20) + 1, mod(day, 20)]
-}
-
-// JD_TO_MAYAN_TZOLKIN -- Determine Mayan Tzolkin "month" and day from Julian day
-
-const MAYAN_TZOLKIN_MONTHS = [
-  'Imix',
-  'Ik',
-  'Akbal',
-  'Kan',
-  'Chicchan',
-  'Cimi',
-  'Manik',
-  'Lamat',
-  'Muluc',
-  'Oc',
-  'Chuen',
-  'Eb',
-  'Ben',
-  'Ix',
-  'Men',
-  'Cib',
-  'Caban',
-  'Etznab',
-  'Cauac',
-  'Ahau'
-]
-
-function jdToMayanTzolkin (jd) {
-  jd = Math.floor(jd) + 0.5
-  const lcount = jd - MAYAN_COUNT_EPOCH
-  return [amod(lcount + 20, 20), amod(lcount + 4, 13)]
-}
-
-// INDIAN_CIVIL_TO_JD -- Obtain Julian day for Indian Civil date
-
-const INDIAN_CIVIL_WEEKDAYS = [
-  'ravivara',
-  'somavara',
-  'mangalavara',
-  'budhavara',
-  'brahaspativara',
-  'sukravara',
-  'sanivara'
-]
-
-function indianCivilToJd (year, month, day) {
-  let jd, m
-
-  const gyear = year + 78
-  const leap = leapGregorian(gyear) // Is this a leap year ?
-  const start = gregorianToJd(gyear, 3, leap ? 21 : 22)
-  const Caitra = leap ? 31 : 30
-
-  if (month === 1) {
-    jd = start + (day - 1)
-  } else {
-    jd = start + Caitra
-    m = month - 2
-    m = Math.min(m, 5)
-    jd += m * 31
-    if (month >= 8) {
-      m = month - 7
-      jd += m * 30
-    }
-    jd += day - 1
-  }
-
-  return jd
-}
-
-// JD_TO_INDIAN_CIVIL -- Calculate Indian Civil date from Julian day
-
-function jdToIndianCivil (jd) {
-  let year, yday, mday
-
-  const Saka = 79 - 1 // Offset in years from Saka era to Gregorian epoch
-  const start = 80 // Day offset between Saka and Gregorian
-
-  jd = Math.floor(jd) + 0.5
-  const greg = jdToGregorian(jd) // Gregorian date for Julian day
-  const leap = leapGregorian(greg[0]) // Is this a leap year?
-  year = greg[0] - Saka // Tentative year in Saka era
-  const greg0 = gregorianToJd(greg[0], 1, 1) // JD at start of Gregorian year
-  yday = jd - greg0 // Day number (0 based) in Gregorian year
-  const Caitra = leap ? 31 : 30 // Days in Caitra this year
-
-  if (yday < start) {
-    // Day is at the end of the preceding Saka year
-    year--
-    yday += Caitra + 31 * 5 + 30 * 3 + 10 + start
-  }
-
-  let month, day
-
-  yday -= start
-  if (yday < Caitra) {
-    month = 1
-    day = yday + 1
-  } else {
-    mday = yday - Caitra
-    if (mday < 31 * 5) {
-      month = Math.floor(mday / 31) + 2
-      day = (mday % 31) + 1
-    } else {
-      mday -= 31 * 5
-      month = Math.floor(mday / 30) + 7
-      day = (mday % 30) + 1
-    }
-  }
-
-  return [year, month, day]
-}
-
 /*  updateFromGregorian -- Update all calendars from Gregorian.
                            "Why not Julian date?" you ask. Because
                            starting from Gregorian guarantees we're
@@ -1312,10 +966,9 @@ function updateFromGregorian () {
   const year = Number(document.gregorian.year.value)
   const mon = document.gregorian.month.selectedIndex
   const mday = Number(document.gregorian.day.value)
-  let min = Number(document.gregorian.min.value)
-  let sec = Number(document.gregorian.sec.value)
-  let hour = (min = sec = 0)
-  hour = Number(document.gregorian.hour.value)
+  const hour = 0
+  const min = 0
+  const sec = 0
 
   // Update Julian day
 
@@ -1323,8 +976,7 @@ function updateFromGregorian () {
     gregorianToJd(year, mon + 1, mday) +
     Math.floor(sec + 60 * (min + 60 * hour) + 0.5) / 86400.0
 
-  document.julianday.day.value = j
-  document.modifiedjulianday.day.value = j - JMJD
+  julianDay = j
 
   // Update day of week in Gregorian box
 
@@ -1363,7 +1015,6 @@ function updateFromGregorian () {
   if (hmindex === 12 && !hebrewLeap(hebcal[0])) {
     hmindex = 14
   }
-  document.hebrew.hebmonth.src = 'figures/hebrew_month_0.gif'
   switch (hebrewYearDays(hebcal[0])) {
     case 353:
       document.hebrew.leap.value = 'Common deficient (353 days)'
@@ -1407,11 +1058,6 @@ function updateFromGregorian () {
   // Update Persian Calendar
 
   let perscal = jdToPersian(j)
-  document.persian.year.value = perscal[0]
-  document.persian.month.selectedIndex = perscal[1] - 1
-  document.persian.day.value = perscal[2]
-  document.persian.wday.value = PERSIAN_WEEKDAYS[weekday]
-  document.persian.leap.value = NormLeap[leapPersian(perscal[0]) ? 1 : 0]
 
   // Update Persian Astronomical Calendar
 
@@ -1422,75 +1068,11 @@ function updateFromGregorian () {
   document.persiana.wday.value = PERSIAN_WEEKDAYS[weekday]
   document.persiana.leap.value = NormLeap[leapPersiana(perscal[0]) ? 1 : 0]
 
-  // Update Mayan Calendars
-
-  const mayCountcal = jdToMayanCount(j)
-  document.mayancount.baktun.value = mayCountcal[0]
-  document.mayancount.katun.value = mayCountcal[1]
-  document.mayancount.tun.value = mayCountcal[2]
-  document.mayancount.uinal.value = mayCountcal[3]
-  document.mayancount.kin.value = mayCountcal[4]
-  const mayhaabcal = jdToMayanHaab(j)
-  document.mayancount.haab.value =
-    '' + mayhaabcal[1] + ' ' + MAYAN_HAAB_MONTHS[mayhaabcal[0] - 1]
-  const maytzolkincal = jdToMayanTzolkin(j)
-  document.mayancount.tzolkin.value =
-    '' + maytzolkincal[1] + ' ' + MAYAN_TZOLKIN_MONTHS[maytzolkincal[0] - 1]
-
-  // Update Indian Civil Calendar
-
-  const indcal = jdToIndianCivil(j)
-  document.indiancivilcalendar.year.value = indcal[0]
-  document.indiancivilcalendar.month.selectedIndex = indcal[1] - 1
-  document.indiancivilcalendar.day.value = indcal[2]
-  document.indiancivilcalendar.weekday.value = INDIAN_CIVIL_WEEKDAYS[weekday]
-  document.indiancivilcalendar.leap.value =
-    NormLeap[leapGregorian(indcal[0] + 78) ? 1 : 0]
-
-  // Update French Republican Calendar
-
-  const frrcal = jdToFrenchRevolutionary(j)
-  document.french.an.value = frrcal[0]
-  document.french.mois.selectedIndex = frrcal[1] - 1
-  document.french.decade.selectedIndex = frrcal[2] - 1
-  document.french.jour.selectedIndex =
-    (frrcal[1] <= 12 ? frrcal[3] : frrcal[3] + 11) - 1
-
   // Update Gregorian serial number
 
   if (document.gregserial != null) {
     document.gregserial.day.value = j - J0000
   }
-
-  // Update Excel 1900 and 1904 day serial numbers
-
-  document.excelserial1900.day.value =
-    j -
-    J1900 +
-    1 +
-    /*  Microsoft marching morons thought 1900 was a leap year.
-                Adjust dates after 1900-02-28 to compensate for their
-                idiocy.  */
-    (j > 2415078.5 ? 1 : 0)
-  document.excelserial1904.day.value = j - J1904
-
-  // Update Unix time()
-
-  const utime = (j - J1970) * (60 * 60 * 24 * 1000)
-  document.unixtime.time.value = Math.round(utime / 1000)
-
-  // Update ISO Week
-
-  const isoweek = jdToIso(j)
-  document.isoweek.year.value = isoweek[0]
-  document.isoweek.week.value = isoweek[1]
-  document.isoweek.day.value = isoweek[2]
-
-  // Update ISO Day
-
-  const isoday = jdToIsoDay(j)
-  document.isoday.year.value = isoday[0]
-  document.isoday.day.value = isoday[1]
 }
 
 // calcGregorian -- Perform calculation starting with a Gregorian date
@@ -1502,22 +1084,18 @@ function calcGregorian () {
 // calcJulian -- Perform calculation starting with a Julian date
 
 function calcJulian () {
-  const j = Number(document.julianday.day.value)
+  const j = julianDay
   const date = jdToGregorian(j)
-  const time = jhms(j)
   document.gregorian.year.value = date[0]
   document.gregorian.month.selectedIndex = date[1] - 1
   document.gregorian.day.value = date[2]
-  document.gregorian.hour.value = pad(time[0], 2, ' ')
-  document.gregorian.min.value = pad(time[1], 2, '0')
-  document.gregorian.sec.value = pad(time[2], 2, '0')
   updateFromGregorian()
 }
 
 // setJulian -- Set Julian date and update all calendars
 
 function setJulian (j) {
-  document.julianday.day.value = Number(j)
+  julianDay = Number(j)
   calcJulian()
 }
 
@@ -1565,19 +1143,6 @@ function calcIslamic () {
   )
 }
 
-// calcPersian -- Update from Persian calendar
-
-// eslint-disable-next-line no-unused-vars
-function calcPersian () {
-  setJulian(
-    persianToJd(
-      Number(document.persian.year.value),
-      document.persian.month.selectedIndex + 1,
-      Number(document.persian.day.value)
-    )
-  )
-}
-
 // calcPersiana -- Update from Persian astronomical calendar
 
 // eslint-disable-next-line no-unused-vars
@@ -1589,86 +1154,6 @@ function calcPersiana () {
       Number(document.persiana.day.value)
     ) + 0.5
   )
-}
-
-// calcMayanCount -- Update from the Mayan Long Count
-
-// eslint-disable-next-line no-unused-vars
-function calcMayanCount () {
-  setJulian(
-    mayanCountToJd(
-      Number(document.mayancount.baktun.value),
-      Number(document.mayancount.katun.value),
-      Number(document.mayancount.tun.value),
-      Number(document.mayancount.uinal.value),
-      Number(document.mayancount.kin.value)
-    )
-  )
-}
-
-// calcIndianCivilCalendar -- Update from Indian Civil Calendar
-
-// eslint-disable-next-line no-unused-vars
-function calcIndianCivilCalendar () {
-  setJulian(
-    indianCivilToJd(
-      Number(document.indiancivilcalendar.year.value),
-      document.indiancivilcalendar.month.selectedIndex + 1,
-      Number(document.indiancivilcalendar.day.value)
-    )
-  )
-}
-
-// calcFrench -- Update from French Republican calendar
-
-// eslint-disable-next-line no-unused-vars
-function calcFrench () {
-  let decade, j, mois
-
-  j = document.french.jour.selectedIndex
-  decade = document.french.decade.selectedIndex
-  mois = document.french.mois.selectedIndex
-
-  /*  If the currently selected day is one of the sansculottides,
-        adjust the index to be within that period and force the
-        decade to zero and the month to 12, designating the
-        intercalary interval.  */
-
-  if (j > 9) {
-    j -= 11
-    decade = 0
-    mois = 12
-  }
-
-  /*  If the selected month is the pseudo-month of the five or
-        six sansculottides, ensure that the decade is 0 and the day
-        number doesn't exceed six. To avoid additional overhead, we
-        don't test whether a day number of 6 is valid for this year,
-        but rather simply permit it to wrap into the first day of
-        the following year if this is a 365 day year.  */
-
-  if (mois === 12) {
-    decade = 0
-    if (j > 5) {
-      j = 0
-    }
-  }
-
-  setJulian(
-    frenchRevolutionaryToJd(
-      Number(document.french.an.value),
-      mois + 1,
-      decade + 1,
-      j + 1
-    )
-  )
-}
-
-// calcGregSerial -- Update from Gregorian serial day number
-
-// eslint-disable-next-line no-unused-vars
-function calcGregSerial () {
-  setJulian(Number(document.gregserial.day.value) + J0000)
 }
 
 // calcExcelSerial1900 -- Perform calculation starting with an Excel 1900 serial date
@@ -1757,8 +1242,6 @@ function setDateToToday () {
   document.gregorian.year.value = y
   document.gregorian.month.selectedIndex = today.getMonth()
   document.gregorian.day.value = today.getDate()
-  document.gregorian.hour.value = document.gregorian.min.value = document.gregorian.sec.value =
-    '00'
 }
 
 /*  presetDataToRequest -- Preset the Gregorian date to the
