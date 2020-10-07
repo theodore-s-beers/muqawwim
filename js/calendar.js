@@ -430,53 +430,10 @@ function equationOfTime (jd) {
                 This program is in the public domain.
 */
 
-/*  You may notice that a variety of array variables logically local
-    to functions are declared globally here. In JavaScript, construction
-    of an array variable from source code occurs as the code is
-    interpreted. Making these variables pseudo-globals permits us
-    to avoid overhead constructing and disposing of them in each
-    call on the function in which whey are used.  */
-
-const J0000 = 1721424.5 // Julian date of Gregorian epoch: 0000-01-01
-const J1970 = 2440587.5 // Julian date at Unix epoch: 1970-01-01
-const JMJD = 2400000.5 // Epoch of Modified Julian Date system
-const J1900 = 2415020.5 // Epoch (day 1) of Excel 1900 date system (PC)
-const J1904 = 2416480.5 // Epoch (day 0) of Excel 1904 date system (Mac)
-
 const NormLeap = ['Normal year', 'Leap year']
 
 // A global variable for the Julian day value
 let julianDay
-
-/*  WEEKDAY_BEFORE -- Return Julian date of given weekday (0 = Sunday)
-                      in the seven days ending on jd.  */
-
-function weekdayBefore (weekday, jd) {
-  return jd - jwday(jd - weekday)
-}
-
-/*  SEARCH_WEEKDAY -- Determine the Julian date for:
-
-          weekday     Day of week desired, 0 = Sunday
-          jd          Julian date to begin search
-          direction   1 = next weekday, -1 = last weekday
-          offset      Offset from jd to begin search
-
-*/
-
-function searchWeekday (weekday, jd, direction, offset) {
-  return weekdayBefore(weekday, jd + direction * offset)
-}
-
-// Utility weekday functions, just wrappers for searchWeekday
-
-function nextWeekday (weekday, jd) {
-  return searchWeekday(weekday, jd, 1, 7)
-}
-
-function previousWeekday (weekday, jd) {
-  return searchWeekday(weekday, jd, -1, 1)
-}
 
 // LEAP_GREGORIAN -- Is a given year in the Gregorian calendar a leap year?
 
@@ -529,29 +486,6 @@ function jdToGregorian (jd) {
   const day = wjd - gregorianToJd(year, month, 1) + 1
 
   return [year, month, day]
-}
-
-// ISO_TO_JULIAN -- Return Julian day of given ISO year, week, and day
-
-function nWeeks (weekday, jd, nthweek) {
-  let j = 7 * nthweek
-
-  if (nthweek > 0) {
-    j += previousWeekday(weekday, jd)
-  } else {
-    j += nextWeekday(weekday, jd)
-  }
-  return j
-}
-
-function isoToJulian (year, week, day) {
-  return day + nWeeks(0, gregorianToJd(year - 1, 12, 28), week)
-}
-
-// ISO_DAY_TO_JULIAN -- Return Julian day of given ISO year, and day of year
-
-function isoDayToJulian (year, day) {
-  return day - 1 + gregorianToJd(year, 1, 1)
 }
 
 // JULIAN_TO_JD -- Determine Julian day number from Julian calendar date
@@ -1067,12 +1001,6 @@ function updateFromGregorian () {
   document.persiana.day.value = perscal[2]
   document.persiana.wday.value = PERSIAN_WEEKDAYS[weekday]
   document.persiana.leap.value = NormLeap[leapPersiana(perscal[0]) ? 1 : 0]
-
-  // Update Gregorian serial number
-
-  if (document.gregserial != null) {
-    document.gregserial.day.value = j - J0000
-  }
 }
 
 // calcGregorian -- Perform calculation starting with a Gregorian date
@@ -1097,12 +1025,6 @@ function calcJulian () {
 function setJulian (j) {
   julianDay = Number(j)
   calcJulian()
-}
-
-// calcModifiedJulian -- Update from Modified Julian day
-
-function calcModifiedJulian () {
-  setJulian(Number(document.modifiedjulianday.day.value) + JMJD)
 }
 
 // calcJulianCalendar -- Update from Julian calendar
@@ -1154,62 +1076,6 @@ function calcPersiana () {
       Number(document.persiana.day.value)
     ) + 0.5
   )
-}
-
-// calcExcelSerial1900 -- Perform calculation starting with an Excel 1900 serial date
-
-function calcExcelSerial1900 () {
-  let d = Number(document.excelserial1900.day.value)
-
-  /* Idiot Kode Kiddies didn't twig to the fact
-       (proclaimed in 1582) that 1900 wasn't a leap year,
-       so every Excel day number in every database on Earth
-       which represents a date subsequent to February 28,
-       1900 is off by one. Note that there is no
-       acknowledgement of this betrayal or warning of its
-       potential consequences in the Excel help file. Thank
-       you so much Mister Talking Paper Clip. Some day
-       we're going to celebrate your extinction like it was
-       February 29 ... 1900.  */
-
-  if (d > 60) {
-    d--
-  }
-
-  setJulian(d - 1 + J1900)
-}
-
-// calcExcelSerial1904 -- Perform calculation starting with an Excel 1904 serial date
-
-function calcExcelSerial1904 () {
-  setJulian(Number(document.excelserial1904.day.value) + J1904)
-}
-
-// calcUnixTime -- Update from specified Unix time() value
-
-function calcUnixTime () {
-  const t = Number(document.unixtime.time.value)
-
-  setJulian(J1970 + t / (60 * 60 * 24))
-}
-
-// calcIsoWeek -- Update from specified ISO year, week, and day
-
-function calcIsoWeek () {
-  const year = Number(document.isoweek.year.value)
-  const week = Number(document.isoweek.week.value)
-  const day = Number(document.isoweek.day.value)
-
-  setJulian(isoToJulian(year, week, day))
-}
-
-// calcIsoDay -- Update from specified ISO year and day of year
-
-function calcIsoDay () {
-  const year = Number(document.isoday.year.value)
-  const day = Number(document.isoday.day.value)
-
-  setJulian(isoDayToJulian(year, day))
 }
 
 /*  setDateToToday -- Preset the fields in
@@ -1335,65 +1201,6 @@ function presetDataToRequest (s) {
         set = 1
       } else {
         console.log('Invalid Julian day "' + date + '" in search request')
-      }
-    } else if (calendar.toLowerCase() === 'mjd') {
-      d = date.match(/^(-?\d+\.?\d*)/)
-      if (d != null) {
-        document.modifiedjulianday.day.value = d[1]
-        calcModifiedJulian()
-        set = 1
-      } else {
-        console.log(
-          'Invalid Modified Julian day "' + date + '" in search request'
-        )
-      }
-    } else if (calendar.toLowerCase() === 'unixtime') {
-      d = date.match(/^(-?\d+\.?\d*)/)
-      if (d != null) {
-        document.unixtime.time.value = d[1]
-        calcUnixTime()
-        set = 1
-      } else {
-        console.log(
-          'Invalid Modified Julian day "' + date + '" in search request'
-        )
-      }
-    } else if (calendar.toLowerCase() === 'iso') {
-      if ((d = date.match(/^(-?\d+)-(\d\d\d)/)) != null) {
-        document.isoday.year.value = d[1]
-        document.isoday.day.value = d[2]
-        calcIsoDay()
-        set = 1
-      } else if ((d = date.match(/^(-?\d+)-?W(\d\d)-?(\d)/i)) != null) {
-        document.isoweek.year.value = d[1]
-        document.isoweek.week.value = d[2]
-        document.isoweek.day.value = d[3]
-        calcIsoWeek()
-        set = 1
-      } else {
-        console.log('Invalid ISO-8601 date "' + date + '" in search request')
-      }
-    } else if (calendar.toLowerCase() === 'excel') {
-      d = date.match(/^(-?\d+\.?\d*)/)
-      if (d != null) {
-        document.excelserial1900.day.value = d[1]
-        calcExcelSerial1900()
-        set = 1
-      } else {
-        console.log(
-          'Invalid Excel serial day (1900/PC) "' + date + '" in search request'
-        )
-      }
-    } else if (calendar.toLowerCase() === 'excel1904') {
-      d = date.match(/^(-?\d+\.?\d*)/)
-      if (d != null) {
-        document.excelserial1904.day.value = d[1]
-        calcExcelSerial1904()
-        set = 1
-      } else {
-        console.log(
-          'Invalid Excel serial day (1904/Mac) "' + date + '" in search request'
-        )
       }
     } else {
       console.log('Invalid calendar "' + calendar + '" in search request')
