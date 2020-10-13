@@ -24,6 +24,6 @@
   "homepage": "https://github.com/theodore-s-beers/calendars#readme",
   "devDependencies": {
     "standard": "^14.3.4",
-    "terser": "^5.3.4"
+    "terser": "^5.3.5"
   }
 }
