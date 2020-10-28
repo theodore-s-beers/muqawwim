@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/theodore-s-beers/calendars#readme",
   "devDependencies": {
-    "standard": "^15.0.0",
+    "standard": "^15.0.1",
     "terser": "^5.3.8"
   }
 }
