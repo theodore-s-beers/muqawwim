@@ -914,7 +914,7 @@ function updateFromGregorian () {
 
   // Update day of week in Gregorian box
 
-  let weekday = jwday(j)
+  const weekday = jwday(j)
   document.gregorian.wday.value = Weekdays[weekday]
 
   // Update leap year status in Gregorian box
@@ -928,7 +928,6 @@ function updateFromGregorian () {
   document.juliancalendar.month.selectedIndex = julcal[1] - 1
   document.juliancalendar.day.value = julcal[2]
   document.juliancalendar.leap.value = NormLeap[leapJulian(julcal[0]) ? 1 : 0]
-  weekday = jwday(j)
   document.juliancalendar.wday.value = Weekdays[weekday]
 
   // Update Hebrew Calendar
