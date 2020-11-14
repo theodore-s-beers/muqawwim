@@ -2,26 +2,26 @@
   "name": "muqawwim",
   "version": "1.0.0",
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars.",
-  "main": "./js/calendar.js",
-  "scripts": {
-    "minify": "terser ./js/calendar.js --mangle --source-map -o ./js/calendar.min.js",
-    "standardize": "standard --fix ./js/calendar.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [
+    "calendars",
+    "muqawwim"
+  ],
+  "homepage": "https://github.com/theodore-s-beers/calendars#readme",
+  "bugs": {
+    "url": "https://github.com/theodore-s-beers/calendars/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theodore-s-beers/calendars.git"
   },
-  "keywords": [
-    "calendars",
-    "muqawwim"
-  ],
-  "author": "Theo Beers",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/theodore-s-beers/calendars/issues"
+  "author": "Theo Beers",
+  "main": "./js/calendar.js",
+  "scripts": {
+    "minify": "terser ./js/calendar.js --mangle --source-map --output ./js/calendar.min.js",
+    "standardize": "standard --fix ./js/calendar.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/theodore-s-beers/calendars#readme",
   "devDependencies": {
     "standard": "^16.0.2",
     "terser": "^5.3.8"

@@ -730,12 +730,16 @@
     </script>
     <script src="js/extras.js"></script>
     <script>
-      $("#greg-calc-btn").on("click", extras);
-      $("#greg-today-btn").on("click", extras);
-      $("#julian-btn").on("click", extras);
-      $("#hebrew-btn").on("click", extras);
-      $("#islamic-btn").on("click", extras);
-      $("#pers-btn").on("click", extras);
+      document
+        .getElementById("greg-calc-btn")
+        .addEventListener("click", extras);
+      document
+        .getElementById("greg-today-btn")
+        .addEventListener("click", extras);
+      document.getElementById("julian-btn").addEventListener("click", extras);
+      document.getElementById("hebrew-btn").addEventListener("click", extras);
+      document.getElementById("islamic-btn").addEventListener("click", extras);
+      document.getElementById("pers-btn").addEventListener("click", extras);
     </script>
   </body>
 </html>
