@@ -24,6 +24,6 @@
   },
   "devDependencies": {
     "standard": "^16.0.2",
-    "terser": "^5.3.8"
+    "terser": "^5.4.0"
   }
 }
