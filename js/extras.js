@@ -60,6 +60,61 @@ function animalCalc () {
   }
 }
 
+// Function for Ottoman fiscal years
+function ottomanFiscalCalc () {
+  // Hooray for more variables
+  const ottomanFiscalAnswer = document.getElementById('ottoman-fiscal')
+  const julianYear = document.juliancalendar.year.value
+  const julianMonthIndex = document.juliancalendar.month.selectedIndex
+  const ottomanFiscalDay = document.juliancalendar.day.value
+
+  let ottomanFiscalYear
+  let ottomanFiscalMonth
+
+  // Set the Ottoman equivalent month
+  if (julianMonthIndex === 0) {
+    ottomanFiscalMonth = 'Kanun-i-sani'
+  } else if (julianMonthIndex === 1) {
+    ottomanFiscalMonth = 'Shobat'
+  } else if (julianMonthIndex === 2) {
+    ottomanFiscalMonth = 'Mart'
+  } else if (julianMonthIndex === 3) {
+    ottomanFiscalMonth = 'Nisan'
+  } else if (julianMonthIndex === 4) {
+    ottomanFiscalMonth = 'Mayis'
+  } else if (julianMonthIndex === 5) {
+    ottomanFiscalMonth = 'Haziran'
+  } else if (julianMonthIndex === 6) {
+    ottomanFiscalMonth = 'Temmuz'
+  } else if (julianMonthIndex === 7) {
+    ottomanFiscalMonth = 'Aghostos'
+  } else if (julianMonthIndex === 8) {
+    ottomanFiscalMonth = 'Eylul'
+  } else if (julianMonthIndex === 9) {
+    ottomanFiscalMonth = 'Tishrin-i-evel'
+  } else if (julianMonthIndex === 10) {
+    ottomanFiscalMonth = 'Tishrin-i-sani'
+  } else {
+    ottomanFiscalMonth = 'Kanun-i-evel'
+  }
+
+  // The Ottoman fiscal year clicks over as of March
+  // So the difference from the Julian year is 584, except in Jan. and Feb.
+  if (julianMonthIndex >= 2) {
+    ottomanFiscalYear = julianYear - 584
+  } else {
+    ottomanFiscalYear = julianYear - 585
+  }
+
+  // Only show this date between 1840-03-01 and 1916-12-31 Julian
+  if (ottomanFiscalYear >= 1256 && julianYear < 1917) {
+    ottomanFiscalAnswer.innerHTML = `In the Ottoman fiscal calendar, as it was followed from 1840 through 1916 Julian, this date is <strong>${ottomanFiscalDay} ${ottomanFiscalMonth} ${ottomanFiscalYear}</strong>.`
+  } else {
+    ottomanFiscalAnswer.innerHTML =
+      '<em>Ottoman fiscal calendar equivalents will be given for Julian dates between 1840-03-01 and 1916-12-31.</em>'
+  }
+}
+
 // Function for Seleucid era
 function seleucidCalc () {
   // Define variables; calculate result
@@ -77,8 +132,17 @@ function seleucidCalc () {
 // Combine functions
 function extras () {
   animalCalc()
+  ottomanFiscalCalc()
   seleucidCalc()
 }
 
 // Run functions on page load
 extras()
+
+// Event listeners for extra functions
+document.getElementById('greg-calc-btn').addEventListener('click', extras)
+document.getElementById('greg-today-btn').addEventListener('click', extras)
+document.getElementById('julian-btn').addEventListener('click', extras)
+document.getElementById('hebrew-btn').addEventListener('click', extras)
+document.getElementById('islamic-btn').addEventListener('click', extras)
+document.getElementById('pers-btn').addEventListener('click', extras)

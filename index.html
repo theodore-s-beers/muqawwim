@@ -10,7 +10,7 @@
     <meta content="Theo Beers" name="author" />
     <meta
       name="description"
-      content="Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars."
+      content="Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars"
     />
     <meta
       property="og:title"
@@ -299,6 +299,14 @@
           </tr>
         </table>
       </form>
+      <div class="card border-info mb-3" style="max-width: 36rem">
+        <div class="card-body text-info">
+          <p class="card-text" id="ottoman-fiscal">
+            In the Ottoman fiscal calendar, as it was followed from 1840 through
+            1916 Julian, this date is …
+          </p>
+        </div>
+      </div>
       <h2>Hebrew Calendar</h2>
       <form action="JavaScript:calcHebrew();" id="hebrew" name="hebrew">
         <table
@@ -729,17 +737,5 @@
       }
     </script>
     <script src="js/extras.js"></script>
-    <script>
-      document
-        .getElementById("greg-calc-btn")
-        .addEventListener("click", extras);
-      document
-        .getElementById("greg-today-btn")
-        .addEventListener("click", extras);
-      document.getElementById("julian-btn").addEventListener("click", extras);
-      document.getElementById("hebrew-btn").addEventListener("click", extras);
-      document.getElementById("islamic-btn").addEventListener("click", extras);
-      document.getElementById("pers-btn").addEventListener("click", extras);
-    </script>
   </body>
 </html>
