@@ -1,0 +1,21 @@
+For the first two months of 1903 Julian, the Ottoman fiscal year was still 1318. This represents a difference of 585.
+
+Then, on 1 March 1903 Julian, the Ottoman fiscal year clicked over to 1319. This represents a difference of 584.
+
+So it can be said that the difference is 585 for dates before March, and 584 for dates as of March.
+
+Ottoman equivalent months:
+0 = January = Kânun-ı Sani
+1 = February = Şubat
+2 = March = Mart
+3 = April = Nisan
+4 = May = Mayıs
+5 = June = Haziran
+6 = July = Temmuz
+7 = August = Ağustos
+8 = September = Eylül
+9 = October = Teşrin-i Evvel
+10 = November = Teşrin-i Sani
+11 = December = Kânun-ı Evvel
+
+Let's assume, preliminarily, that the conversion details outlined above were valid between 1840-03-01 and 1916-12-31 Julian.
