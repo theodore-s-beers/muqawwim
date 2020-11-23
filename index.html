@@ -65,6 +65,17 @@
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
+      .table-bordered {
+        border-collapse: separate;
+        border-radius: 0.25rem;
+        border-spacing: 0px;
+      }
+      .table-bordered td {
+        border-width: 0;
+      }
+      .table-bordered .top-row {
+        border-bottom-width: 1px;
+      }
     </style>
   </head>
   <body>
@@ -80,7 +91,7 @@
       </script>
       <p>
         This is a simple calendar conversion utility that displays a given date
-        according to five different standards:
+        according to five primary standards:
         <a
           href="https://en.wikipedia.org/wiki/Gregorian_calendar"
           rel="noopener"
@@ -112,17 +123,24 @@
           >Solar Hijri</a
         >). Change the date in any of the tables below, then click the
         corresponding “Calculate” button, and the equivalent date will appear in
-        the other four calendars. In the Hebrew case, the year is also listed
-        according to the
+        the other four calendars. There is now limited support for the Ottoman
+        fiscal (or
+        <a
+          href="https://en.wikipedia.org/wiki/Rumi_calendar"
+          rel="noopener"
+          target="_blank"
+          >Rumi</a
+        >) calendar, a Julian derivative. In the Hebrew case, the year is also
+        listed according to the
         <a
           href="https://en.wikipedia.org/wiki/Seleucid_era"
           rel="noopener"
           target="_blank"
           >Seleucid era</a
-        >. For the benefit of historians of the later medieval and early modern
-        Persianate world, this page further indicates the
+        >. And for the benefit of historians of the later medieval and early
+        modern Persianate world, this converter further indicates the
         <em>animal year</em> in which the given date falls. (See the “Notes and
-        References” section below for further discussion of such arcane points.)
+        References” section below for discussion of such arcane points.)
       </p>
       <p>
         The core of this project was adapted from the more extensive work of
@@ -150,7 +168,7 @@
           style="max-width: 36rem; text-align: center"
         >
           <tr>
-            <td>
+            <td class="top-row">
               <input
                 aria-label="Gregorian year"
                 id="greg-year"
@@ -236,7 +254,7 @@
           style="max-width: 36rem; text-align: center"
         >
           <tr>
-            <td>
+            <td class="top-row">
               <input
                 aria-label="Julian year"
                 id="julian-year"
@@ -314,7 +332,7 @@
           style="max-width: 36rem; text-align: center"
         >
           <tr>
-            <td>
+            <td class="top-row">
               <input
                 aria-label="Hebrew year"
                 name="year"
@@ -384,7 +402,7 @@
           style="max-width: 36rem; text-align: center"
         >
           <tr>
-            <td>
+            <td class="top-row">
               <input
                 aria-label="Islamic year"
                 id="islamic-year"
@@ -458,7 +476,7 @@
           style="max-width: 36rem; text-align: center"
         >
           <tr>
-            <td>
+            <td class="top-row">
               <input
                 aria-label="Persian year"
                 id="pers-year"
@@ -545,8 +563,8 @@
             ><h2>Notes and References</h2></a
           >
           <div class="collapse" id="notes" role="tabpanel">
-            <ul>
-              <li>
+            <ul class="list-group">
+              <li class="list-group-item">
                 Calendrical problems can be notoriously difficult for historians
                 to resolve. After all, a calendar is no better than the way in
                 which it has been observed by particular institutions, or the
@@ -556,34 +574,16 @@
                 unlikely to answer all questions. The idea is to provide
                 accurate calculations assuming ideal circumstances.
               </li>
-              <li>
+              <li class="list-group-item">
                 If you find that a certain date appears to have been converted
                 incorrectly on this page, please let me know
                 <a href="mailto:tbeers@uchicago.edu">by email</a>. (This would
-                come as a surprise. I’ve relied on the algorithms coded by John
-                Walker for years, with nary a problem.)
+                come as a surprise. I’ve relied on the algorithms as coded by
+                John Walker for years, with nary a problem.)
               </li>
-              <li>
-                In the Hebrew calendar widget, the months are listed starting
-                with Nisan, but each new year begins with Tishrei. This is
-                simply a point of convention. With regard to the Seleucid era, I
-                have followed the method of subtracting 3,449 from
-                <em>anno mundi</em>. That is, Seleucid year 1 opens with the
-                month of Tishrei in 3450 AM, or September 312 BCE in the Julian
-                calendar. If I have understood correctly, this was the
-                predominant way of reckoning the Seleucid era in Jewish
-                contexts. See the
-                <a
-                  href="https://iranicaonline.org/articles/seleucid-era"
-                  rel="noopener"
-                  target="_blank"
-                  >Encyclopædia Iranica</a
-                >
-                entry for a bit more background discussion.
-              </li>
-              <li>
-                In several of the Arab countries that use the Gregorian calendar
-                for civil purposes, a different
+              <li class="list-group-item">
+                In several of the Arab countries in which the Gregorian calendar
+                is used for civil purposes, a different
                 <a
                   href="https://en.wikipedia.org/wiki/Arabic_names_of_calendar_months"
                   rel="noopener"
@@ -602,7 +602,59 @@
                 Persian (as in the Iranian version shown above). And there is
                 yet another naming convention in Pashto!
               </li>
-              <li>
+              <li class="list-group-item">
+                The Ottoman fiscal calendar, also known as the Rumi calendar,
+                represented a way for the Ottoman government to set dates for
+                various administrative processes—<em>e.g.</em>, collecting taxes
+                and paying the army—that would remain in synchronization with
+                the seasons. The value of this, as a complement to the lunar
+                Islamic calendar, should be obvious. As early as 1740 CE, the
+                Ottomans were using the Julian date of 1 March as the beginning
+                of the fiscal year; and this system was developed further over
+                time. There are a number of complications associated with this
+                calendrical practice. The idea, at least initially, was for the
+                numbering of years in the solar fiscal calendar to be kept in
+                alignment with the Islamic calendar. This required
+                <em>dropping</em> a year from the former every three decades.
+                Eventually, as part of the
+                <a
+                  href="https://en.wikipedia.org/wiki/Tanzimat"
+                  rel="noopener"
+                  target="_blank"
+                  >Tanzimat</a
+                >
+                reforms of 1839, it was decreed that the Julian calendar would
+                be observed in a more systematic manner, in a variety of
+                administrative contexts. From 1840 through early 1917 (when the
+                policy was changed again), the Ottoman fiscal calendar followed
+                relatively straightforward rules. The year began on 1 March, and
+                the numbering reflected the Islamic, rather than the Christian
+                era. The months had different names but otherwise tracked the
+                Julian system. Converting from one to the other is simple. And
+                so I have added support for this calendar, preliminarily, for
+                the aforementioned period. The range may be expanded at some
+                point. For a more detailed overview of the Ottoman fiscal
+                calendar, see <a href="./files/rose.pdf">this article</a> by
+                Richard B. Rose.
+              </li>
+              <li class="list-group-item">
+                In the Hebrew calendar widget, the months are listed starting
+                with Nisan, but each new year begins with Tishrei. This is
+                simply a matter of convention. With regard to the Seleucid era,
+                I have followed the method of subtracting 3,449 from
+                <em>anno mundi</em>. That is, Seleucid year 1 opens with the
+                month of Tishrei in 3450 AM, or September 312 BCE in the Julian
+                calendar. If I have understood correctly, this was the prevalent
+                way of reckoning the Seleucid era in Jewish contexts. See the
+                <a
+                  href="https://iranicaonline.org/articles/seleucid-era"
+                  rel="noopener"
+                  target="_blank"
+                  >Encyclopædia Iranica</a
+                >
+                entry for a bit more background discussion.
+              </li>
+              <li class="list-group-item">
                 It should be noted that the Persian calendar included above is
                 the version adopted in Iran in 1925, as a modernization of the
                 <a
@@ -636,7 +688,7 @@
                 Iranian history. The practical significance of this will become
                 clear in the following note…
               </li>
-              <li>
+              <li class="list-group-item">
                 Most people are likely familiar with the
                 <a
                   href="https://en.wikipedia.org/wiki/Chinese_zodiac"
@@ -672,7 +724,7 @@
                 so we need only a bit of modular arithmetic to calculate the
                 animal sign associated with any date.
               </li>
-              <li>
+              <li class="list-group-item">
                 For more on the use of the twelve-animal cycle in Persian, see
                 <a href="files/melville.pdf" rel="noopener" target="_blank"
                   >this journal article</a
@@ -683,7 +735,7 @@
                 >
                 by Robert D. McChesney (of NYU).
               </li>
-              <li>
+              <li class="list-group-item">
                 It may go without saying, but users of this program should
                 exercise care when interpreting results, in proportion to the
                 degree of precision that is required, and with particular

@@ -73,29 +73,29 @@ function ottomanFiscalCalc () {
 
   // Set the Ottoman equivalent month
   if (julianMonthIndex === 0) {
-    ottomanFiscalMonth = 'Kanun-i-sani'
+    ottomanFiscalMonth = 'Kânun-ı Sani'
   } else if (julianMonthIndex === 1) {
-    ottomanFiscalMonth = 'Shobat'
+    ottomanFiscalMonth = 'Şubat'
   } else if (julianMonthIndex === 2) {
     ottomanFiscalMonth = 'Mart'
   } else if (julianMonthIndex === 3) {
     ottomanFiscalMonth = 'Nisan'
   } else if (julianMonthIndex === 4) {
-    ottomanFiscalMonth = 'Mayis'
+    ottomanFiscalMonth = 'Mayıs'
   } else if (julianMonthIndex === 5) {
     ottomanFiscalMonth = 'Haziran'
   } else if (julianMonthIndex === 6) {
     ottomanFiscalMonth = 'Temmuz'
   } else if (julianMonthIndex === 7) {
-    ottomanFiscalMonth = 'Aghostos'
+    ottomanFiscalMonth = 'Ağustos'
   } else if (julianMonthIndex === 8) {
-    ottomanFiscalMonth = 'Eylul'
+    ottomanFiscalMonth = 'Eylül'
   } else if (julianMonthIndex === 9) {
-    ottomanFiscalMonth = 'Tishrin-i-evel'
+    ottomanFiscalMonth = 'Teşrin-i Evvel'
   } else if (julianMonthIndex === 10) {
-    ottomanFiscalMonth = 'Tishrin-i-sani'
+    ottomanFiscalMonth = 'Teşrin-i Sani'
   } else {
-    ottomanFiscalMonth = 'Kanun-i-evel'
+    ottomanFiscalMonth = 'Kânun-ı Evvel'
   }
 
   // The Ottoman fiscal year clicks over as of March
