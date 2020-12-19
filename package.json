@@ -1,6 +1,6 @@
 {
   "name": "muqawwim",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars",
   "keywords": [
     "calendars",
@@ -19,7 +19,7 @@
   "main": "./js/calendar.js",
   "scripts": {
     "extras": "standard --fix ./js/extras.js",
-    "minify": "terser ./js/calendar.js --mangle --source-map --output ./js/calendar.min.js",
+    "minify": "terser ./js/calendar.js --mangle --source-map url=calendar.min.js.map --output ./js/calendar.min.js",
     "standardize": "standard --fix ./js/calendar.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
