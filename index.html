@@ -29,6 +29,12 @@
     <link href="img/icon-192.png" rel="apple-touch-icon" type="image/png" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <style>
+      :root {
+        --fixed-blue: #0071eb;
+      }
+      a {
+        color: var(--fixed-blue);
+      }
       h1 {
         font-size: 210%;
       }
@@ -65,6 +71,10 @@
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
+      .btn-primary {
+        background-color: var(--fixed-blue);
+        border-color: var(--fixed-blue);
+      }
       .table-bordered {
         border-collapse: separate;
         border-radius: 0.25rem;
@@ -75,6 +85,9 @@
       }
       .table-bordered .top-row {
         border-bottom-width: 1px;
+      }
+      .text-info {
+        color: #24828f !important;
       }
     </style>
   </head>
@@ -208,7 +221,7 @@
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top: 0.25em; color: #228b22; width: 9.1em"
+                style="margin-top: 0.25em; color: #218721; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -216,7 +229,7 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; width: 9em"
+                style="color: #218721; width: 9em"
                 type="text"
                 value=""
               />
@@ -225,14 +238,12 @@
           <tr>
             <td>
               <input
-                class="btn btn-primary"
+                class="btn btn-primary mr-3"
                 id="greg-calc-btn"
                 onclick="calcGregorian();"
                 type="submit"
                 value="Calculate"
-              />
-              &ensp;
-              <input
+              /><input
                 class="btn btn-secondary"
                 id="greg-today-btn"
                 onclick="setDateToToday();calcGregorian();"
@@ -290,7 +301,7 @@
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top: 0.25em; color: #228b22; width: 9.1em"
+                style="margin-top: 0.25em; color: #218721; width: 9.1em"
                 type="text"
                 value=""
               />
@@ -298,7 +309,7 @@
                 aria-label="Weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; width: 9em"
+                style="color: #218721; width: 9em"
                 type="text"
                 value=""
               />
@@ -370,7 +381,7 @@
                 readonly="readonly"
                 type="text"
                 value=""
-                style="margin-top: 0.25em; color: #228b22; width: 18.3em"
+                style="margin-top: 0.25em; color: #218721; width: 18.3em"
               />
             </td>
           </tr>
@@ -442,7 +453,7 @@
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top: 0.25em; color: #228b22; width: 8.8em"
+                style="margin-top: 0.25em; color: #218721; width: 8.8em"
                 type="text"
                 value=""
               />
@@ -450,7 +461,7 @@
                 aria-label="Arabic weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; width: 10.8em"
+                style="color: #218721; width: 10.8em"
                 type="text"
                 value=""
               />
@@ -516,7 +527,7 @@
                 aria-label="Normal or leap year"
                 name="leap"
                 readonly="readonly"
-                style="margin-top: 0.25em; color: #228b22; width: 8.9em"
+                style="margin-top: 0.25em; color: #218721; width: 8.9em"
                 type="text"
                 value=""
               />
@@ -524,7 +535,7 @@
                 aria-label="Persian weekday"
                 name="wday"
                 readonly="readonly"
-                style="color: #228b22; width: 10.2em"
+                style="color: #218721; width: 10.2em"
                 type="text"
                 value=""
               />
