@@ -34,6 +34,10 @@
       }
       a {
         color: var(--fixed-blue);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
       }
       h1 {
         font-size: 210%;
@@ -71,20 +75,12 @@
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
+      .border-info {
+        border-color: #17a2b8 !important;
+      }
       .btn-primary {
         background-color: var(--fixed-blue);
         border-color: var(--fixed-blue);
-      }
-      .table-bordered {
-        border-collapse: separate;
-        border-radius: 0.25rem;
-        border-spacing: 0px;
-      }
-      .table-bordered td {
-        border-width: 0;
-      }
-      .table-bordered .top-row {
-        border-bottom-width: 1px;
       }
       .text-info {
         color: #24828f !important;
@@ -237,19 +233,22 @@
           </tr>
           <tr>
             <td>
-              <input
-                class="btn btn-primary mr-3"
+              <button
+                class="btn btn-primary"
                 id="greg-calc-btn"
                 onclick="calcGregorian();"
                 type="submit"
-                value="Calculate"
-              /><input
+                style="margin-right: 1em"
+              >
+                Calculate</button
+              ><button
                 class="btn btn-secondary"
                 id="greg-today-btn"
                 onclick="setDateToToday();calcGregorian();"
                 type="button"
-                value="Today"
-              />
+              >
+                Today
+              </button>
             </td>
           </tr>
         </table>
@@ -317,13 +316,14 @@
           </tr>
           <tr>
             <td>
-              <input
+              <button
                 class="btn btn-primary"
                 id="julian-btn"
                 onclick="calcJulianCalendar();"
                 type="submit"
-                value="Calculate"
-              />
+              >
+                Calculate
+              </button>
             </td>
           </tr>
         </table>
@@ -387,13 +387,14 @@
           </tr>
           <tr>
             <td>
-              <input
+              <button
                 onclick="calcHebrew();"
-                value="Calculate"
                 class="btn btn-primary"
                 type="submit"
                 id="hebrew-btn"
-              />
+              >
+                Calculate
+              </button>
             </td>
           </tr>
         </table>
@@ -469,13 +470,14 @@
           </tr>
           <tr>
             <td>
-              <input
+              <button
                 class="btn btn-primary"
                 id="islamic-btn"
                 onclick="calcIslamic();"
                 type="submit"
-                value="Calculate"
-              />
+              >
+                Calculate
+              </button>
             </td>
           </tr>
         </table>
@@ -543,13 +545,14 @@
           </tr>
           <tr>
             <td>
-              <input
+              <button
                 class="btn btn-primary"
                 id="pers-btn"
                 onclick="calcPersiana();"
                 type="submit"
-                value="Calculate"
-              />
+              >
+                Calculate
+              </button>
             </td>
           </tr>
         </table>
@@ -563,17 +566,19 @@
         </div>
       </div>
       <hr />
-      <div data-children=".item" id="notes-accordion">
-        <div class="item">
-          <a
-            aria-controls="notes"
-            aria-expanded="false"
-            data-parent="#notes-accordion"
-            data-toggle="collapse"
-            href="#notes"
-            ><h2>Notes and References</h2></a
-          >
-          <div class="collapse" id="notes" role="tabpanel">
+      <div class="accordion" id="notes-accordion">
+        <div class="accordion-item">
+          <h2>
+            <a
+              aria-controls="notes"
+              aria-expanded="false"
+              data-bs-target="#notes"
+              data-bs-toggle="collapse"
+              href="#notes"
+              >Notes and References</a
+            >
+          </h2>
+          <div class="collapse" id="notes">
             <ul class="list-group">
               <li class="list-group-item">
                 Calendrical problems can be notoriously difficult for historians
@@ -764,7 +769,7 @@
       </div>
       <hr />
       <p>
-        &copy; 2018&#8202;–20
+        &copy; 2018&#8202;–21
         <a href="https://www.theobeers.com/" rel="noopener" target="_blank"
           >T. S. Beers</a
         ><br />The files relating to this page are available
@@ -784,9 +789,7 @@
         let me know <a href="mailto:tbeers@uchicago.edu">by email</a>!
       </p>
     </div>
-    <script src="js/jquery-3.5.1.slim.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/calendar.min.js"></script>
     <script>
       // Set current date on page load
