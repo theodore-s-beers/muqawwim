@@ -1,0 +1,101 @@
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+h1 {
+  font-size: 210%;
+}
+h2 {
+  font-size: 160%;
+}
+input {
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+li,
+p {
+  hyphens: auto;
+}
+select {
+  height: calc(1.5em + 0.75rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+table {
+  max-width: 36rem;
+  text-align: center;
+}
+.border-info {
+  border-color: #17a2b8 !important;
+}
+.card {
+  max-width: 36rem;
+}
+.container {
+  margin-top: 0.6rem;
+  max-width: 1100px;
+}
+.green-input {
+  color: #218721;
+}
+.nudge-margin {
+  margin-top: 0.25em;
+}
+.text-info {
+  color: #24828f !important;
+}
+.width-10-2 {
+  width: 10.2em;
+}
+.width-10-8 {
+  width: 10.8em;
+}
+.width-18-3 {
+  width: 18.3em;
+}
+.width-4-25 {
+  width: 4.25em;
+}
+.width-5-5 {
+  width: 5.5em;
+}
+.width-8 {
+  width: 8em;
+}
+.width-8-8 {
+  width: 8.8em;
+}
+.width-8-9 {
+  width: 8.9em;
+}
+.width-9 {
+  width: 9em;
+}
+.width-9-1 {
+  width: 9.1em;
+}
+.width-9-5 {
+  width: 9.5em;
+}
+#greg-calc-btn {
+  margin-right: 1em;
+}

@@ -1,3 +1,5 @@
+/* global location */
+
 /*
             JavaScript functions for positional astronomy
 
@@ -1212,4 +1214,18 @@ function presetDataToRequest (s) {
     setDateToToday()
     calcGregorian()
   }
+}
+
+//
+// MISCELLANY
+//
+
+// Set current date on page load
+setDateToToday()
+
+// Also on page load; not sure what this does
+if (location.search === '') {
+  calcGregorian()
+} else {
+  presetDataToRequest(location.search.substring(1))
 }
