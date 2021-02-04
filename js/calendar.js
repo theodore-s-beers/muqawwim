@@ -1229,3 +1229,23 @@ if (location.search === '') {
 } else {
   presetDataToRequest(location.search.substring(1))
 }
+
+// Combined function for "Today" button
+function todayAndCalc () {
+  setDateToToday()
+  calcGregorian()
+}
+
+// Event listeners
+document
+  .getElementById('greg-calc-btn')
+  .addEventListener('click', calcGregorian)
+document
+  .getElementById('greg-today-btn')
+  .addEventListener('click', todayAndCalc)
+document
+  .getElementById('julian-btn')
+  .addEventListener('click', calcJulianCalendar)
+document.getElementById('hebrew-btn').addEventListener('click', calcHebrew)
+document.getElementById('islamic-btn').addEventListener('click', calcIslamic)
+document.getElementById('pers-btn').addEventListener('click', calcPersiana)
