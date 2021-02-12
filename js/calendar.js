@@ -1,4 +1,4 @@
-/* global location */
+/* global location, Option */
 
 /*
             JavaScript functions for positional astronomy
@@ -937,11 +937,11 @@ function updateFromGregorian () {
   const hebcal = jdToHebrew(j)
   if (hebrewLeap(hebcal[0])) {
     document.hebrew.month.options.length = 13
-    document.hebrew.month.options[11] = new Option('Adar I') // eslint-disable-line no-undef
-    document.hebrew.month.options[12] = new Option('Veadar') // eslint-disable-line no-undef
+    document.hebrew.month.options[11] = new Option('Adar I')
+    document.hebrew.month.options[12] = new Option('Veadar')
   } else {
     document.hebrew.month.options.length = 12
-    document.hebrew.month.options[11] = new Option('Adar') // eslint-disable-line no-undef
+    document.hebrew.month.options[11] = new Option('Adar')
   }
   document.hebrew.year.value = hebcal[0]
   document.hebrew.month.selectedIndex = hebcal[1] - 1
@@ -1042,7 +1042,6 @@ function calcJulianCalendar () {
 
 // calcHebrew -- Update from Hebrew calendar
 
-// eslint-disable-next-line no-unused-vars
 function calcHebrew () {
   setJulian(
     hebrewToJd(
@@ -1055,7 +1054,6 @@ function calcHebrew () {
 
 // calcIslamic -- Update from Islamic calendar
 
-// eslint-disable-next-line no-unused-vars
 function calcIslamic () {
   setJulian(
     islamicToJd(
@@ -1068,7 +1066,6 @@ function calcIslamic () {
 
 // calcPersiana -- Update from Persian astronomical calendar
 
-// eslint-disable-next-line no-unused-vars
 function calcPersiana () {
   setJulian(
     persianaToJd(
@@ -1115,7 +1112,6 @@ function setDateToToday () {
                            date requested by the URL
                            search field.  */
 
-// eslint-disable-next-line no-unused-vars
 function presetDataToRequest (s) {
   const eq = s.indexOf('=')
   let set = false
@@ -1249,3 +1245,37 @@ document
 document.getElementById('hebrew-btn').addEventListener('click', calcHebrew)
 document.getElementById('islamic-btn').addEventListener('click', calcIslamic)
 document.getElementById('pers-btn').addEventListener('click', calcPersiana)
+
+// Even more event listeners
+document.getElementById('gregorian').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    document.getElementById('greg-calc-btn').click()
+    document.activeElement.blur()
+  }
+})
+document
+  .getElementById('juliancalendar')
+  .addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      document.getElementById('julian-btn').click()
+      document.activeElement.blur()
+    }
+  })
+document.getElementById('hebrew').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    document.getElementById('hebrew-btn').click()
+    document.activeElement.blur()
+  }
+})
+document.getElementById('islamic').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    document.getElementById('islamic-btn').click()
+    document.activeElement.blur()
+  }
+})
+document.getElementById('persiana').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    document.getElementById('pers-btn').click()
+    document.activeElement.blur()
+  }
+})
