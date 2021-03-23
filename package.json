@@ -20,15 +20,15 @@
   "scripts": {
     "extras": "standard --fix ./js/extras.js",
     "lint-css": "stylelint --fix ./css/styles.css",
-    "minify": "terser ./js/calendar.js --mangle --source-map url=calendar.min.js.map --output ./js/calendar.min.js",
+    "minify": "esbuild ./js/calendar.js --minify --sourcemap --outfile=./js/calendar.min.js",
     "standardize": "standard --fix ./js/calendar.js",
     "standardize-sw": "standard --fix ./js/registerSW.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "esbuild": "^0.9.6",
     "standard": "^16.0.3",
     "stylelint": "^13.10.0",
-    "stylelint-config-standard": "^20.0.0",
-    "terser": "^5.6.0"
+    "stylelint-config-standard": "^20.0.0"
   }
 }
