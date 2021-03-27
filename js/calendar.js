@@ -1,4 +1,4 @@
-/* global location, Option */
+/* global Option */
 
 /*
             JavaScript functions for positional astronomy
@@ -1108,123 +1108,13 @@ function setDateToToday () {
   document.gregorian.day.value = today.getDate()
 }
 
-/*  presetDataToRequest -- Preset the Gregorian date to the
-                           date requested by the URL
-                           search field.  */
-
-function presetDataToRequest (s) {
-  const eq = s.indexOf('=')
-  let set = false
-  if (eq !== -1) {
-    const calendar = s.substring(0, eq)
-    const date = decodeURIComponent(s.substring(eq + 1))
-    let d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/)
-    if (calendar.toLowerCase() === 'gregorian') {
-      d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/)
-      if (d != null) {
-        // Sanity check date and time components
-        if (
-          d[2] >= 1 &&
-          d[2] <= 12 &&
-          d[3] >= 1 &&
-          d[3] <= 31 &&
-          (d[4] === undefined ||
-            (d[4].substring(1) >= 0 && d[4].substring(1) <= 23)) &&
-          (d[5] === undefined ||
-            (d[5].substring(1) >= 0 && d[5].substring(1) <= 59)) &&
-          (d[6] === undefined ||
-            (d[6].substring(1) >= 0 && d[6].substring(1) <= 59))
-        ) {
-          document.gregorian.year.value = d[1]
-          document.gregorian.month.selectedIndex = d[2] - 1
-          document.gregorian.day.value = Number(d[3])
-          document.gregorian.hour.value =
-            d[4] === undefined ? '00' : d[4].substring(1)
-          document.gregorian.min.value =
-            d[5] === undefined ? '00' : d[5].substring(1)
-          document.gregorian.sec.value =
-            d[6] === undefined ? '00' : d[6].substring(1)
-          calcGregorian()
-          set = true
-        } else {
-          console.log(
-            'Invalid Gregorian date "' + date + '" in search request'
-          )
-        }
-      } else {
-        console.log('Invalid Gregorian date "' + date + '" in search request')
-      }
-    } else if (calendar.toLowerCase() === 'julian') {
-      d = date.match(/^(\d+)\D(\d+)\D(\d+)(\D\d+)?(\D\d+)?(\D\d+)?/)
-      if (d != null) {
-        // Sanity check date and time components
-        if (
-          d[2] >= 1 &&
-          d[2] <= 12 &&
-          d[3] >= 1 &&
-          d[3] <= 31 &&
-          (d[4] === undefined ||
-            (d[4].substring(1) >= 0 && d[4].substring(1) <= 23)) &&
-          (d[5] === undefined ||
-            (d[5].substring(1) >= 0 && d[5].substring(1) <= 59)) &&
-          (d[6] === undefined ||
-            (d[6].substring(1) >= 0 && d[6].substring(1) <= 59))
-        ) {
-          document.juliancalendar.year.value = d[1]
-          document.juliancalendar.month.selectedIndex = d[2] - 1
-          document.juliancalendar.day.value = Number(d[3])
-          calcJulianCalendar()
-          document.gregorian.hour.value =
-            d[4] === undefined ? '00' : d[4].substring(1)
-          document.gregorian.min.value =
-            d[5] === undefined ? '00' : d[5].substring(1)
-          document.gregorian.sec.value =
-            d[6] === undefined ? '00' : d[6].substring(1)
-          set = true
-        } else {
-          console.log(
-            'Invalid Julian calendar date "' + date + '" in search request'
-          )
-        }
-      } else {
-        console.log(
-          'Invalid Julian calendar date "' + date + '" in search request'
-        )
-      }
-    } else if (calendar.toLowerCase() === 'jd') {
-      d = date.match(/^(-?\d+\.?\d*)/)
-      if (d != null) {
-        setJulian(d[1])
-        set = 1
-      } else {
-        console.log('Invalid Julian day "' + date + '" in search request')
-      }
-    } else {
-      console.log('Invalid calendar "' + calendar + '" in search request')
-    }
-  } else {
-    console.log('Invalid search request: ' + s)
-  }
-
-  if (!set) {
-    setDateToToday()
-    calcGregorian()
-  }
-}
-
 //
 // MISCELLANY
 //
 
-// Set current date on page load
+// On page load, set current date and propagate
 setDateToToday()
-
-// Also on page load; not sure what this does
-if (location.search === '') {
-  calcGregorian()
-} else {
-  presetDataToRequest(location.search.substring(1))
-}
+calcGregorian()
 
 // Combined function for "Today" button
 function todayAndCalc () {
@@ -1232,7 +1122,7 @@ function todayAndCalc () {
   calcGregorian()
 }
 
-// Event listeners
+// Click handlers
 document
   .getElementById('greg-calc-btn')
   .addEventListener('click', calcGregorian)
@@ -1246,7 +1136,8 @@ document.getElementById('hebrew-btn').addEventListener('click', calcHebrew)
 document.getElementById('islamic-btn').addEventListener('click', calcIslamic)
 document.getElementById('pers-btn').addEventListener('click', calcPersiana)
 
-// Even more event listeners
+// Keydown handlers
+// These mimic clicks so that the extra functions will also be triggered
 document.getElementById('gregorian').addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     document.getElementById('greg-calc-btn').click()
