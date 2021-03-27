@@ -139,7 +139,7 @@ function extras () {
 // Run functions on page load
 extras()
 
-// Event listeners for extra functions
+// Click handlers for extra functions
 document.getElementById('greg-calc-btn').addEventListener('click', extras)
 document.getElementById('greg-today-btn').addEventListener('click', extras)
 document.getElementById('julian-btn').addEventListener('click', extras)
