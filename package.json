@@ -28,7 +28,7 @@
   "devDependencies": {
     "esbuild": "^0.11.20",
     "standard": "^16.0.3",
-    "stylelint": "^13.13.0",
+    "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0"
   }
 }
