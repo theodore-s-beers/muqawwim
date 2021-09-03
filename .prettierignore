@@ -1,0 +1,4 @@
+*.min.js
+*.min.css
+sw.js
+workbox-*.js
