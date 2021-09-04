@@ -17,7 +17,7 @@ h2 {
 input {
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: 100%;
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
@@ -36,7 +36,7 @@ p {
 select {
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: 100%;
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
@@ -50,6 +50,10 @@ select {
 table {
   max-width: 36rem;
   text-align: center;
+}
+
+.accordion-button {
+  font-size: 80%;
 }
 
 .border-info {
@@ -75,18 +79,6 @@ table {
 
 .text-info {
   color: #24828f !important;
-}
-
-.width-10-2 {
-  width: 10.2em;
-}
-
-.width-10-8 {
-  width: 10.8em;
-}
-
-.width-18-3 {
-  width: 18.3em;
 }
 
 .width-4-25 {
@@ -119,6 +111,18 @@ table {
 
 .width-9-5 {
   width: 9.5em;
+}
+
+.width-10-2 {
+  width: 10.2em;
+}
+
+.width-10-8 {
+  width: 10.8em;
+}
+
+.width-18-3 {
+  width: 18.3em;
 }
 
 #greg-calc-btn {
