@@ -28,7 +28,7 @@
     "esbuild": "^0.13.14",
     "prettier": "^2.4.1",
     "standard": "^16.0.4",
-    "stylelint": "^14.0.1",
+    "stylelint": "^14.1.0",
     "stylelint-config-standard": "^24.0.0"
   }
 }
