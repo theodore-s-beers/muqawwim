@@ -12,12 +12,9 @@ name: Lint Code Base
 #
 
 #############################
-# Start the job on all push #
+# Start job on PR to master #
 #############################
 on:
-  push:
-    branches-ignore: [master]
-    # Remove the line above to run when pushing to master
   pull_request:
     branches: [master]
 
@@ -40,6 +37,9 @@ jobs:
       ##########################
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          # Full history needed for list of changed files within `super-linter`
+          fetch-depth: 0
 
       ################################
       # Run Linter against code base #
