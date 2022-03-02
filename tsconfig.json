@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true
   },
-  "files": ["ts/extras.ts"]
+  "files": ["ts/main.ts", "ts/unical.ts"]
 }
