@@ -19,7 +19,7 @@ import {
   leapPersiana,
   hebrewToJd,
   islamicToJd,
-  persianaToJd,
+  persianaToJd
 } from './unical'
 
 //
@@ -268,9 +268,9 @@ function setDateToToday () {
       for all year numbers greater than 1000. When we're willing
       to require JavaScript 1.2, this may be replaced by
       the single line:
-                              
+
           document.gregorian.year.value = today.getFullYear();
-                              
+
       Thanks to Larry Gilbert for pointing out this problem.
     */
 
