@@ -574,7 +574,7 @@ function hebrewDelay2 (year: number) {
   return next - present === 356 ? 2 : present - last === 382 ? 1 : 0
 }
 
-// How many days are in a Hebrew year ?
+// How many days are in a Hebrew year?
 
 export function hebrewYearDays (year: number) {
   return hebrewToJd(year + 1, 7, 1) - hebrewToJd(year, 7, 1)
