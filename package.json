@@ -18,10 +18,11 @@
   "author": "Theo Beers",
   "main": "./js/calendar.js",
   "scripts": {
+    "check": "tsc",
+    "compile": "esbuild ts/main.ts --bundle --minify --sourcemap --outfile=js/calendar.min.js",
+    "lint": "eslint --fix --ignore-path .prettierignore .",
     "lint-css": "stylelint --fix ./css/styles.css",
-    "minify": "esbuild ./js/calendar.js --minify --sourcemap --outfile=./js/calendar.min.js",
     "prettify": "prettier --write --plugin-search-dir=. .",
-    "standardize": "standard --fix ./js/calendar.js ./js/extras.js ./js/registerSW.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -30,7 +31,6 @@
     "esbuild": "^0.14.14",
     "eslint": "^7.18.0",
     "prettier": "^2.5.1",
-    "standard": "^16.0.4",
     "stylelint": "^14.2.0",
     "stylelint-config-standard": "^24.0.0",
     "typescript": "^4.6.2"
