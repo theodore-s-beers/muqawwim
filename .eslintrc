@@ -7,13 +7,11 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "rules": {
-    "comma-dangle": "error",
-    "no-trailing-spaces": "error",
-    "space-before-function-paren": "error"
+  "env": {
+    "browser": true
   },
-  "globals": {
-    "navigator": "readonly",
-    "window": "readonly"
+  "rules": {
+    "no-trailing-spaces": "error",
+    "space-before-function-paren": ["error", "always"]
   }
 }
