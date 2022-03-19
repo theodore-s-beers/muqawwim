@@ -1,26 +1,4 @@
-import {
-  gregorianToJd,
-  jWday,
-  WEEKDAYS,
-  NORM_LEAP,
-  leapGregorian,
-  jdToJulian,
-  leapJulian,
-  jdToHebrew,
-  hebrewLeap,
-  hebrewYearDays,
-  jdToGregorian,
-  ISLAMIC_WEEKDAYS,
-  leapIslamic,
-  jdToIslamic,
-  julianToJd,
-  PERSIAN_WEEKDAYS,
-  jdToPersiana,
-  leapPersiana,
-  hebrewToJd,
-  islamicToJd,
-  persianaToJd
-} from './unical'
+import * as unical from './unical'
 
 //
 // GLOBAL VARIABLES
@@ -89,33 +67,33 @@ function updateFromGregorian () {
   // Update Julian day
 
   const j =
-    gregorianToJd(year, mon + 1, mday) +
+    unical.gregorianToJd(year, mon + 1, mday) +
     Math.floor(sec + 60 * (min + 60 * hour) + 0.5) / 86400.0
 
   julianDay = j
 
   // Update day of week in Gregorian box
 
-  const weekday = jWday(j)
-  gregWeekday.value = WEEKDAYS[weekday]
+  const weekday = unical.jWday(j)
+  gregWeekday.value = unical.WEEKDAYS[weekday]
 
   // Update leap year status in Gregorian box
 
-  gregLeap.value = NORM_LEAP[leapGregorian(year) ? 1 : 0]
+  gregLeap.value = unical.NORM_LEAP[unical.leapGregorian(year) ? 1 : 0]
 
   // Update Julian Calendar
 
-  const julcal = jdToJulian(j)
+  const julcal = unical.jdToJulian(j)
   julianYear.value = String(julcal[0])
   julianMonth.selectedIndex = julcal[1] - 1
   julianDate.value = String(julcal[2])
-  julianLeap.value = NORM_LEAP[leapJulian(julcal[0]) ? 1 : 0]
-  julianWeekday.value = WEEKDAYS[weekday]
+  julianLeap.value = unical.NORM_LEAP[unical.leapJulian(julcal[0]) ? 1 : 0]
+  julianWeekday.value = unical.WEEKDAYS[weekday]
 
   // Update Hebrew Calendar
 
-  const hebcal = jdToHebrew(j)
-  if (hebrewLeap(hebcal[0])) {
+  const hebcal = unical.jdToHebrew(j)
+  if (unical.hebrewLeap(hebcal[0])) {
     hebMonth.options.length = 13
     hebMonth.options[11] = new Option('Adar I')
     hebMonth.options[12] = new Option('Veadar')
@@ -127,10 +105,10 @@ function updateFromGregorian () {
   hebMonth.selectedIndex = hebcal[1] - 1
   hebDay.value = String(hebcal[2])
   let hmindex = hebcal[1]
-  if (hmindex === 12 && !hebrewLeap(hebcal[0])) {
+  if (hmindex === 12 && !unical.hebrewLeap(hebcal[0])) {
     hmindex = 14
   }
-  switch (hebrewYearDays(hebcal[0])) {
+  switch (unical.hebrewYearDays(hebcal[0])) {
     case 353:
       hebLeap.value = 'Common deficient (353 days)'
       break
@@ -157,27 +135,27 @@ function updateFromGregorian () {
 
     default:
       hebLeap.value =
-        'Invalid year length: ' + hebrewYearDays(hebcal[0]) + ' days.'
+        'Invalid year length: ' + unical.hebrewYearDays(hebcal[0]) + ' days.'
       break
   }
 
   // Update Islamic Calendar
 
-  const islcal = jdToIslamic(j)
+  const islcal = unical.jdToIslamic(j)
   islamicYear.value = String(islcal[0])
   islamicMonth.selectedIndex = islcal[1] - 1
   islamicDay.value = String(islcal[2])
-  islamicWeekday.value = 'Yawm ' + ISLAMIC_WEEKDAYS[weekday]
-  islamicLeap.value = NORM_LEAP[leapIslamic(islcal[0]) ? 1 : 0]
+  islamicWeekday.value = 'Yawm ' + unical.ISLAMIC_WEEKDAYS[weekday]
+  islamicLeap.value = unical.NORM_LEAP[unical.leapIslamic(islcal[0]) ? 1 : 0]
 
   // Update Persian Astronomical Calendar
 
-  const perscal = jdToPersiana(j)
+  const perscal = unical.jdToPersiana(j)
   persYear.value = String(perscal[0])
   persMonth.selectedIndex = perscal[1] - 1
   persDay.value = String(perscal[2])
-  persWeekday.value = PERSIAN_WEEKDAYS[weekday]
-  persLeap.value = NORM_LEAP[leapPersiana(perscal[0]) ? 1 : 0]
+  persWeekday.value = unical.PERSIAN_WEEKDAYS[weekday]
+  persLeap.value = unical.NORM_LEAP[unical.leapPersiana(perscal[0]) ? 1 : 0]
 }
 
 // calcGregorian -- Perform calculation starting with a Gregorian date
@@ -190,7 +168,7 @@ function calcGregorian () {
 
 function calcJulian () {
   const j = julianDay
-  const date = jdToGregorian(j)
+  const date = unical.jdToGregorian(j)
   gregYear.value = String(date[0])
   gregMonth.selectedIndex = date[1] - 1
   gregDay.value = String(date[2])
@@ -208,7 +186,7 @@ function setJulian (j: number) {
 
 function calcJulianCalendar () {
   setJulian(
-    julianToJd(
+    unical.julianToJd(
       Number(julianYear.value),
       julianMonth.selectedIndex + 1,
       Number(julianDate.value)
@@ -220,7 +198,7 @@ function calcJulianCalendar () {
 
 function calcHebrew () {
   setJulian(
-    hebrewToJd(
+    unical.hebrewToJd(
       Number(hebYear.value),
       hebMonth.selectedIndex + 1,
       Number(hebDay.value)
@@ -232,7 +210,7 @@ function calcHebrew () {
 
 function calcIslamic () {
   setJulian(
-    islamicToJd(
+    unical.islamicToJd(
       Number(islamicYear.value),
       islamicMonth.selectedIndex + 1,
       Number(islamicDay.value)
@@ -244,7 +222,7 @@ function calcIslamic () {
 
 function calcPersiana () {
   setJulian(
-    persianaToJd(
+    unical.persianaToJd(
       Number(persYear.value),
       persMonth.selectedIndex + 1,
       Number(persDay.value)
