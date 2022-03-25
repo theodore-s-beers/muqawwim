@@ -49,6 +49,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
+          TYPESCRIPT_ES_CONFIG_FILE: .eslintrc
           FILTER_REGEX_EXCLUDE: .*(\.min\.|sw\.js|workbox).*
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
