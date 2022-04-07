@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "noEmit": true,
-    "skipLibCheck": true,
     "strict": true
   },
-  "files": ["ts/main.ts", "ts/unical.ts"]
+  "files": ["ts/main.ts"]
 }

@@ -20,18 +20,19 @@
   "scripts": {
     "check": "tsc",
     "compile": "esbuild ts/main.ts --bundle --minify --sourcemap --outfile=js/calendar.min.js",
+    "format": "prettier --write .",
     "lint": "eslint --fix --ignore-path .prettierignore . && stylelint --fix css/styles.css",
-    "prettify": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "esbuild": "^0.14.32",
+    "esbuild": "^0.14.34",
     "eslint": "^8.12.0",
     "prettier": "^2.6.2",
     "stylelint": "^14.6.1",
     "stylelint-config-standard": "^25.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "unical": "github:theodore-s-beers/unical"
   }
 }

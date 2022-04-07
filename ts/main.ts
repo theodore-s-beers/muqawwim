@@ -1,4 +1,4 @@
-import * as unical from './unical'
+import * as unical from 'unical'
 
 //
 // GLOBAL VARIABLES
