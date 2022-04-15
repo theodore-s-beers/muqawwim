@@ -510,8 +510,15 @@ document.getElementById('persiana')?.addEventListener('keydown', (event) => {
   }
 })
 
-// When any form field is changed, clear all checkmarks
-document.querySelectorAll('form').forEach((element) => {
+// When the text of any input field is changed, clear all checkmarks
+document.querySelectorAll('input').forEach((element) => {
+  element.addEventListener('input', () => {
+    document.documentElement.style.setProperty('--img-display', 'none')
+  })
+})
+
+// When any select field is changed, clear all checkmarks
+document.querySelectorAll('select').forEach((element) => {
   element.addEventListener('change', () => {
     document.documentElement.style.setProperty('--img-display', 'none')
   })
