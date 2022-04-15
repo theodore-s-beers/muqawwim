@@ -1,3 +1,7 @@
+:root {
+  --img-display: none;
+}
+
 a {
   text-decoration: none;
 }
@@ -12,6 +16,11 @@ h1 {
 
 h2 {
   font-size: 160%;
+}
+
+img {
+  display: var(--img-display);
+  max-width: 0.8em;
 }
 
 input,
@@ -35,7 +44,8 @@ p {
 }
 
 table {
-  max-width: 36rem;
+  margin-top: 0.65rem;
+  max-width: 32rem;
   text-align: center;
 }
 
@@ -48,12 +58,12 @@ table {
 }
 
 .card {
-  max-width: 36rem;
+  max-width: 32rem;
 }
 
 .container {
   margin-top: 0.6rem;
-  max-width: 1100px;
+  max-width: 1000px;
 }
 
 .green-input {
