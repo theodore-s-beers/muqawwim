@@ -343,6 +343,13 @@ function ottomanFiscalCalc () {
     return
   }
 
+  // Early out for obviously out-of-scope dates
+  if (julianYearValue < 1840 || julianYearValue >= 1917) {
+    ottomanFiscalAnswer.innerHTML =
+      '<em>Ottoman fiscal calendar equivalents will be given for Julian dates between 1840-03-01 and 1916-12-31.</em>'
+    return
+  }
+
   let ottomanFiscalYear: number
   let ottomanFiscalMonth: string
 
@@ -381,7 +388,7 @@ function ottomanFiscalCalc () {
     ottomanFiscalYear = julianYearValue - 585
   }
 
-  // Only show this date between 1840-03-01 and 1916-12-31 Julian
+  // More specifically, we want between 1840-03-01 and 1916-12-31 Julian
   if (ottomanFiscalYear >= 1256 && julianYearValue < 1917) {
     ottomanFiscalAnswer.innerHTML = `In the Ottoman fiscal calendar, as it was followed from 1840 through 1916 Julian, this date is <strong>${ottomanFiscalDay} ${ottomanFiscalMonth} ${ottomanFiscalYear}</strong>.`
   } else {
@@ -415,6 +422,7 @@ function extrasCombined () {
   animalCalc()
   ottomanFiscalCalc()
   seleucidCalc()
+  document.documentElement.style.setProperty('--img-display', 'inline')
 }
 
 // Combined function for "Today" button
@@ -428,10 +436,11 @@ function todayAndCalc () {
 //
 
 // On page load, set current date and propagate
-todayAndCalc()
-
 // Also run "extra" functions
-extrasCombined()
+window.onload = () => {
+  todayAndCalc()
+  extrasCombined()
+}
 
 //
 // EVENT HANDLERS
@@ -463,12 +472,14 @@ persBtn?.addEventListener('click', extrasCombined)
 
 // Keydown handlers
 // These mimic clicks so that the extra functions will also be triggered
+
 document.getElementById('gregorian')?.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     gregCalcBtn?.click()
     ;(document.activeElement as HTMLElement).blur()
   }
 })
+
 document
   .getElementById('juliancalendar')
   ?.addEventListener('keydown', (event) => {
@@ -477,21 +488,31 @@ document
       ;(document.activeElement as HTMLElement).blur()
     }
   })
+
 document.getElementById('hebrew')?.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     hebrewBtn?.click()
     ;(document.activeElement as HTMLElement).blur()
   }
 })
+
 document.getElementById('islamic')?.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     islamicBtn?.click()
     ;(document.activeElement as HTMLElement).blur()
   }
 })
+
 document.getElementById('persiana')?.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
     persBtn?.click()
     ;(document.activeElement as HTMLElement).blur()
   }
+})
+
+// When any form field is changed, clear all checkmarks
+document.querySelectorAll('form').forEach((element) => {
+  element.addEventListener('change', () => {
+    document.documentElement.style.setProperty('--img-display', 'none')
+  })
 })
