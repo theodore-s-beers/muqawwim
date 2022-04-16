@@ -417,6 +417,24 @@ function seleucidCalc () {
     '</strong>.'
 }
 
+// Function to show or hide notes text
+function toggleNotes () {
+  const notesShowing: boolean =
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--notes-display'
+    ) === 'block'
+
+  const button = document.getElementById('notes-button') as HTMLButtonElement
+
+  if (notesShowing) {
+    document.documentElement.style.setProperty('--notes-display', 'none')
+    button.innerText = '(show)'
+  } else {
+    document.documentElement.style.setProperty('--notes-display', 'block')
+    button.innerText = '(hide)'
+  }
+}
+
 // Combined function for "extras"
 function extrasCombined () {
   animalCalc()
@@ -523,3 +541,6 @@ document.querySelectorAll('select').forEach((element) => {
     document.documentElement.style.setProperty('--img-display', 'none')
   })
 })
+
+// Listen for clicks on notes field button
+document.getElementById('notes-button')?.addEventListener('click', toggleNotes)

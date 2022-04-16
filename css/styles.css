@@ -1,5 +1,6 @@
 :root {
   --img-display: none;
+  --notes-display: none;
 }
 
 a {
@@ -47,10 +48,6 @@ table {
   margin-top: 0.65rem;
   max-width: 32rem;
   text-align: center;
-}
-
-.accordion-button {
-  font-size: 80%;
 }
 
 .border-info {
@@ -124,4 +121,24 @@ table {
 
 #greg-calc-btn {
   margin-right: 1em;
+}
+
+#notes-button {
+  background: #fff;
+  font-size: 65%;
+  padding: 0;
+  border: none;
+  color: #0d6efd;
+}
+
+#notes-heading {
+  display: flex;
+}
+
+#notes-heading-text {
+  margin-right: 0.4em;
+}
+
+#notes-list {
+  display: var(--notes-display);
 }
