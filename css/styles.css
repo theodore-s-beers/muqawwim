@@ -21,7 +21,6 @@ h2 {
 
 img {
   display: var(--img-display);
-  max-width: 0.8em;
 }
 
 input,
