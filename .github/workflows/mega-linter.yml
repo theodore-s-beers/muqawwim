@@ -6,8 +6,9 @@ name: MegaLinter
 on:
   # Trigger mega-linter at every push. Action will also be visible from Pull Requests to master
   push: # Comment this line to trigger action only on pull-requests (not recommended if you don't pay for GH Actions)
+    branches-ignore: [master]
   pull_request:
-    branches: [master, main]
+    branches: [master]
 
 env: # Comment env block if you do not want to apply fixes
   # Apply linter fixes configuration
@@ -26,7 +27,7 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
