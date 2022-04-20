@@ -1,7 +1,7 @@
 {
   "name": "Muqawwim",
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars",
-  "start_url": "index.html",
+  "start_url": "./",
   "display": "standalone",
   "theme_color": "#0369a1",
   "icons": [
