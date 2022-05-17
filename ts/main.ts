@@ -134,8 +134,9 @@ function updateFromGregorian () {
       break
 
     default:
-      hebLeap.value =
-        'Invalid year length: ' + unical.hebrewYearDays(hebcal[0]) + ' days.'
+      hebLeap.value = `Invalid year length: ${unical.hebrewYearDays(
+        hebcal[0]
+      )} days.`
       break
   }
 
@@ -145,7 +146,7 @@ function updateFromGregorian () {
   islamicYear.value = String(islcal[0])
   islamicMonth.selectedIndex = islcal[1] - 1
   islamicDay.value = String(islcal[2])
-  islamicWeekday.value = 'Yawm ' + unical.ISLAMIC_WEEKDAYS[weekday]
+  islamicWeekday.value = `Yawm ${unical.ISLAMIC_WEEKDAYS[weekday]}`
   islamicLeap.value = unical.NORM_LEAP[unical.leapIslamic(islcal[0]) ? 1 : 0]
 
   // Update Persian Astronomical Calendar
@@ -266,15 +267,9 @@ function animalCalc () {
   // Declare a few variables
   const persYearValue = Number(persYear.value)
   const persMod = persYearValue % 12
-  const animalAnswer = document.getElementById('animal-answer')
+  const animalAnswer = document.getElementById('animal-answer') as HTMLElement
   let animalEng = ''
   let animalOrig = ''
-
-  // Null check
-  if (animalAnswer === null) {
-    console.log('Something went very wrong...')
-    return
-  }
 
   // Determine animal sign
   if (persYearValue < 1) {
@@ -320,31 +315,33 @@ function animalCalc () {
     }
 
     // Set result text
-    animalAnswer.innerHTML =
-      'In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>' +
-      animalEng +
-      ' (<em>' +
-      animalOrig +
-      '</em>)</strong>.'
+    animalAnswer.innerHTML = `In the Persianate adaptation of the Chinese-Uighur animal calendar, this date falls in a year of the <strong>${animalEng} (<em>${animalOrig}</em>)</strong>.`
   }
+}
+
+function persianImperial () {
+  const persYearValue = Number(persYear.value)
+  const imperialYear = persYearValue + 1180
+
+  const imperialAnswer = document.getElementById(
+    'persian-imperial'
+  ) as HTMLElement
+
+  imperialAnswer.innerHTML = `In the “imperial epoch” favored by Mohammad Reza Pahlavi, this is year <strong>${imperialYear}</strong>.`
 }
 
 // Function for Ottoman fiscal years
 function ottomanFiscalCalc () {
   // Hooray for more variables
-  const ottomanFiscalAnswer = document.getElementById('ottoman-fiscal')
+  const ottomanFiscalAnswer = document.getElementById(
+    'ottoman-fiscal'
+  ) as HTMLElement
   const julianYearValue = Number(julianYear.value)
   const julianMonthIndex = julianMonth.selectedIndex
   const ottomanFiscalDay = julianDate.value
 
-  // Null check
-  if (ottomanFiscalAnswer === null) {
-    console.log('Something went very wrong...')
-    return
-  }
-
   // Early out for obviously out-of-scope dates
-  if (julianYearValue < 1840 || julianYearValue >= 1917) {
+  if (julianYearValue < 1840 || julianYearValue > 1916) {
     ottomanFiscalAnswer.innerHTML =
       '<em>Ottoman fiscal calendar equivalents will be given for Julian dates between 1840-03-01 and 1916-12-31.</em>'
     return
@@ -382,14 +379,14 @@ function ottomanFiscalCalc () {
 
   // The Ottoman fiscal year clicks over as of March
   // So the difference from the Julian year is 584, except in Jan. and Feb.
-  if (julianMonthIndex >= 2) {
+  if (julianMonthIndex > 1) {
     ottomanFiscalYear = julianYearValue - 584
   } else {
     ottomanFiscalYear = julianYearValue - 585
   }
 
   // More specifically, we want between 1840-03-01 and 1916-12-31 Julian
-  if (ottomanFiscalYear >= 1256 && julianYearValue < 1917) {
+  if (ottomanFiscalYear > 1255 && julianYearValue < 1917) {
     ottomanFiscalAnswer.innerHTML = `In the Ottoman fiscal calendar, as it was followed from 1840 through 1916 Julian, this date is <strong>${ottomanFiscalDay} ${ottomanFiscalMonth} ${ottomanFiscalYear}</strong>.`
   } else {
     ottomanFiscalAnswer.innerHTML =
@@ -402,19 +399,12 @@ function seleucidCalc () {
   // Define variables; calculate result
   const hebYearValue = Number(hebYear.value)
   const seleucidYear = hebYearValue - 3449
-  const seleucidAnswer = document.getElementById('seleucid-answer')
-
-  // Null check
-  if (seleucidAnswer === null) {
-    console.log('Something went very wrong...')
-    return
-  }
+  const seleucidAnswer = document.getElementById(
+    'seleucid-answer'
+  ) as HTMLElement
 
   // Set result text
-  seleucidAnswer.innerHTML =
-    'In the Seleucid era, as used by some medieval Jewish communities, this is year <strong>' +
-    seleucidYear +
-    '</strong>.'
+  seleucidAnswer.innerHTML = `In the Seleucid era, as used by some medieval Jewish communities, this is year <strong>${seleucidYear}</strong>.`
 }
 
 // Function to show or hide notes text
@@ -438,6 +428,7 @@ function toggleNotes () {
 // Combined function for "extras"
 function extrasCombined () {
   animalCalc()
+  persianImperial()
   ottomanFiscalCalc()
   seleucidCalc()
   document.documentElement.style.setProperty('--img-display', 'inline')
