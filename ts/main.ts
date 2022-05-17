@@ -327,7 +327,7 @@ function persianImperial () {
     'persian-imperial'
   ) as HTMLElement
 
-  imperialAnswer.innerHTML = `In the “imperial epoch” favored by Mohammad Reza Pahlavi, this is year <strong>${imperialYear}</strong>.`
+  imperialAnswer.innerHTML = `Using the “imperial epoch” favored by Mohammad Reza Pahlavi, this is year <strong>${imperialYear}</strong>.`
 }
 
 // Function for Ottoman fiscal years
