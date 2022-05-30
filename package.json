@@ -30,7 +30,7 @@
     "esbuild": "^0.14.39",
     "eslint": "^8.16.0",
     "prettier": "^2.6.2",
-    "stylelint": "^14.8.4",
+    "stylelint": "^14.8.5",
     "stylelint-config-standard": "^25.0.0",
     "typescript": "^4.7.2",
     "unical": "github:theodore-s-beers/unical"
