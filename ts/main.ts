@@ -1,7 +1,7 @@
 import * as unical from 'unical'
 
 //
-// GLOBAL VARIABLES
+// GLOBAL VARIABLES (mostly for DOM elements)
 //
 
 // Global variable for "Julian day" value
@@ -53,7 +53,7 @@ const persLeap = document.getElementById('pers-leap') as HTMLInputElement
                             "Why not Julian date?" you ask. Because
                             starting from Gregorian guarantees we're
                             already snapped to an integral second, so
-                            we don't get roundoff errors in other
+                            we don't get round-off errors in other
                             calendars.  */
 
 function updateFromGregorian () {
@@ -519,14 +519,14 @@ document.getElementById('persiana')?.addEventListener('keydown', (event) => {
   }
 })
 
-// When the text of any input field is changed, clear all checkmarks
+// When the text of any input field is changed, clear all check marks
 document.querySelectorAll('input').forEach((element) => {
   element.addEventListener('input', () => {
     document.documentElement.style.setProperty('--img-display', 'none')
   })
 })
 
-// When any select field is changed, clear all checkmarks
+// When any select field is changed, clear all check marks
 document.querySelectorAll('select').forEach((element) => {
   element.addEventListener('change', () => {
     document.documentElement.style.setProperty('--img-display', 'none')
