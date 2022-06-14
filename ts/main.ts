@@ -49,6 +49,9 @@ const persLeap = document.getElementById('pers-leap') as HTMLInputElement
 // CORE FUNCTIONS
 //
 
+// Much of what follows was adapted from the work of John Walker
+// See his homepage: https://fourmilab.ch/
+
 /*  updateFromGregorian --  Update all calendars from Gregorian.
                             "Why not Julian date?" you ask. Because
                             starting from Gregorian guarantees we're
