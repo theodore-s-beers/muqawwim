@@ -62,16 +62,11 @@ const persLeap = document.getElementById('pers-leap') as HTMLInputElement
 function updateFromGregorian () {
   const year = Number(gregYear.value)
   const mon = gregMonth.selectedIndex
-  const mday = Number(gregDay.value)
-  const hour = 0
-  const min = 0
-  const sec = 0
+  const mDay = Number(gregDay.value)
 
   // Update Julian day
 
-  const j =
-    unical.gregorianToJD(year, mon + 1, mday) +
-    Math.floor(sec + 60 * (min + 60 * hour) + 0.5) / 86400.0
+  const j = unical.gregorianToJD(year, mon + 1, mDay)
 
   julianDay = j
 
@@ -86,17 +81,18 @@ function updateFromGregorian () {
 
   // Update Julian Calendar
 
-  const julcal = unical.jdToJulian(j)
-  julianYear.value = String(julcal[0])
-  julianMonth.selectedIndex = julcal[1] - 1
-  julianDate.value = String(julcal[2])
-  julianLeap.value = unical.NORM_LEAP[unical.leapJulian(julcal[0]) ? 1 : 0]
+  const julCal = unical.jdToJulian(j)
+  julianYear.value = String(julCal[0])
+  julianMonth.selectedIndex = julCal[1] - 1
+  julianDate.value = String(julCal[2])
+  julianLeap.value = unical.NORM_LEAP[unical.leapJulian(julCal[0]) ? 1 : 0]
   julianWeekday.value = unical.WEEKDAYS[weekday]
 
   // Update Hebrew Calendar
 
-  const hebcal = unical.jdToHebrew(j)
-  if (unical.hebrewLeap(hebcal[0])) {
+  const hebCal = unical.jdToHebrew(j)
+
+  if (unical.hebrewLeap(hebCal[0])) {
     hebMonth.options.length = 13
     hebMonth.options[11] = new Option('Adar I')
     hebMonth.options[12] = new Option('Veadar')
@@ -104,14 +100,17 @@ function updateFromGregorian () {
     hebMonth.options.length = 12
     hebMonth.options[11] = new Option('Adar')
   }
-  hebYear.value = String(hebcal[0])
-  hebMonth.selectedIndex = hebcal[1] - 1
-  hebDay.value = String(hebcal[2])
-  let hmindex = hebcal[1]
-  if (hmindex === 12 && !unical.hebrewLeap(hebcal[0])) {
-    hmindex = 14
+
+  hebYear.value = String(hebCal[0])
+  hebMonth.selectedIndex = hebCal[1] - 1
+  hebDay.value = String(hebCal[2])
+
+  let hmIndex = hebCal[1]
+  if (hmIndex === 12 && !unical.hebrewLeap(hebCal[0])) {
+    hmIndex = 14
   }
-  switch (unical.hebrewYearDays(hebcal[0])) {
+
+  switch (unical.hebrewYearDays(hebCal[0])) {
     case 353: {
       hebLeap.value = 'Common deficient (353 days)'
       break
@@ -144,28 +143,28 @@ function updateFromGregorian () {
 
     default:
       hebLeap.value = `Invalid year length: ${unical.hebrewYearDays(
-        hebcal[0]
+        hebCal[0]
       )} days.`
       break
   }
 
   // Update Islamic Calendar
 
-  const islcal = unical.jdToIslamic(j)
-  islamicYear.value = String(islcal[0])
-  islamicMonth.selectedIndex = islcal[1] - 1
-  islamicDay.value = String(islcal[2])
+  const islCal = unical.jdToIslamic(j)
+  islamicYear.value = String(islCal[0])
+  islamicMonth.selectedIndex = islCal[1] - 1
+  islamicDay.value = String(islCal[2])
   islamicWeekday.value = `Yawm ${unical.ISLAMIC_WEEKDAYS[weekday]}`
-  islamicLeap.value = unical.NORM_LEAP[unical.leapIslamic(islcal[0]) ? 1 : 0]
+  islamicLeap.value = unical.NORM_LEAP[unical.leapIslamic(islCal[0]) ? 1 : 0]
 
   // Update Persian Astronomical Calendar
 
-  const perscal = unical.jdToPersianA(j)
-  persYear.value = String(perscal[0])
-  persMonth.selectedIndex = perscal[1] - 1
-  persDay.value = String(perscal[2])
+  const persCal = unical.jdToPersianA(j)
+  persYear.value = String(persCal[0])
+  persMonth.selectedIndex = persCal[1] - 1
+  persDay.value = String(persCal[2])
   persWeekday.value = unical.PERSIAN_WEEKDAYS[weekday]
-  persLeap.value = unical.NORM_LEAP[unical.leapPersianA(perscal[0]) ? 1 : 0]
+  persLeap.value = unical.NORM_LEAP[unical.leapPersianA(persCal[0]) ? 1 : 0]
 }
 
 // calcGregorian -- Perform calculation starting with a Gregorian date
@@ -228,9 +227,9 @@ function calcIslamic () {
   )
 }
 
-// calcPersiana -- Update from Persian astronomical calendar
+// calcPersianA -- Update from Persian astronomical calendar
 
-function calcPersiana () {
+function calcPersianA () {
   setJulian(
     unical.persianAToJD(
       Number(persYear.value),
@@ -478,7 +477,7 @@ gregTodayBtn?.addEventListener('click', todayAndCalc)
 julianBtn?.addEventListener('click', calcJulianCalendar)
 hebrewBtn?.addEventListener('click', calcHebrew)
 islamicBtn?.addEventListener('click', calcIslamic)
-persBtn?.addEventListener('click', calcPersiana)
+persBtn?.addEventListener('click', calcPersianA)
 
 // Click handlers for extra functions
 gregCalcBtn?.addEventListener('click', extrasCombined)
