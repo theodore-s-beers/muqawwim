@@ -1,4 +1,4 @@
-/report/
+megalinter-reports/
 
 *.min.js
 *.min.css
