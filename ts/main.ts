@@ -246,7 +246,7 @@ function setDateToToday () {
   const today = new Date()
 
   /*  The following idiocy is due to bizarre incompatibilities
-      in the behaviour of getYear() between Netscrape and
+      in the behavior of getYear() between Netscrape and
       Exploder. The ideal solution is to use getFullYear(),
       which returns the actual year number, but that would
       break this code on versions of JavaScript prior to
