@@ -1,5 +1,5 @@
-/node_modules/
-/report/
+megalinter-reports/
+node_modules/
 
 *.psd
 *.pxd
