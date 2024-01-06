@@ -3,6 +3,7 @@
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars",
   "start_url": "./",
   "display": "standalone",
+  "background_color": "#fff",
   "theme_color": "#124ba1",
   "icons": [
     {
