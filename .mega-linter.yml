@@ -28,9 +28,10 @@ FILEIO_REPORTER: false
 DISABLE_LINTERS:
   [
     "HTML_DJLINT",
+    "JAVASCRIPT_STANDARD",
     "REPOSITORY_CHECKOV",
     "REPOSITORY_TRIVY",
     "TYPESCRIPT_STANDARD",
   ]
 
-FILTER_REGEX_EXCLUDE: (sw\.js|workbox-.*\.js|pnpm-lock\.yaml|.*\.min\..*)
+FILTER_REGEX_EXCLUDE: (sw\.js|workbox-.*\.js|pnpm-lock\.yaml|.*\.min\..*|keybase\.txt)
