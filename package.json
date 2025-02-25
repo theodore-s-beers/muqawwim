@@ -16,23 +16,29 @@
   },
   "license": "MIT",
   "author": "Theo Beers",
+  "type": "module",
   "main": "ts/main.js",
   "scripts": {
     "check": "tsc",
     "compile": "esbuild ts/main.ts --bundle --minify --sourcemap --outfile=js/calendar.min.js",
     "format": "prettier --write .",
-    "lint": "eslint --fix --ignore-path .prettierignore . && stylelint --fix css/styles.css",
+    "lint": "eslint --fix . && stylelint --fix css/styles.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
-    "esbuild": "^0.21.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "stylelint": "^16.5.0",
-    "stylelint-config-standard": "^36.0.0",
-    "typescript": "^5.4.5",
+    "@eslint/js": "^9.21.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.2",
+    "stylelint": "^16.14.1",
+    "stylelint-config-standard": "^37.0.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.25.0",
     "unical": "github:theodore-s-beers/unical"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

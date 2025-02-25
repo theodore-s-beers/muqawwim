@@ -12,9 +12,9 @@ FILEIO_REPORTER: false
 # DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
 DISABLE_LINTERS:
   [
-    'HTML_DJLINT',
-    'REPOSITORY_CHECKOV',
-    'REPOSITORY_TRIVY',
-    'TYPESCRIPT_STANDARD'
+    "HTML_DJLINT",
+    "REPOSITORY_CHECKOV",
+    "REPOSITORY_TRIVY",
+    "TYPESCRIPT_STANDARD",
   ]
 FILTER_REGEX_EXCLUDE: (sw\.js|workbox-.*\.js|pnpm-lock\.yaml|.*\.min\..*)
