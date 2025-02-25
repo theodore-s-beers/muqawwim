@@ -1,15 +1,30 @@
 # Configuration file for MegaLinter
-# See all available variables at https://megalinter.io/configuration/ and in linters documentation
+#
+# See all available variables at https://megalinter.io/latest/config-file/ and in
+# linters documentation
 
-APPLY_FIXES: none # all, none, or list of linter keys
-# ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
-# ENABLE_LINTERS: # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
+# all, none, or list of linter keys
+APPLY_FIXES: none
+
+# If you use ENABLE variable, all other languages/formats/tooling-formats will
+# be disabled by default
+# ENABLE:
+
+# If you use ENABLE_LINTERS variable, all other linters will be disabled by
+# default
+# ENABLE_LINTERS:
+
 # DISABLE:
 # - COPYPASTE # Uncomment to disable checks of excessive copy-pastes
 # - SPELL # Uncomment to disable checks of spelling mistakes
+
 SHOW_ELAPSED_TIME: true
+
 FILEIO_REPORTER: false
-# DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
+
+# Uncomment if you want MegaLinter to detect errors but not block CI to pass
+# DISABLE_ERRORS: true
+
 DISABLE_LINTERS:
   [
     "HTML_DJLINT",
@@ -17,4 +32,5 @@ DISABLE_LINTERS:
     "REPOSITORY_TRIVY",
     "TYPESCRIPT_STANDARD",
   ]
+
 FILTER_REGEX_EXCLUDE: (sw\.js|workbox-.*\.js|pnpm-lock\.yaml|.*\.min\..*)
