@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["**/*.min.js"],
+    ignores: ["**/*.min.js", "sw.js", "workbox-*.js*"],
   },
   {
     languageOptions: {
