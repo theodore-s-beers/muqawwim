@@ -111,11 +111,6 @@ function updateFromGregorian() {
   hebMonth.selectedIndex = hebCal[1] - 1;
   hebDay.value = String(hebCal[2]);
 
-  let hmIndex = hebCal[1];
-  if (hmIndex === 12 && !unical.hebrewLeap(hebCal[0])) {
-    hmIndex = 14;
-  }
-
   switch (unical.hebrewYearDays(hebCal[0])) {
     case 353: {
       hebLeap.value = "Common deficient (353 days)";
@@ -282,8 +277,8 @@ function animalCalc() {
   const persYearValue = Number(persYear.value);
   const persMod = persYearValue % 12;
   const animalAnswer = document.getElementById("animal-answer") as HTMLElement;
-  let animalEng = "";
-  let animalOrig = "";
+  let animalEng: string;
+  let animalOrig: string;
 
   // Determine animal sign
   if (persYearValue < 1) {
