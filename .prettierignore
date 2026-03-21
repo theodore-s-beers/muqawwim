@@ -1,8 +1,0 @@
-megalinter-reports/
-
-*.min.js
-*.min.css
-package-lock.json
-pnpm-lock.yaml
-sw.js
-workbox-*.js

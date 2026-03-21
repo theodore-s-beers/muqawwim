@@ -16,15 +16,9 @@ const gregLeap = document.getElementById("greg-leap") as HTMLInputElement;
 
 // Julian date fields
 const julianYear = document.getElementById("julian-year") as HTMLInputElement;
-const julianMonth = document.getElementById(
-  "julian-month",
-) as HTMLSelectElement;
-const julianDate = document.getElementById(
-  "julian-cal-day",
-) as HTMLInputElement;
-const julianWeekday = document.getElementById(
-  "julian-wday",
-) as HTMLInputElement;
+const julianMonth = document.getElementById("julian-month") as HTMLSelectElement;
+const julianDate = document.getElementById("julian-cal-day") as HTMLInputElement;
+const julianWeekday = document.getElementById("julian-wday") as HTMLInputElement;
 const julianLeap = document.getElementById("julian-leap") as HTMLInputElement;
 
 // Hebrew date fields
@@ -35,13 +29,9 @@ const hebDay = document.getElementById("heb-day") as HTMLInputElement;
 
 // Islamic date fields
 const islamicYear = document.getElementById("islamic-year") as HTMLInputElement;
-const islamicMonth = document.getElementById(
-  "islamic-month",
-) as HTMLSelectElement;
+const islamicMonth = document.getElementById("islamic-month") as HTMLSelectElement;
 const islamicDay = document.getElementById("islamic-day") as HTMLInputElement;
-const islamicWeekday = document.getElementById(
-  "islamic-wday",
-) as HTMLInputElement;
+const islamicWeekday = document.getElementById("islamic-wday") as HTMLInputElement;
 const islamicLeap = document.getElementById("islamic-leap") as HTMLInputElement;
 
 // Persian date fields
@@ -143,9 +133,7 @@ function updateFromGregorian() {
     }
 
     default:
-      hebLeap.value = `Invalid year length: ${unical.hebrewYearDays(
-        hebCal[0],
-      )} days.`;
+      hebLeap.value = `Invalid year length: ${unical.hebrewYearDays(hebCal[0])} days.`;
       break;
   }
 
@@ -208,11 +196,7 @@ function calcJulianCalendar() {
 
 function calcHebrew() {
   setJulian(
-    unical.hebrewToJD(
-      Number(hebYear.value),
-      hebMonth.selectedIndex + 1,
-      Number(hebDay.value),
-    ),
+    unical.hebrewToJD(Number(hebYear.value), hebMonth.selectedIndex + 1, Number(hebDay.value)),
   );
 }
 
@@ -332,19 +316,14 @@ function persianImperial() {
   const persYearValue = Number(persYear.value);
   const imperialYear = persYearValue + 1180;
 
-  const imperialAnswer = document.getElementById(
-    "persian-imperial",
-  ) as HTMLElement;
-
+  const imperialAnswer = document.getElementById("persian-imperial") as HTMLElement;
   imperialAnswer.innerHTML = `Using the “imperial epoch” favored by Mohammad Reza Pahlavi, this is year <strong>${imperialYear}</strong>.`;
 }
 
 // Function for Ottoman fiscal years
 function ottomanFiscalCalc() {
   // Hooray for more variables
-  const ottomanFiscalAnswer = document.getElementById(
-    "ottoman-fiscal",
-  ) as HTMLElement;
+  const ottomanFiscalAnswer = document.getElementById("ottoman-fiscal") as HTMLElement;
   const julianYearValue = Number(julianYear.value);
   const julianMonthIndex = julianMonth.selectedIndex;
   const ottomanFiscalDay = julianDate.value;
@@ -408,9 +387,7 @@ function seleucidCalc() {
   // Define variables; calculate result
   const hebYearValue = Number(hebYear.value);
   const seleucidYear = hebYearValue - 3449;
-  const seleucidAnswer = document.getElementById(
-    "seleucid-answer",
-  ) as HTMLElement;
+  const seleucidAnswer = document.getElementById("seleucid-answer") as HTMLElement;
 
   // Set result text
   seleucidAnswer.innerHTML = `In the Seleucid era, as used by some medieval Jewish communities, this is year <strong>${seleucidYear}</strong>.`;
@@ -419,9 +396,7 @@ function seleucidCalc() {
 // Function to show or hide notes text
 function toggleNotes() {
   const notesShowing: boolean =
-    getComputedStyle(document.documentElement).getPropertyValue(
-      "--notes-display",
-    ) === "block";
+    getComputedStyle(document.documentElement).getPropertyValue("--notes-display") === "block";
 
   const button = document.getElementById("notes-button") as HTMLButtonElement;
 
@@ -498,14 +473,12 @@ document.getElementById("gregorian")?.addEventListener("keydown", (event) => {
   }
 });
 
-document
-  .getElementById("juliancalendar")
-  ?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      julianBtn?.click();
-      (document.activeElement as HTMLElement).blur();
-    }
-  });
+document.getElementById("juliancalendar")?.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    julianBtn?.click();
+    (document.activeElement as HTMLElement).blur();
+  }
+});
 
 document.getElementById("hebrew")?.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {

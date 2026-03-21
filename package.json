@@ -10,30 +10,29 @@
   "bugs": {
     "url": "https://github.com/theodore-s-beers/calendars/issues"
   },
+  "license": "MIT",
+  "author": "Theo Beers",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theodore-s-beers/calendars.git"
   },
-  "license": "MIT",
-  "author": "Theo Beers",
   "type": "module",
   "main": "ts/main.js",
   "scripts": {
     "check": "tsc",
     "compile": "esbuild ts/main.ts --bundle --minify --sourcemap --outfile=js/calendar.min.js",
-    "format": "prettier --write .",
-    "lint": "eslint --fix . && stylelint --fix css/styles.css",
+    "format": "oxfmt",
+    "lint": "oxfmt --check && oxlint && stylelint css/styles.css",
+    "lint:fix": "oxfmt && oxlint --fix && stylelint --fix css/styles.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "esbuild": "^0.27.4",
-    "eslint": "^10.0.3",
-    "prettier": "^3.8.1",
-    "stylelint": "^17.4.0",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0",
+    "stylelint": "^17.5.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.1",
     "unical": "github:theodore-s-beers/unical"
   },
   "pnpm": {
