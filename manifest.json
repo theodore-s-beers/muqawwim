@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.schemastore.org/web-manifest-combined.json",
   "name": "Muqawwim",
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars",
   "start_url": "./",
