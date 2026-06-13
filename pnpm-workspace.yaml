@@ -1,3 +1,5 @@
 allowBuilds:
   esbuild: true
   unical: true
+minimumReleaseAgeExclude:
+  - unical@0.1.1
