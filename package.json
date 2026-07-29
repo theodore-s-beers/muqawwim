@@ -28,14 +28,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.1.2",
     "esbuild": "^0.28.1",
-    "knip": "^6.16.1",
-    "oxfmt": "^0.54.0",
-    "oxlint": "^1.69.0",
-    "stylelint": "^17.13.0",
+    "knip": "^6.29.0",
+    "oxfmt": "^0.61.0",
+    "oxlint": "^1.76.0",
+    "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "unical": "^0.1.1"
   }
 }
