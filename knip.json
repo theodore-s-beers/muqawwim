@@ -1,4 +1,10 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
-  "tags": ["-lintignore"]
+  "$schema": "./node_modules/knip/schema.json",
+  "ignoreFiles": [
+    "js/bootstrap.bundle.min.js",
+    "js/calendar.min.js",
+    "js/registerSW.js",
+    "sw.js",
+    "workbox-*.js"
+  ]
 }
