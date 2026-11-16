@@ -216,11 +216,7 @@ function calcIslamic() {
 
 function calcPersianA() {
   setJulian(
-    unical.persianAToJD(
-      Number(persYear.value),
-      persMonth.selectedIndex + 1,
-      Number(persDay.value),
-    ) + 0.5,
+    unical.persianAToJD(Number(persYear.value), persMonth.selectedIndex + 1, Number(persDay.value)),
   );
 }
 

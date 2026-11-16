@@ -33,8 +33,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       unical:
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.3
+        version: 0.1.3
 
 packages:
 
@@ -1375,8 +1375,8 @@ packages:
   undici-types@8.9.0:
     resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
-  unical@0.1.2:
-    resolution: {integrity: sha512-HRSUImR6ZNxHWRq7LTUj5uxMWwg8Gj+trqwrMACjrk/8/ZFceONh8ussm87lWXvsG0h2mguW3bGFDHirz7ndBg==}
+  unical@0.1.3:
+    resolution: {integrity: sha512-pIG5SGQA4PRHVn0k/mQeoCjhTeukFtYRozd48XpojQWI1OARmv/o0k/IMwcO2emBRS0vAlHoAGceyEuTxhlKQw==}
 
   unicorn-magic@0.4.1:
     resolution: {integrity: sha512-lzlXPoVB0Uy/FvTaUgX39RbixYiSKoc3JSoSf01+0c2B6FR3qdYIPN7Qjo/AV7n6sqLCk0509cT3LRj1oSZ1+A==}
@@ -2446,7 +2446,7 @@ snapshots:
 
   undici-types@8.9.0: {}
 
-  unical@0.1.2: {}
+  unical@0.1.3: {}
 
   unicorn-magic@0.4.1: {}
 
