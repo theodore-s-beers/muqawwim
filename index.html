@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <title>Calendar Converter for Near East Historians</title>
   </head>
-  <body>
+  <body data-1p-ignore>
     <div class="container">
       <h1>Calendar Converter for Near East Historians</h1>
       <script src="js/registerSW.js"></script>
@@ -70,7 +70,7 @@
         Gregorian Calendar
         <img src="img/check.svg" alt="checkmark" height="21" width="21" />
       </h2>
-      <form id="gregorian">
+      <form id="gregorian" autocomplete="off">
         <table class="table table-borderless table-sm">
           <tr>
             <td class="top-row">
@@ -79,6 +79,7 @@
                 id="greg-year"
                 class="width-5-5"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value="1998"
@@ -104,6 +105,7 @@
                 min="1"
                 class="width-4-25"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value="1"
@@ -137,7 +139,7 @@
         Julian Calendar
         <img src="img/check.svg" alt="checkmark" height="21" width="21" />
       </h2>
-      <form id="juliancalendar">
+      <form id="juliancalendar" autocomplete="off">
         <table class="table table-borderless table-sm">
           <tr>
             <td class="top-row">
@@ -146,6 +148,7 @@
                 id="julian-year"
                 class="width-5-5"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -171,6 +174,7 @@
                 min="1"
                 class="width-4-25"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -211,7 +215,7 @@
         Hebrew Calendar
         <img src="img/check.svg" alt="checkmark" height="21" width="21" />
       </h2>
-      <form id="hebrew">
+      <form id="hebrew" autocomplete="off">
         <table class="table table-borderless table-sm">
           <tr>
             <td class="top-row">
@@ -219,6 +223,7 @@
                 aria-label="Hebrew year"
                 id="heb-year"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -245,6 +250,7 @@
                 max="30"
                 min="1"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -277,7 +283,7 @@
         Islamic Calendar
         <img src="img/check.svg" alt="checkmark" height="21" width="21" />
       </h2>
-      <form id="islamic">
+      <form id="islamic" autocomplete="off">
         <table class="table table-borderless table-sm">
           <tr>
             <td class="top-row">
@@ -286,6 +292,7 @@
                 id="islamic-year"
                 class="width-5-5"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -311,6 +318,7 @@
                 min="1"
                 class="width-4-25"
                 type="number"
+                data-bwignore="true"
                 required
                 inputmode="numeric"
                 value=""
@@ -347,7 +355,7 @@
         <p id="persian-range" hidden>
           Outside Gregorian years −1000 through 3000, Persian dates are approximate.
         </p>
-        <form id="persiana">
+        <form id="persiana" autocomplete="off">
           <table class="table table-borderless table-sm">
             <tr>
               <td class="top-row">
@@ -356,6 +364,7 @@
                   id="pers-year"
                   class="width-5-5"
                   type="number"
+                  data-bwignore="true"
                   required
                   inputmode="numeric"
                   value=""
@@ -381,6 +390,7 @@
                   min="1"
                   class="width-4-25"
                   type="number"
+                  data-bwignore="true"
                   required
                   inputmode="numeric"
                   value=""
