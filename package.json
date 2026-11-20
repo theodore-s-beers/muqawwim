@@ -1,6 +1,7 @@
 {
   "name": "muqawwim",
   "version": "0.1.0",
+  "private": true,
   "description": "Easily and accurately convert dates among the Gregorian, Julian, Hebrew, Islamic, and Persian calendars",
   "keywords": [
     "calendars",
@@ -25,7 +26,7 @@
     "knip": "knip",
     "lint": "oxfmt --check && oxlint && stylelint css/styles.css",
     "lint:fix": "oxfmt && oxlint --fix && stylelint --fix css/styles.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo 'Error: no test specified' && exit 1"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
@@ -36,6 +37,6 @@
     "stylelint": "^18.0.0",
     "stylelint-config-standard": "^41.0.0",
     "typescript": "^7.0.2",
-    "unical": "^0.1.3"
+    "unical": "^0.2.0"
   }
 }

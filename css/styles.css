@@ -40,6 +40,26 @@ select {
     box-shadow 0.15s ease-in-out;
 }
 
+.green-input {
+  color: #218721;
+}
+
+[aria-describedby="persian-range"] :is(input, select) {
+  background-color: #fbf3df;
+}
+
+[aria-describedby="persian-range"] .green-input {
+  color: #29652d;
+}
+
+.validated :invalid {
+  outline-color: #b02a37;
+}
+
+.validated :invalid:not(:focus) {
+  border-color: #b02a37;
+}
+
 li,
 p {
   hyphens: auto;
@@ -62,10 +82,6 @@ table {
 .container {
   margin-top: 0.6rem;
   max-width: 1000px;
-}
-
-.green-input {
-  color: #218721;
 }
 
 .nudge-margin {

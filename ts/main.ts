@@ -1,260 +1,129 @@
 import * as unical from "unical";
 
-//
-// GLOBAL VARIABLES (mostly for DOM elements)
-//
+function calendarFields(prefix: string, dayId = `${prefix}-day`) {
+  return {
+    year: document.getElementById(`${prefix}-year`) as HTMLInputElement,
+    month: document.getElementById(`${prefix}-month`) as HTMLSelectElement,
+    day: document.getElementById(dayId) as HTMLInputElement,
+    leap: document.getElementById(`${prefix}-leap`) as HTMLInputElement,
+    weekday: document.getElementById(`${prefix}-wday`) as HTMLInputElement | null,
+  };
+}
 
-// Global variable for "Julian day" value
-let julianDay: number;
+const fields = {
+  gregorian: calendarFields("greg"),
+  julian: calendarFields("julian", "julian-cal-day"),
+  hebrew: calendarFields("heb"),
+  islamic: calendarFields("islamic"),
+  persian: calendarFields("pers"),
+};
 
-// Gregorian date fields
-const gregYear = document.getElementById("greg-year") as HTMLInputElement;
-const gregMonth = document.getElementById("greg-month") as HTMLSelectElement;
-const gregDay = document.getElementById("greg-day") as HTMLInputElement;
-const gregWeekday = document.getElementById("greg-wday") as HTMLInputElement;
-const gregLeap = document.getElementById("greg-leap") as HTMLInputElement;
-
-// Julian date fields
-const julianYear = document.getElementById("julian-year") as HTMLInputElement;
-const julianMonth = document.getElementById("julian-month") as HTMLSelectElement;
-const julianDate = document.getElementById("julian-cal-day") as HTMLInputElement;
-const julianWeekday = document.getElementById("julian-wday") as HTMLInputElement;
-const julianLeap = document.getElementById("julian-leap") as HTMLInputElement;
-
-// Hebrew date fields
-const hebMonth = document.getElementById("heb-month") as HTMLSelectElement;
-const hebLeap = document.getElementById("heb-leap") as HTMLInputElement;
-const hebYear = document.getElementById("heb-year") as HTMLInputElement;
-const hebDay = document.getElementById("heb-day") as HTMLInputElement;
-
-// Islamic date fields
-const islamicYear = document.getElementById("islamic-year") as HTMLInputElement;
-const islamicMonth = document.getElementById("islamic-month") as HTMLSelectElement;
-const islamicDay = document.getElementById("islamic-day") as HTMLInputElement;
-const islamicWeekday = document.getElementById("islamic-wday") as HTMLInputElement;
-const islamicLeap = document.getElementById("islamic-leap") as HTMLInputElement;
-
-// Persian date fields
-const persYear = document.getElementById("pers-year") as HTMLInputElement;
-const persMonth = document.getElementById("pers-month") as HTMLSelectElement;
-const persDay = document.getElementById("pers-day") as HTMLInputElement;
-const persWeekday = document.getElementById("pers-wday") as HTMLInputElement;
-const persLeap = document.getElementById("pers-leap") as HTMLInputElement;
-
-//
-// CORE FUNCTIONS
-//
-
-// Much of what follows was adapted from the work of John Walker
-// See his homepage: https://fourmilab.ch/
-
-/*  updateFromGregorian --  Update all calendars from Gregorian.
-                            "Why not Julian date?" you ask. Because
-                            starting from Gregorian guarantees we're
-                            already snapped to an integral second, so
-                            we don't get round-off errors in other
-                            calendars.  */
-
-function updateFromGregorian() {
-  const year = Number(gregYear.value);
-  const mon = gregMonth.selectedIndex;
-  const mDay = Number(gregDay.value);
-
-  // Update Julian day
-
-  const j = unical.gregorianToJD(year, mon + 1, mDay);
-
-  julianDay = j;
-
-  // Update day of week in Gregorian box
-
-  const weekday = unical.jWeekday(j);
-  gregWeekday.value = unical.WEEKDAYS[weekday];
-
-  // Update leap year status in Gregorian box
-
-  gregLeap.value = unical.NORM_LEAP[unical.leapGregorian(year) ? 1 : 0];
-
-  // Update Julian Calendar
-
-  const julCal = unical.jdToJulian(j);
-  julianYear.value = String(julCal[0]);
-  julianMonth.selectedIndex = julCal[1] - 1;
-  julianDate.value = String(julCal[2]);
-  julianLeap.value = unical.NORM_LEAP[unical.leapJulian(julCal[0]) ? 1 : 0];
-  julianWeekday.value = unical.WEEKDAYS[weekday];
-
-  // Update Hebrew Calendar
-
-  const hebCal = unical.jdToHebrew(j);
-
-  if (unical.hebrewLeap(hebCal[0])) {
-    hebMonth.options.length = 13;
-    hebMonth.options[11] = new Option("Adar I");
-    hebMonth.options[12] = new Option("Veadar");
-  } else {
-    hebMonth.options.length = 12;
-    hebMonth.options[11] = new Option("Adar");
+function refreshHebrewMonths(year: number) {
+  const { month } = fields.hebrew;
+  const selected = month.value;
+  const count = unical.yearMonths("hebrew", year);
+  month.options[11].label = count === 13 ? "Adar I" : "Adar";
+  if (count === 13 && month.length === 12) {
+    month.add(new Option("Veadar", "13"));
+  } else if (count === 12) {
+    month.length = 12;
   }
+  month.value = selected;
+}
 
-  hebYear.value = String(hebCal[0]);
-  hebMonth.selectedIndex = hebCal[1] - 1;
-  hebDay.value = String(hebCal[2]);
+const hebrewYearTypes: Record<number, string> = {
+  353: "Common deficient",
+  354: "Common regular",
+  355: "Common complete",
+  383: "Embolismic deficient",
+  384: "Embolismic regular",
+  385: "Embolismic complete",
+};
 
-  switch (unical.hebrewYearDays(hebCal[0])) {
-    case 353: {
-      hebLeap.value = "Common deficient (353 days)";
-      break;
-    }
-
-    case 354: {
-      hebLeap.value = "Common regular (354 days)";
-      break;
-    }
-
-    case 355: {
-      hebLeap.value = "Common complete (355 days)";
-      break;
-    }
-
-    case 383: {
-      hebLeap.value = "Embolismic deficient (383 days)";
-      break;
-    }
-
-    case 384: {
-      hebLeap.value = "Embolismic regular (384 days)";
-      break;
-    }
-
-    case 385: {
-      hebLeap.value = "Embolismic complete (385 days)";
-      break;
-    }
-
-    default:
-      hebLeap.value = `Invalid year length: ${unical.hebrewYearDays(hebCal[0])} days.`;
-      break;
+function describeYear(calendar: unical.Calendar, year: number) {
+  if (calendar === "hebrew") {
+    const days = unical.yearDays(calendar, year);
+    return `${hebrewYearTypes[days]} (${days} days)`;
   }
-
-  // Update Islamic Calendar
-
-  const islCal = unical.jdToIslamic(j);
-  islamicYear.value = String(islCal[0]);
-  islamicMonth.selectedIndex = islCal[1] - 1;
-  islamicDay.value = String(islCal[2]);
-  islamicWeekday.value = `Yawm ${unical.ISLAMIC_WEEKDAYS[weekday]}`;
-  islamicLeap.value = unical.NORM_LEAP[unical.leapIslamic(islCal[0]) ? 1 : 0];
-
-  // Update Persian Astronomical Calendar
-
-  const persCal = unical.jdToPersianA(j);
-  persYear.value = String(persCal[0]);
-  persMonth.selectedIndex = persCal[1] - 1;
-  persDay.value = String(persCal[2]);
-  persWeekday.value = unical.PERSIAN_WEEKDAYS[weekday];
-  persLeap.value = unical.NORM_LEAP[unical.leapPersianA(persCal[0]) ? 1 : 0];
+  return unical.isLeapYear(calendar, year) ? "Leap year" : "Normal year";
 }
 
-// calcGregorian -- Perform calculation starting with a Gregorian date
+// Each form describes a civil date. Render all five from the same midnight JD.
+function renderDate(jd: number) {
+  const weekday = unical.weekday(jd);
+  const results = unical.CALENDARS.map((calendar) => {
+    const [year, month, day] = unical.fromJD(calendar, jd);
+    // Extreme years can exceed the precision of the calendar algorithms.
+    if (
+      !unical.isValidDate(calendar, year, month, day) ||
+      unical.toJD(calendar, year, month, day) !== jd
+    ) {
+      throw new RangeError("Date outside the convertible range");
+    }
+    return { calendar, year, month, day, description: describeYear(calendar, year) };
+  });
 
-function calcGregorian() {
-  updateFromGregorian();
+  for (const { calendar, year, month, day, description } of results) {
+    const form = fields[calendar];
+    if (calendar === "hebrew") refreshHebrewMonths(year);
+    form.year.value = String(year);
+    form.month.value = String(month);
+    form.day.value = String(day);
+    form.leap.value = description;
+    form.year.form!.classList.remove("validated");
+    form.year.setCustomValidity("");
+    form.day.setCustomValidity("");
+    if (form.weekday) {
+      form.weekday.value =
+        calendar === "islamic"
+          ? `Yawm ${unical.ISLAMIC_WEEKDAYS[weekday]}`
+          : calendar === "persian"
+            ? unical.PERSIAN_WEEKDAYS[weekday]
+            : unical.WEEKDAYS[weekday];
+    }
+  }
+  const year = fields.gregorian.year.valueAsNumber;
+  const panel = document.getElementById("persian-calendar")!;
+  if (year < -1000 || year > 3000) panel.setAttribute("aria-describedby", "persian-range");
+  else panel.removeAttribute("aria-describedby");
+  extrasCombined();
 }
 
-// calcJulian -- Perform calculation starting with a Julian date
-
-function calcJulian() {
-  const j = julianDay;
-  const date = unical.jdToGregorian(j);
-  gregYear.value = String(date[0]);
-  gregMonth.selectedIndex = date[1] - 1;
-  gregDay.value = String(date[2]);
-  updateFromGregorian();
+function calculate(calendar: unical.Calendar) {
+  const { year, month, day } = fields[calendar];
+  const y = year.valueAsNumber;
+  const m = Number(month.value);
+  const d = day.valueAsNumber;
+  if (!Number.isSafeInteger(y)) {
+    year.setCustomValidity("Enter a year within the supported range.");
+    year.reportValidity();
+    return;
+  }
+  if (!unical.isValidDate(calendar, y, m, d)) {
+    day.setCustomValidity(
+      `Enter a day from 1 to ${unical.monthDays(calendar, y, m)} for this month.`,
+    );
+    day.reportValidity();
+    return;
+  }
+  try {
+    renderDate(unical.toJD(calendar, y, m, d));
+  } catch (error) {
+    if (!(error instanceof RangeError)) throw error;
+    year.setCustomValidity("This date is outside the range the converter can calculate.");
+    year.reportValidity();
+  }
 }
 
-// setJulian -- Set Julian date and update all calendars
-
-function setJulian(j: number) {
-  julianDay = Number(j);
-  calcJulian();
-}
-
-// calcJulianCalendar -- Update from Julian calendar
-
-function calcJulianCalendar() {
-  setJulian(
-    unical.julianToJD(
-      Number(julianYear.value),
-      julianMonth.selectedIndex + 1,
-      Number(julianDate.value),
-    ),
-  );
-}
-
-// calcHebrew -- Update from Hebrew calendar
-
-function calcHebrew() {
-  setJulian(
-    unical.hebrewToJD(Number(hebYear.value), hebMonth.selectedIndex + 1, Number(hebDay.value)),
-  );
-}
-
-// calcIslamic -- Update from Islamic calendar
-
-function calcIslamic() {
-  setJulian(
-    unical.islamicToJD(
-      Number(islamicYear.value),
-      islamicMonth.selectedIndex + 1,
-      Number(islamicDay.value),
-    ),
-  );
-}
-
-// calcPersianA -- Update from Persian astronomical calendar
-
-function calcPersianA() {
-  setJulian(
-    unical.persianAToJD(Number(persYear.value), persMonth.selectedIndex + 1, Number(persDay.value)),
-  );
-}
-
-/*  setDateToToday -- Preset the fields in
-                      the request form to today's date.  */
-
-function setDateToToday() {
+function todayAndCalc() {
   const today = new Date();
-
-  /*  The following idiocy is due to bizarre incompatibilities
-      in the behavior of getYear() between Netscrape and
-      Exploder. The ideal solution is to use getFullYear(),
-      which returns the actual year number, but that would
-      break this code on versions of JavaScript prior to
-      1.2. So, for the moment we use the following code
-      which works for all versions of JavaScript and browsers
-      for all year numbers greater than 1000. When we're willing
-      to require JavaScript 1.2, this may be replaced by
-      the single line:
-
-          document.gregorian.year.value = today.getFullYear();
-
-      Thanks to Larry Gilbert for pointing out this problem.
-    */
-
-  gregYear.value = String(today.getFullYear());
-  gregMonth.selectedIndex = today.getMonth();
-  gregDay.value = String(today.getDate());
+  renderDate(unical.toJD("gregorian", today.getFullYear(), today.getMonth() + 1, today.getDate()));
 }
-
-//
-// NEW FUNCTIONS
-//
 
 // Function for animal years
 function animalCalc() {
   // Declare a few variables
-  const persYearValue = Number(persYear.value);
+  const persYearValue = Number(fields.persian.year.value);
   const persMod = persYearValue % 12;
   const animalAnswer = document.getElementById("animal-answer") as HTMLElement;
   let animalEng: string;
@@ -309,7 +178,7 @@ function animalCalc() {
 }
 
 function persianImperial() {
-  const persYearValue = Number(persYear.value);
+  const persYearValue = Number(fields.persian.year.value);
   const imperialYear = persYearValue + 1180;
 
   const imperialAnswer = document.getElementById("persian-imperial") as HTMLElement;
@@ -320,9 +189,9 @@ function persianImperial() {
 function ottomanFiscalCalc() {
   // Hooray for more variables
   const ottomanFiscalAnswer = document.getElementById("ottoman-fiscal") as HTMLElement;
-  const julianYearValue = Number(julianYear.value);
-  const julianMonthIndex = julianMonth.selectedIndex;
-  const ottomanFiscalDay = julianDate.value;
+  const julianYearValue = Number(fields.julian.year.value);
+  const julianMonthIndex = fields.julian.month.selectedIndex;
+  const ottomanFiscalDay = fields.julian.day.value;
 
   // Early out for obviously out-of-scope dates
   if (julianYearValue < 1840 || julianYearValue > 1916) {
@@ -381,7 +250,7 @@ function ottomanFiscalCalc() {
 // Function for Seleucid era
 function seleucidCalc() {
   // Define variables; calculate result
-  const hebYearValue = Number(hebYear.value);
+  const hebYearValue = Number(fields.hebrew.year.value);
   const seleucidYear = hebYearValue - 3449;
   const seleucidAnswer = document.getElementById("seleucid-answer") as HTMLElement;
 
@@ -414,102 +283,37 @@ function extrasCombined() {
   document.documentElement.style.setProperty("--img-display", "inline");
 }
 
-// Combined function for "Today" button
-function todayAndCalc() {
-  setDateToToday();
-  calcGregorian();
+for (const calendar of unical.CALENDARS) {
+  const { year, day } = fields[calendar];
+  const form = year.form!;
+  form.addEventListener(
+    "invalid",
+    (event) => {
+      event.preventDefault();
+      form.classList.add("validated");
+      form.querySelector<HTMLElement>(":invalid")?.focus();
+    },
+    true,
+  );
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    calculate(calendar);
+  });
+  form.addEventListener("input", () => {
+    year.setCustomValidity("");
+    day.setCustomValidity("");
+    document.documentElement.style.setProperty("--img-display", "none");
+  });
 }
 
-//
-// TO RUN ON PAGE LOAD
-//
-
-// On page load, set current date and propagate
-// Also run "extra" functions
-window.onload = () => {
-  todayAndCalc();
-  extrasCombined();
-};
-
-//
-// EVENT HANDLERS
-//
-
-// Many buttons
-const gregCalcBtn = document.getElementById("greg-calc-btn");
-const gregTodayBtn = document.getElementById("greg-today-btn");
-const julianBtn = document.getElementById("julian-btn");
-const hebrewBtn = document.getElementById("hebrew-btn");
-const islamicBtn = document.getElementById("islamic-btn");
-const persBtn = document.getElementById("pers-btn");
-
-// Click handlers for core functions
-gregCalcBtn?.addEventListener("click", calcGregorian);
-gregTodayBtn?.addEventListener("click", todayAndCalc);
-julianBtn?.addEventListener("click", calcJulianCalendar);
-hebrewBtn?.addEventListener("click", calcHebrew);
-islamicBtn?.addEventListener("click", calcIslamic);
-persBtn?.addEventListener("click", calcPersianA);
-
-// Click handlers for extra functions
-gregCalcBtn?.addEventListener("click", extrasCombined);
-gregTodayBtn?.addEventListener("click", extrasCombined);
-julianBtn?.addEventListener("click", extrasCombined);
-hebrewBtn?.addEventListener("click", extrasCombined);
-islamicBtn?.addEventListener("click", extrasCombined);
-persBtn?.addEventListener("click", extrasCombined);
-
-// Keydown handlers
-// These mimic clicks so that the extra functions will also be triggered
-
-document.getElementById("gregorian")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    gregCalcBtn?.click();
-    (document.activeElement as HTMLElement).blur();
+fields.hebrew.year.addEventListener("input", () => {
+  const year = fields.hebrew.year.valueAsNumber;
+  if (Number.isSafeInteger(year)) {
+    refreshHebrewMonths(year);
+    if (!fields.hebrew.month.value) fields.hebrew.month.form!.classList.add("validated");
   }
 });
 
-document.getElementById("juliancalendar")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    julianBtn?.click();
-    (document.activeElement as HTMLElement).blur();
-  }
-});
-
-document.getElementById("hebrew")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    hebrewBtn?.click();
-    (document.activeElement as HTMLElement).blur();
-  }
-});
-
-document.getElementById("islamic")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    islamicBtn?.click();
-    (document.activeElement as HTMLElement).blur();
-  }
-});
-
-document.getElementById("persiana")?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    persBtn?.click();
-    (document.activeElement as HTMLElement).blur();
-  }
-});
-
-// When the text of any input field is changed, clear all check marks
-document.querySelectorAll("input").forEach((element) => {
-  element.addEventListener("input", () => {
-    document.documentElement.style.setProperty("--img-display", "none");
-  });
-});
-
-// When any select field is changed, clear all check marks
-document.querySelectorAll("select").forEach((element) => {
-  element.addEventListener("change", () => {
-    document.documentElement.style.setProperty("--img-display", "none");
-  });
-});
-
-// Listen for clicks on notes field button
+document.getElementById("greg-today-btn")?.addEventListener("click", todayAndCalc);
 document.getElementById("notes-button")?.addEventListener("click", toggleNotes);
+window.addEventListener("load", todayAndCalc);
