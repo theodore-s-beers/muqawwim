@@ -89,25 +89,28 @@ function renderDate(jd: number) {
   extrasCombined();
 }
 
-function calculate(calendar: unical.Calendar) {
+function validateDate(calendar: unical.Calendar) {
   const { year, month, day } = fields[calendar];
+  year.setCustomValidity("");
+  day.setCustomValidity("");
+  if (!year.validity.valid || !month.validity.valid || !day.validity.valid) return;
   const y = year.valueAsNumber;
   const m = Number(month.value);
-  const d = day.valueAsNumber;
   if (!Number.isSafeInteger(y)) {
     year.setCustomValidity("Enter a year within the supported range.");
-    year.reportValidity();
-    return;
-  }
-  if (!unical.isValidDate(calendar, y, m, d)) {
+  } else if (!unical.isValidDate(calendar, y, m, day.valueAsNumber)) {
     day.setCustomValidity(
       `Enter a day from 1 to ${unical.monthDays(calendar, y, m)} for this month.`,
     );
-    day.reportValidity();
-    return;
   }
+}
+
+function calculate(calendar: unical.Calendar) {
+  const { year, month, day } = fields[calendar];
+  validateDate(calendar);
+  if (!year.form!.reportValidity()) return;
   try {
-    renderDate(unical.toJD(calendar, y, m, d));
+    renderDate(unical.toJD(calendar, year.valueAsNumber, Number(month.value), day.valueAsNumber));
   } catch (error) {
     if (!(error instanceof RangeError)) throw error;
     year.setCustomValidity("This date is outside the range the converter can calculate.");
@@ -284,7 +287,7 @@ function extrasCombined() {
 }
 
 for (const calendar of unical.CALENDARS) {
-  const { year, day } = fields[calendar];
+  const { year } = fields[calendar];
   const form = year.form!;
   form.addEventListener(
     "invalid",
@@ -300,8 +303,7 @@ for (const calendar of unical.CALENDARS) {
     calculate(calendar);
   });
   form.addEventListener("input", () => {
-    year.setCustomValidity("");
-    day.setCustomValidity("");
+    if (form.classList.contains("validated")) validateDate(calendar);
     document.documentElement.style.setProperty("--img-display", "none");
   });
 }
